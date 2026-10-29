@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escalation Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f4;--card:#fff;--ink:#17212b;--mute:#5d6b79;--line:#d5dce3;--brand:#0f4c5c;--brand-ink:#fff;--err:#b3261e;--ok:#1b6e3c;--focus:#e09f3e}
+@media (prefers-color-scheme:dark){:root{--bg:#10161c;--card:#18212a;--ink:#e8edf2;--mute:#9aa8b6;--line:#2c3945;--brand:#4fb3c8;--brand-ink:#0b1318;--err:#ff8a80;--ok:#7bd89a}}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;display:grid;place-items:center;padding:24px}
+[hidden]{display:none!important}
+.card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:32px 28px}
+.card.wide{max-width:640px}
+h1{font-size:1.35rem;font-weight:600;margin:0 0 4px}
+p.sub{margin:0 0 22px;color:var(--mute);font-size:.95rem}
+label{display:block;font-size:.88rem;font-weight:500;margin:14px 0 6px}
+input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink)}
+input:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+button.primary{width:100%;margin-top:20px;font:inherit;font-weight:600;padding:11px;border:0;border-radius:6px;background:var(--brand);color:var(--brand-ink);cursor:pointer}
+button.primary:disabled{opacity:.6;cursor:wait}
+button.ghost,a.link{font:inherit;background:none;border:0;padding:0;color:var(--brand);cursor:pointer;text-decoration:underline}
+.row{display:flex;justify-content:space-between;gap:12px;margin-top:16px;font-size:.9rem}
+.msg{min-height:1.3em;margin:14px 0 0;font-size:.9rem}
+.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.bar div{display:flex;gap:16px}
+.stat{border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
+.stat b{font-size:1.6rem;font-weight:600}
+</style>
+</head>
+<body>
+
+<section id="login" class="card view" hidden>
+  <h1>Escalation Dashboard</h1>
+  <p class="sub">Sign in with your work email.</p>
+  <form id="loginForm">
+    <label for="lEmail">Work email</label>
+    <input id="lEmail" type="email" autocomplete="username" required>
+    <label for="lPass">Password</label>
+    <input id="lPass" type="password" autocomplete="current-password" required>
+    <button class="primary" type="submit">Sign in</button>
+  </form>
+  <p id="lMsg" class="msg" role="alert"></p>
+  <div class="row"><button class="ghost" id="toForgot">Forgot password or first time here?</button></div>
+</section>
+
+<section id="forgot" class="card view" hidden>
+  <h1>Set or reset your password</h1>
+  <p class="sub">Enter your work email and we will send you a link to choose a password.</p>
+  <form id="forgotForm">
+    <label for="fEmail">Work email</label>
+    <input id="fEmail" type="email" autocomplete="username" required>
+    <button class="primary" type="submit">Send link</button>
+  </form>
+  <p id="fMsg" class="msg" role="alert"></p>
+  <div class="row"><button class="ghost" id="toLogin">Back to sign in</button></div>
+</section>
+
+<section id="setpw" class="card view" hidden>
+  <h1 id="pwTitle">Choose a password</h1>
+  <p class="sub" id="pwSub">Use at least 8 characters.</p>
+  <form id="pwForm">
+    <label for="p1">New password</label>
+    <input id="p1" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="p2">Confirm new password</label>
+    <input id="p2" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="primary" type="submit">Save password</button>
+  </form>
+  <p id="pMsg" class="msg" role="alert"></p>
+  <div class="row"><button class="ghost" id="pwCancel" hidden>Cancel</button></div>
+</section>
+
+<section id="app" class="card wide view" hidden>
+  <div class="bar">
+    <h1 id="who">Signed in</h1>
+    <div><button class="ghost" id="chPw">Change password</button><button class="ghost" id="out">Sign out</button></div>
+  </div>
+  <p class="sub" id="roleLine"></p>
+  <div class="stat"><b id="rowCount">…</b> <span class="sub">escalation records visible to you</span></div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<script>
+// ---- Settings: paste your own values ----
+const SUPABASE_URL = "https://cggavmfizegnuiaacvpz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ZxFQWQEYybHJqp8LOkTLyg_97PsjaG6"; // sb_publishable_... (safe to be public)
+// -----------------------------------------
+
+const isRecovery = location.hash.includes("type=recovery");
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+const redirectTo = location.origin + location.pathname;
+let pwMode = "first"; // first | recover | change
+
+function show(id){ document.querySelectorAll(".view").forEach(v => v.hidden = v.id !== id); }
+function say(id, text, ok){ const e = $(id); e.textContent = text || ""; e.className = "msg " + (ok ? "ok" : "err"); }
+function busy(form, on){ form.querySelector("button[type=submit]").disabled = on; }
+
+async function route(session){
+  if (!session){ show("login"); return; }
+  if (!session.user.user_metadata?.password_changed){ openPw("first"); return; }
+  show("app"); loadApp(session.user);
+}
+
+function openPw(mode){
+  pwMode = mode;
+  $("pwTitle").textContent = mode === "change" ? "Change your password" : "Choose a password";
+  $("pwSub").textContent = mode === "first" ? "Set your own password before continuing. Use at least 8 characters." : "Use at least 8 characters.";
+  $("pwCancel").hidden = mode !== "change";
+  $("pwForm").reset(); say("pMsg", "");
+  show("setpw");
+}
+
+async function loadApp(user){
+  $("rowCount").textContent = "…";
+  const { data: me } = await sb.from("employees").select("emp_name, role").maybeSingle();
+  if (!me || !["ADMIN","L5","L4","L3","L2","L1","L0"].includes((me.role || "").toUpperCase())){
+    $("who").textContent = user.email;
+    $("roleLine").textContent = "Your account does not have dashboard access. Contact your administrator.";
+    $("rowCount").textContent = "0";
+    return;
+  }
+  $("who").textContent = me.emp_name;
+  $("roleLine").textContent = "Role: " + me.role.toUpperCase();
+  const { count, error } = await sb.from("first_call_escalation").select("*", { count: "exact", head: true });
+  $("rowCount").textContent = error ? "?" : count.toLocaleString();
+}
+
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault(); busy(e.target, true); say("lMsg", "");
+  const { data, error } = await sb.auth.signInWithPassword({ email: $("lEmail").value.trim(), password: $("lPass").value });
+  busy(e.target, false);
+  if (error){ say("lMsg", "Incorrect email or password. If this is your first time, use the link below."); return; }
+  route(data.session);
+});
+
+$("forgotForm").addEventListener("submit", async e => {
+  e.preventDefault(); busy(e.target, true); say("fMsg", "");
+  await sb.auth.resetPasswordForEmail($("fEmail").value.trim(), { redirectTo });
+  busy(e.target, false);
+  say("fMsg", "If this email has access, a link is on its way. Check your inbox and spam folder.", true);
+});
+
+$("pwForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if ($("p1").value !== $("p2").value){ say("pMsg", "The two passwords do not match."); return; }
+  busy(e.target, true); say("pMsg", "");
+  const { error } = await sb.auth.updateUser({ password: $("p1").value, data: { password_changed: true } });
+  busy(e.target, false);
+  if (error){ say("pMsg", error.message); return; }
+  history.replaceState(null, "", location.pathname);
+  const { data } = await sb.auth.getSession();
+  route(data.session);
+});
+
+$("toForgot").onclick = () => { say("fMsg", ""); show("forgot"); };
+$("toLogin").onclick = () => show("login");
+$("chPw").onclick = () => openPw("change");
+$("pwCancel").onclick = () => show("app");
+$("out").onclick = async () => { await sb.auth.signOut(); show("login"); };
+
+sb.auth.onAuthStateChange(ev => { if (ev === "PASSWORD_RECOVERY") openPw("recover"); });
+
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (isRecovery) openPw("recover"); else route(data.session);
+})();
+</script>
+</body>
+</html>
