@@ -119,7 +119,7 @@ function openPw(mode){
 async function loadApp(user){
   $("rowCount").textContent = "…";
   const { data: me } = await sb.from("employees").select("emp_name, role").maybeSingle();
-  if (!me || !["ADMIN","L5","L4","L3","L2","L1","L0"].includes((me.role || "").toUpperCase())){
+  if (!me || !["NS","L5","L4","L3","L2","L1","L0"].includes((me.role || "").toUpperCase())){
     $("who").textContent = user.email;
     $("roleLine").textContent = "Your account does not have dashboard access. Contact your administrator.";
     $("rowCount").textContent = "0";
