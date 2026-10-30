@@ -1,178 +1,506 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://cggavmfizegnuiaacvpz.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'">
 <title>Escalation Dashboard</title>
-<script>(function(){var t="light";try{if(localStorage.getItem("themePreference")==="dark")t="dark"}catch(e){}document.documentElement.dataset.theme=t})()</script>
+<script>/* apply the saved theme before first paint (default: light) */
+(function(){var t="light";try{if(localStorage.getItem("themePreference")==="dark")t="dark"}catch(e){}document.documentElement.setAttribute("data-theme",t)})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root,[data-theme=light]{color-scheme:light;--bg0:#fbf6ec;--bg1:#f5eddd;--glow:rgba(38,119,255,.1);--panel:rgba(255,253,248,.94);--p2:#fffdf8;--line:rgba(40,78,130,.2);--l2:rgba(40,78,130,.11);--cyan:#0a82c4;--blue:#1f5fd1;--text:#1d2733;--muted:#5d6b78;--faint:#8a95a0;--green:#17875c;--amber:#a86300;--red:#c93048;--in:#fffdf8;--inbd:#d8cdb8;--chip:#f3ebdc;--ctx:#234a73;--track:rgba(29,39,51,.09);--sh:rgba(90,70,40,.1);--grid:rgba(60,80,110,.12);--pct:#6d4fc4;--res:#1463b8;--opn:#b86200;--pill:rgba(255,253,248,.96);--ptx:#4b2fa3;--band:rgba(31,95,209,.08);--th:#f3ebdc;--thtx:#1c4f86;--err:#c93048;--ok:#17875c}
-[data-theme=dark]{color-scheme:dark;--bg0:#02050b;--bg1:#07111f;--glow:#12345d;--panel:rgba(12,24,43,.88);--p2:rgba(9,19,35,.92);--line:rgba(83,190,255,.22);--l2:rgba(83,190,255,.12);--cyan:#34c5ff;--blue:#2677ff;--text:#eef8ff;--muted:#8da7bd;--faint:#6f879b;--green:#4bd39a;--amber:#ffc970;--red:#ff7081;--in:#07101f;--inbd:#29445f;--chip:#0a1a2d;--ctx:#bfe8ff;--track:rgba(255,255,255,.07);--sh:rgba(0,0,0,.3);--grid:rgba(141,167,189,.12);--pct:#b9a6e8;--res:#7fd9ff;--opn:#ffc970;--pill:rgba(7,16,31,.92);--ptx:#e6dcff;--band:rgba(52,197,255,.09);--th:#0b1a2c;--thtx:#bfe8ff;--err:#ff7081;--ok:#4bd39a}
-html.anim,html.anim *{transition:background-color .35s,color .35s,border-color .35s,fill .35s!important}
+:root,[data-theme=light]{color-scheme:light;--bg0:#fbf6ec;--bg1:#f5eddd;--glow:rgba(38,119,255,.1);--panel:rgba(255,253,248,.94);--p2:#fffdf8;--line:rgba(40,78,130,.2);--l2:rgba(40,78,130,.11);--soft:rgba(31,95,209,.07);--cyan:#0a82c4;--blue:#1f5fd1;--text:#1d2733;--muted:#5d6b78;--faint:#8a95a0;--green:#17875c;--greenbg:rgba(23,135,92,.1);--amber:#a86300;--amberbg:rgba(214,140,20,.13);--red:#c93048;--redbg:rgba(201,48,72,.09);--in:#fffdf8;--inbd:#d8cdb8;--indis:#f1eadc;--indistx:#9a9486;--lbl:#3b4a58;--chip:#f3ebdc;--ctx:#234a73;--btn2:#fffaf1;--btn2tx:#4a5a6a;--hovtx:#0b3d73;--link:#1f5fd1;--banner:#7a4800;--track:rgba(29,39,51,.09);--sh:rgba(90,70,40,.1);--shl:rgba(60,45,20,.22);--grid:rgba(60,80,110,.12);--pct:#6d4fc4;--res:#1463b8;--opn:#b86200;--pill:rgba(255,253,248,.96);--ptx:#4b2fa3;--band:rgba(31,95,209,.08);--th:#f3ebdc;--thtx:#1c4f86;--hovrow:rgba(31,95,209,.05);--overlay:rgba(40,30,15,.42);--toast:#fffdf8;--nodata:#b4ab9a}
+[data-theme=dark]{color-scheme:dark;--bg0:#02050b;--bg1:#07111f;--glow:#12345d;--panel:rgba(12,24,43,.88);--p2:rgba(9,19,35,.92);--line:rgba(83,190,255,.22);--l2:rgba(83,190,255,.12);--soft:rgba(91,192,255,.1);--cyan:#34c5ff;--blue:#2677ff;--text:#eef8ff;--muted:#8da7bd;--faint:#6f879b;--green:#4bd39a;--greenbg:rgba(28,124,94,.2);--amber:#ffc970;--amberbg:rgba(143,83,0,.24);--red:#ff7081;--redbg:rgba(138,55,65,.26);--in:#07101f;--inbd:#29445f;--indis:#0a1421;--indistx:#60778b;--lbl:#bdd3e5;--chip:#0a1a2d;--ctx:#bfe8ff;--btn2:#081321;--btn2tx:#aac1d3;--hovtx:#fff;--link:#7dd4ff;--banner:#ffe2b3;--track:rgba(255,255,255,.07);--sh:rgba(0,0,0,.3);--shl:rgba(0,0,0,.45);--grid:rgba(141,167,189,.12);--pct:#b9a6e8;--res:#7fd9ff;--opn:#ffc970;--pill:rgba(7,16,31,.92);--ptx:#e6dcff;--band:rgba(52,197,255,.09);--th:#0b1a2c;--thtx:#bfe8ff;--hovrow:rgba(52,197,255,.05);--overlay:rgba(0,0,0,.72);--toast:#0d1d33;--nodata:#3d5468}
+html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,border-color .35s,fill .35s,stroke .35s!important}
 *{box-sizing:border-box}html,body{margin:0}[hidden]{display:none!important}
-body{min-height:100vh;background:radial-gradient(circle at 18% 0,var(--glow),transparent 34%),linear-gradient(145deg,var(--bg0),var(--bg1) 58%,var(--bg0));background-attachment:fixed;color:var(--text);font:14px/1.5 Manrope,"Segoe UI",Arial,sans-serif}
-button{font:inherit;color:inherit;cursor:pointer}:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-input,select{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--inbd);border-radius:10px;background:var(--in);color:var(--text)}select:disabled{opacity:.7}
-.card{width:min(420px,calc(100% - 32px));margin:12vh auto 0;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px var(--sh)}
-h1,h2{margin:0}h1{font-size:1.3rem}h2{font-size:15px}.sub{color:var(--muted);font-size:13px;margin:4px 0 0}
-label{display:block;font-size:12.5px;font-weight:600;margin:14px 0 5px;color:var(--muted)}
-.pri{width:100%;margin-top:18px;padding:11px;border:0;border-radius:10px;font-weight:700;color:#fff;background:linear-gradient(90deg,var(--blue),var(--cyan))}.pri:disabled{opacity:.6}
-.gh{border:1px solid var(--line);background:var(--p2);border-radius:10px;padding:7px 12px}.lk{background:none;border:0;padding:0;color:var(--cyan);text-decoration:underline;font-size:13px}
-.msg{min-height:1.3em;margin:12px 0 0;font-size:13px}.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
-.tt{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--chip);color:var(--ctx);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}
-.tt i{width:36px;height:18px;border-radius:99px;background:linear-gradient(90deg,#ffd46b,#ffb238);position:relative}.tt i:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .3s}
-[data-theme=dark] .tt i{background:linear-gradient(90deg,#1757bb,#168cc7)}[data-theme=dark] .tt i:after{transform:translateX(18px)}
-.fx{position:fixed;top:12px;right:14px;z-index:30}
-.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px clamp(12px,2vw,32px);background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
-.ua{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:var(--chip);color:var(--ctx);white-space:nowrap}.chip.g{color:var(--green)}.chip.b{color:var(--amber)}
-.lay{display:grid;grid-template-columns:210px 1fr;gap:16px;padding:16px clamp(12px,2vw,32px)}
-.side{display:grid;gap:6px;align-content:start;position:sticky;top:70px;height:max-content}
-.nv{text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--p2);font-weight:700;font-size:13px}.nv.sub{margin-left:16px;font-weight:600}
+body{min-height:100vh;background:radial-gradient(circle at 18% 0,var(--glow),transparent 34%),linear-gradient(145deg,var(--bg0),var(--bg1) 58%,var(--bg0));background-attachment:fixed;color:var(--text);font:14px/1.5 Manrope,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+input,select{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--inbd);border-radius:10px;background:var(--in);color:var(--text);outline:0}
+select option{background:var(--in);color:var(--text)}
+input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(52,197,255,.14)}
+select:disabled,input:disabled{background:var(--indis);color:var(--indistx)}
+h1,h2,h3{margin:0}h1{font-size:1.25rem;font-weight:800}h2{font-size:15px;font-weight:800}.sub{color:var(--muted);font-size:12.5px;margin:2px 0 0}
+.lbl{display:block;font-size:12px;font-weight:600;margin:0 0 5px;color:var(--lbl)}
+/* auth cards */
+.card{width:min(420px,calc(100% - 32px));margin:12vh auto 0;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px var(--shl)}
+.card .lbl{margin-top:14px}
+.pri{width:100%;margin-top:18px;padding:11px;border:0;border-radius:10px;font-weight:700;color:#fff;background:linear-gradient(90deg,var(--blue),var(--cyan));box-shadow:0 8px 24px rgba(38,119,255,.28)}
+.gh{border:1px solid var(--line);background:var(--p2);border-radius:10px;padding:7px 12px}.gh:hover:not(:disabled){border-color:var(--cyan)}
+.lk{background:none;border:0;padding:4px 0;color:var(--link);font-size:13px}.lk:hover{text-decoration:underline}
+.msg{min-height:1.3em;margin:12px 0 0;font-size:13px;color:var(--red)}.msg.ok{color:var(--green)}
+.pw{position:relative}.pw input{padding-right:58px}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--link);font-size:12px;padding:6px}
+.caps{font-size:12px;color:var(--amber);margin-top:4px}.hint{font-size:12px;color:var(--muted);margin-top:4px}
+/* theme toggle (from the reference) */
+.theme-toggle{display:inline-flex;align-items:center;gap:8px;padding:5px 10px 5px 8px;border-radius:999px;border:1px solid var(--line);background:var(--p2);color:var(--muted);font:600 12px/1 Manrope,sans-serif;box-shadow:0 4px 14px var(--sh);white-space:nowrap}
+.theme-toggle:hover{border-color:var(--cyan)}.theme-toggle .o{display:inline-flex;align-items:center;gap:4px;opacity:.55}.theme-toggle em{font-style:normal}
+.theme-toggle .tr{position:relative;width:38px;height:20px;border-radius:999px;background:linear-gradient(90deg,#ffd46b,#ffb238);box-shadow:inset 0 1px 3px rgba(0,0,0,.25)}
+.theme-toggle .kn{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.35);transition:transform .3s cubic-bezier(.4,.2,.2,1)}
+[data-theme=light] .theme-toggle .sun,[data-theme=dark] .theme-toggle .moon{opacity:1;color:var(--text)}
+[data-theme=dark] .theme-toggle .tr{background:linear-gradient(90deg,#3056c9,#6b4fd8)}[data-theme=dark] .theme-toggle .kn{transform:translateX(18px)}
+.theme-fixed{position:fixed;top:14px;right:16px;z-index:45}
+/* app shell */
+.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px clamp(12px,2vw,32px);background:var(--panel);border-bottom:1px solid var(--line);box-shadow:0 10px 35px var(--sh);backdrop-filter:blur(14px)}
+.ua{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:var(--chip);color:var(--ctx);white-space:nowrap}
+.chip.g{background:var(--greenbg);color:var(--green)}.chip.b{background:var(--amberbg);color:var(--amber)}.chip.r{background:var(--redbg);color:var(--red)}
+.lay{display:grid;grid-template-columns:210px minmax(0,1fr);gap:16px;padding:16px clamp(12px,2vw,32px) 60px}
+.side{display:grid;gap:6px;align-content:start;position:sticky;top:76px;height:max-content}
+.nv{text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--p2);font-weight:700;font-size:13px}.nv.sub{margin-left:16px;font-weight:600}.nv:hover{border-color:var(--cyan)}
 .nv.on{color:#fff;background:linear-gradient(90deg,#1757bb,#168cc7);border-color:#4bcaff}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 14px 38px var(--sh);margin-bottom:14px}
-.hier{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.hier label{margin:0 0 4px}
-.months{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.mo{border:1px solid var(--line);background:var(--p2);color:var(--muted);border-radius:10px;padding:6px 12px;font-weight:700;font-size:12px}.mo.on{color:#fff;background:linear-gradient(90deg,#1757bb,#168cc7);border-color:#4bcaff}
-.act{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 14px 38px var(--sh);margin-bottom:14px;backdrop-filter:blur(14px)}
+/* filters (reference layout) */
+.filters{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:start}
+.months{display:grid;grid-template-columns:auto repeat(12,minmax(0,1fr));gap:6px}
+.mo{border:1px solid var(--line);background:var(--btn2);color:var(--btn2tx);border-radius:10px;padding:7px 8px;font-weight:700;font-size:12px}
+.mo:hover:not(:disabled){border-color:var(--cyan);color:var(--hovtx)}.mo:disabled{opacity:.35}
+.mo.on{background:linear-gradient(90deg,#1757bb,#168cc7);color:#fff;border-color:#4bcaff;box-shadow:0 0 14px rgba(52,197,255,.25)}
+.hier{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.hier .lock select{border-style:dashed}
+.crumbs{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.crumbs button{border:0;background:none;color:var(--link);padding:2px 4px;border-radius:6px}.crumbs button:hover{background:var(--soft)}
+.crumbs .sep{color:var(--faint)}.crumbs .cur{color:var(--text);font-weight:700;padding:2px 4px}
+.sel-note{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px;padding:7px 12px;border-radius:10px;font-size:12.5px;background:var(--amberbg);border:1px solid rgba(214,140,20,.35);color:var(--banner)}
+.sel-note button{border:0;background:none;color:var(--link);font-weight:700;padding:2px 4px;margin-left:auto}.sel-note button:hover{text-decoration:underline}
+.act{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}.act:empty{display:none}
+/* KPIs */
 .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
 .kpi{position:relative;background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:12px 14px;overflow:hidden}.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line)}
-.kpi.good:before{background:var(--green)}.kpi.bad:before{background:var(--red)}
+.kpi.good:before{background:var(--green)}.kpi.warn:before{background:var(--amber)}.kpi.bad:before{background:var(--red)}
 .kpi span{display:block;color:var(--muted);font-size:12px;font-weight:600}.kpi b{display:block;font-size:22px;font-weight:800;letter-spacing:-.01em}.kpi small{color:var(--faint);font-size:11.5px}
 .g2{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
 .leg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:8px 0}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
-.ch{width:100%;height:auto;display:block}.gl{stroke:var(--grid)}.ax{fill:var(--muted);font:600 11px Manrope,sans-serif}.res{fill:var(--res)}.opn{fill:var(--opn)}.band{fill:var(--band)}.hit{fill:transparent;cursor:pointer}
+/* charts */
+.ch{width:100%;height:auto;display:block}.gl{stroke:var(--grid)}.ax{fill:var(--muted);font:600 11px Manrope,sans-serif}.ax2{fill:var(--faint);font:600 10px Manrope,sans-serif}
+.res{fill:var(--res)}.opn{fill:var(--opn)}.band{fill:var(--band)}.hit{fill:transparent;cursor:pointer}.nd{fill:var(--nodata);font:600 10px Manrope,sans-serif}
 .ln{fill:none;stroke:var(--pct);stroke-width:2.5}.pt{fill:var(--pct)}.pl{fill:var(--pill);stroke:var(--pct)}.pt2{fill:var(--ptx);font:700 10.5px Manrope,sans-serif}
 .hb{display:grid;grid-template-columns:minmax(90px,170px) 1fr auto;gap:10px;align-items:center;font-size:12.5px;padding:4px 6px;border-radius:8px;cursor:pointer}.hb:hover,.hb.on{background:var(--band)}
+.hb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tk{display:flex;height:9px;border-radius:99px;background:var(--track);overflow:hidden}.tk i{display:block;height:100%}
-.tbl{width:100%;border-collapse:collapse;font-size:12.5px}.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--l2);text-align:left}.tbl th{background:var(--th);color:var(--thtx);font-size:12px}
-.wrapx{overflow-x:auto}.empty{color:var(--muted);padding:18px;text-align:center}.pg{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px;font-size:12.5px}
-@media(max-width:820px){.lay{grid-template-columns:1fr}.side{position:static;grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+/* tables */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}.toolbar input{width:260px}.toolbar select{width:auto;padding:8px 10px}.grow{flex:1}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--btn2);color:var(--btn2tx);border-radius:999px;padding:6px 13px;font-weight:700;font-size:12.5px}
+.tab:hover{border-color:var(--cyan);color:var(--hovtx)}.tab.on{background:linear-gradient(90deg,#1757bb,#168cc7);color:#fff;border-color:#4bcaff}.tab .c{opacity:.8;margin-left:5px;font-weight:600}
+.tbox{border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:560px}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--l2);text-align:left;white-space:nowrap}
+.tbl th{position:sticky;top:0;background:var(--th);color:var(--thtx);font-size:12px;z-index:1;user-select:none}
+.tbl th.s{cursor:pointer}.tbl th.s:hover{color:var(--hovtx)}.tbl th .ar{opacity:.4;margin-left:3px}.tbl th.on .ar{opacity:1;color:var(--cyan)}
+.tbl .r{text-align:right}.tbl tbody tr:hover td{background:var(--hovrow)}.tbl tr.click{cursor:pointer}
+.pb{display:inline-block;width:56px;height:5px;border-radius:9px;background:var(--track);vertical-align:middle;margin-left:6px;overflow:hidden}.pb i{display:block;height:100%}
+.empty{color:var(--muted);padding:18px;text-align:center}
+.pg{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--muted)}.pg div{display:flex;gap:6px}
+/* modal + toast */
+.modalbg{position:fixed;inset:0;background:var(--overlay);display:grid;place-items:center;padding:20px;z-index:60}
+.modal{width:min(430px,100%);background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 50px var(--shl);backdrop-filter:blur(16px);padding:22px;border-radius:16px}
+.modal h3{font-size:17px;margin-bottom:8px}.modal p{margin:0 0 14px;color:var(--muted)}.modal.danger{border-color:rgba(255,112,129,.45)}.modal .lbl{margin-top:12px}
+.actions{display:flex;gap:8px;margin-top:16px}.actions>*{flex:1;margin-top:0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--toast);color:var(--text);border:1px solid var(--line);padding:10px 16px;border-radius:10px;z-index:70;box-shadow:0 10px 30px var(--shl);font-size:13px;max-width:90vw}.toast.bad{border-color:rgba(255,112,129,.5)}
+@media(max-width:1000px){.g2{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.months{grid-template-columns:repeat(7,1fr)}.months .mo:first-child{grid-column:span 7}}
+@media(max-width:820px){.lay{grid-template-columns:1fr}.side{position:static;grid-template-columns:1fr 1fr}.top{position:static}.toolbar input{width:100%}}
+@media(max-width:640px){.months{grid-template-columns:repeat(4,1fr)}.months .mo:first-child{grid-column:span 4}.kpis{grid-template-columns:1fr 1fr}.theme-toggle em{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
-<button class="tt fx" aria-label="Toggle theme" role="switch">☀️<i></i>🌙</button>
+<button type="button" class="theme-toggle theme-fixed" role="switch" aria-checked="false" aria-label="Switch to dark theme"><span class="o sun">☀️<em>Light</em></span><span class="tr"><span class="kn"></span></span><span class="o moon">🌙<em>Dark</em></span></button>
 
+<!-- ================= SIGN IN ================= -->
 <section id="login" class="card view" hidden><h1>Escalation Dashboard</h1><p class="sub">Sign in with your work email.</p>
-<form id="loginForm"><label for="lEmail">Work email</label><input id="lEmail" type="email" autocomplete="username" required>
-<label for="lPass">Password</label><input id="lPass" type="password" autocomplete="current-password" required>
+<form id="loginForm" autocomplete="on"><label class="lbl" for="lEmail">Work email</label><input id="lEmail" type="email" autocomplete="username" placeholder="name@infinitylearn.com" required>
+<label class="lbl" for="lPass">Password</label><div class="pw"><input id="lPass" type="password" autocomplete="current-password" required><button type="button" data-show="lPass">Show</button></div>
+<div id="capsHint" class="caps" hidden>Caps Lock is on</div>
 <button class="pri" type="submit">Sign in</button></form><p id="lMsg" class="msg" role="alert"></p>
-<button class="lk" id="toForgot">Forgot password or first time here?</button></section>
+<button class="lk" id="toForgot" type="button">Forgot password or first time here?</button></section>
 
 <section id="forgot" class="card view" hidden><h1>Set or reset your password</h1><p class="sub">Enter your work email and we will send you a link.</p>
-<form id="forgotForm"><label for="fEmail">Work email</label><input id="fEmail" type="email" autocomplete="username" required>
-<button class="pri" type="submit">Send link</button></form><p id="fMsg" class="msg" role="alert"></p>
-<button class="lk" id="toLogin">Back to sign in</button></section>
+<form id="forgotForm"><label class="lbl" for="fEmail">Work email</label><input id="fEmail" type="email" autocomplete="username" required>
+<button class="pri" type="submit" id="fBtn">Send link</button></form><p id="fMsg" class="msg" role="alert"></p>
+<button class="lk" id="toLogin" type="button">Back to sign in</button></section>
 
-<section id="setpw" class="card view" hidden><h1 id="pwTitle">Choose a password</h1><p class="sub" id="pwSub">Use at least 8 characters.</p>
-<form id="pwForm"><label for="p1">New password</label><input id="p1" type="password" autocomplete="new-password" minlength="8" required>
-<label for="p2">Confirm new password</label><input id="p2" type="password" autocomplete="new-password" minlength="8" required>
-<button class="pri" type="submit">Save password</button></form><p id="pMsg" class="msg" role="alert"></p>
-<button class="lk" id="pwCancel" hidden>Cancel</button></section>
+<section id="setpw" class="card view" hidden><h1 id="pwTitle">Choose a password</h1><p class="sub" id="pwSub"></p>
+<form id="pwForm"><label class="lbl" for="p1">New password</label><div class="pw"><input id="p1" type="password" autocomplete="new-password" required><button type="button" data-show="p1">Show</button></div>
+<div class="hint">At least 8 characters, with a letter and a number.</div>
+<label class="lbl" for="p2">Confirm new password</label><input id="p2" type="password" autocomplete="new-password" required>
+<button class="pri" type="submit">Save password</button></form><p id="pMsg" class="msg" role="alert"></p></section>
 
+<!-- ================= DASHBOARD ================= -->
 <section id="app" class="view" hidden>
-<header class="top"><h1>Escalation Dashboard</h1><div class="ua"><span class="chip" id="who"></span><button class="tt" aria-label="Toggle theme" role="switch">☀️<i></i>🌙</button><button class="gh" id="chPw">Change password</button><button class="gh" id="out">Sign out</button></div></header>
-<div class="lay"><nav id="side" class="side"></nav><main id="main">
+<header class="top"><div><h1>Escalation Dashboard</h1><span class="sub" id="period"></span></div>
+<div class="ua"><span class="chip" id="who"></span>
+<button type="button" class="theme-toggle" role="switch" aria-checked="false" aria-label="Switch to dark theme"><span class="o sun">☀️<em>Light</em></span><span class="tr"><span class="kn"></span></span><span class="o moon">🌙<em>Dark</em></span></button>
+<button class="gh" id="refresh" type="button">Refresh data</button><button class="gh" id="chPw" type="button">Change password</button><button class="gh" id="out" type="button">Log out</button></div></header>
+<div class="lay"><nav id="side" class="side" aria-label="Sections"></nav><main id="main">
 <div id="ph" class="panel empty" hidden></div>
 <div id="fce" hidden>
- <div class="panel"><h2>Filters</h2><div class="hier" id="hier"></div><div class="months" id="months"></div><div class="act" id="act"></div></div>
+ <div class="panel">
+  <div class="filters"><div><label class="lbl" for="fy">Financial year</label><select id="fy"></select></div>
+   <div><span class="lbl">Month</span><div id="months" class="months" role="group" aria-label="Month"></div></div></div>
+  <div class="hier" id="hier"></div>
+  <nav class="crumbs" id="crumbs" aria-label="Hierarchy path"></nav>
+  <div id="selNote" class="sel-note" role="status" hidden></div>
+  <div class="act" id="act"></div>
+ </div>
  <div class="kpis" id="kpis"></div>
- <div class="panel"><h2>Month-on-month: resolved vs yet to resolve</h2><div class="leg"><span><i style="background:var(--res)"></i>Resolved</span><span><i style="background:var(--opn)"></i>Yet to resolve</span><span><i style="background:var(--pct)"></i>Resolved %</span></div><div id="trend"></div></div>
- <div class="g2"><div class="panel"><h2>By escalation category</h2><p class="sub">Click a row to filter. Blue = resolved, amber = yet to resolve.</p><div id="cats"></div></div>
+ <div class="panel"><h2>Month-on-month: resolved vs yet to resolve</h2><p class="sub">Every month of the selected financial year. Click a month to filter.</p><div class="leg"><span><i style="background:var(--res)"></i>Resolved</span><span><i style="background:var(--opn)"></i>Yet to resolve</span><span><i style="background:var(--pct)"></i>Resolved %</span></div><div id="trend"></div></div>
+ <div class="g2"><div class="panel"><h2>By escalation category</h2><p class="sub">Click a row to filter. Blue = resolved, amber = yet to resolve.</p><div id="cats" style="margin-top:8px"></div></div>
  <div class="panel"><h2>Aging of unresolved cases</h2><p class="sub" id="agSub"></p><div class="kpis" id="agK" style="margin:10px 0"></div><div id="aging"></div></div></div>
- <div class="panel"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h2>Record-level drill-down</h2><input id="q" placeholder="Search user ID, product, category" style="max-width:280px"></div><div class="wrapx" id="tbl"></div></div>
+ <div class="panel" id="teamSec" hidden></div>
+ <div class="panel"><h2>Record-level drill-down</h2><p class="sub">Every escalation in the current view.</p>
+  <div class="toolbar"><input id="q" type="search" placeholder="Search user ID, product, category, name" aria-label="Search records"><span class="grow"></span>
+  <select id="size" aria-label="Rows per page"><option>20</option><option>50</option><option>100</option></select><button class="gh" id="exp" type="button">Export CSV</button></div>
+  <div id="tbl"></div></div>
 </div></main></div></section>
+<div id="modalRoot"></div><div id="toastRoot"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" integrity="sha384-BWcjm9OdFth9TbhCxZPdm+gAOUMAzQy9nmTs12ioXdCcbVnJaPMn+fMUoQCLt60R" crossorigin="anonymous"></script>
 <script>
+/* ======================= settings ======================= */
 const SUPABASE_URL="https://cggavmfizegnuiaacvpz.supabase.co",SUPABASE_KEY="sb_publishable_ZxFQWQEYybHJqp8LOkTLyg_97PsjaG6";
-const isRecovery=location.hash.includes("type=recovery"),sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=id=>document.getElementById(id),redirectTo=location.origin+location.pathname;
-const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],fm=m=>MN[+m.slice(5)-1]+" "+m.slice(2,4),fd=d=>d.slice(8,10)+"."+d.slice(5,7)+"."+d.slice(0,4);
-const ADMIN=["ADMIN","L5","NS"],LV={L4:4,L3:3,L2:2,L1:1,L0:0},BL=["0-3 d","4-7 d","8-15 d","16-30 d","30+ d"],BC=["var(--green)","var(--cyan)","var(--amber)","var(--opn)","var(--red)"];
-const pc=(a,b)=>b?(a/b*100).toFixed(1)+"%":"–",mons=a=>[...new Set(a.map(r=>r.m))].sort(),nice=v=>{if(v<=0)return 1;const p=10**Math.floor(Math.log10(v)),f=v/p;return(f<=1?1:f<=2?2:f<=5?5:10)*p};
-const SEC=[["fce","First Call Escalation"],["onb","Onboarding Not Connected"],["ref","Refunds"],["fin","Fintech",[["baj","Fintech: Bajaj"],["fib","Fintech: Fibe"]]]];
-let S={rows:[],top:4,lock:-1,sec:"fce",sel:{},month:"",cat:"",q:"",page:1,f:[]},pwMode="first";
+const IDLE_MS=30*60*1000;            // auto log out after 30 minutes without activity
+const MAX_FAILS=5,LOCK_MS=60*1000;   // after 5 wrong passwords, sign-in pauses for 60 seconds
+const RESEND_S=60;                   // wait before another reset email can be requested
+const ADMIN=["ADMIN","L5","NS"],LVR={L4:4,L3:3,L2:2,L1:1,L0:0};
 
-/* ---------- auth ---------- */
-function show(id){document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!==id);document.querySelector(".fx").hidden=id==="app"}
-function say(id,t,ok){const e=$(id);e.textContent=t||"";e.className="msg "+(ok?"ok":"err")}
+/* sessions live in sessionStorage: closing the tab or browser signs the person out */
+let store;try{sessionStorage.setItem("_t","1");sessionStorage.removeItem("_t");store=sessionStorage}catch(e){store=undefined}
+const isRecovery=location.hash.includes("type=recovery");
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storage:store,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const redirectTo=location.origin+location.pathname;
+
+/* ======================= helpers ======================= */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fm=m=>MN[+m.slice(5)-1]+" "+m.slice(2,4),fml=m=>MN[+m.slice(5)-1]+" "+m.slice(0,4),fd=d=>d.slice(8,10)+"."+d.slice(5,7)+"."+d.slice(0,4);
+const pc=(a,b)=>b?(a/b*100).toFixed(1)+"%":"–";
+const nice=v=>{if(v<=0)return 1;const p=10**Math.floor(Math.log10(v)),f=v/p;return(f<=1?1:f<=2?2:f<=5?5:10)*p};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+const fyOf=d=>{if(!d)return null;const y=+d.slice(0,4),m=+d.slice(5,7);return m>=4?y:y-1};
+const fyLabel=s=>"FY "+s+"-"+String(s+1).slice(2);
+const fyMonths=s=>[4,5,6,7,8,9,10,11,12].map(m=>s+"-"+pad(m)).concat([1,2,3].map(m=>(s+1)+"-"+pad(m)));
+const pwOk=p=>p.length>=8&&/[A-Za-z]/.test(p)&&/\d/.test(p);
+function say(id,t,ok){const e=$(id);e.textContent=t||"";e.className="msg"+(ok?" ok":"")}
 const busy=(f,on)=>f.querySelector("button[type=submit]").disabled=on;
-async function route(s){if(!s){show("login");return}if(!s.user.user_metadata?.password_changed){openPw("first");return}show("app");loadApp(s.user)}
-function openPw(m){pwMode=m;$("pwTitle").textContent=m==="change"?"Change your password":"Choose a password";$("pwSub").textContent=m==="first"?"Set your own password before continuing. Use at least 8 characters.":"Use at least 8 characters.";$("pwCancel").hidden=m!=="change";$("pwForm").reset();say("pMsg","");show("setpw")}
-$("loginForm").onsubmit=async e=>{e.preventDefault();busy(e.target,1);say("lMsg","");const{data,error}=await sb.auth.signInWithPassword({email:$("lEmail").value.trim(),password:$("lPass").value});busy(e.target,0);if(error){say("lMsg","Incorrect email or password. First time? Use the link below.");return}route(data.session)};
-$("forgotForm").onsubmit=async e=>{e.preventDefault();busy(e.target,1);await sb.auth.resetPasswordForEmail($("fEmail").value.trim(),{redirectTo});busy(e.target,0);say("fMsg","If this email has access, a link is on its way. Check spam too.",1)};
-$("pwForm").onsubmit=async e=>{e.preventDefault();if($("p1").value!==$("p2").value){say("pMsg","The two passwords do not match.");return}busy(e.target,1);const{error}=await sb.auth.updateUser({password:$("p1").value,data:{password_changed:true}});busy(e.target,0);if(error){say("pMsg",error.message);return}history.replaceState(null,"",location.pathname);const{data}=await sb.auth.getSession();route(data.session)};
-$("toForgot").onclick=()=>{say("fMsg","");show("forgot")};$("toLogin").onclick=()=>show("login");$("chPw").onclick=()=>openPw("change");$("pwCancel").onclick=()=>show("app");$("out").onclick=async()=>{await sb.auth.signOut();S.rows=[];show("login")};
-sb.auth.onAuthStateChange(ev=>{if(ev==="PASSWORD_RECOVERY")openPw("recover")});
-document.querySelectorAll(".tt").forEach(b=>b.onclick=()=>{const t=document.documentElement.dataset.theme==="dark"?"light":"dark",h=document.documentElement;h.classList.add("anim");setTimeout(()=>h.classList.remove("anim"),450);h.dataset.theme=t;try{localStorage.setItem("themePreference",t)}catch(e){}});
+function toast(t,bad){const r=$("toastRoot");r.innerHTML='<div class="toast'+(bad?" bad":"")+'" role="status">'+esc(t)+"</div>";clearTimeout(toast.h);toast.h=setTimeout(()=>r.innerHTML="",4200)}
+function modal(html,cls){$("modalRoot").innerHTML='<div class="modalbg" role="dialog" aria-modal="true"><div class="modal '+(cls||"")+'">'+html+"</div></div>";const f=$("modalRoot").querySelector("input,.pri,button");if(f)f.focus()}
+function closeModal(){$("modalRoot").innerHTML=""}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-show]");if(!b)return;const i=$(b.dataset.show);i.type=i.type==="password"?"text":"password";b.textContent=i.type==="password"?"Show":"Hide"});
 
-/* ---------- data ---------- */
+/* ======================= source protection =======================
+   Blocks the right-click menu and the view-source / save / developer-tools shortcuts.
+   This only discourages casual copying. The real protection is the database's
+   row-level security, which decides what each login can read. */
+(function(){
+ const editable=t=>!!(t&&t.closest&&t.closest("input,textarea,select,[contenteditable=true]"));
+ document.addEventListener("contextmenu",e=>{if(!editable(e.target))e.preventDefault()},true);
+ document.addEventListener("keydown",e=>{const c=e.code||"",k=(e.key||"").toLowerCase(),mod=e.ctrlKey||e.metaKey;
+  const bad=k==="f12"||(mod&&!e.shiftKey&&(c==="KeyU"||c==="KeyS"))||(mod&&e.shiftKey&&["KeyI","KeyJ","KeyC","KeyS"].includes(c))||(e.metaKey&&e.altKey&&["KeyU","KeyI","KeyJ","KeyC"].includes(c));
+  if(bad){e.preventDefault();e.stopPropagation()}},true);
+})();
+
+/* ======================= theme ======================= */
+function applyTheme(t,anim){const h=document.documentElement;if(anim){h.classList.add("theme-anim");clearTimeout(applyTheme.t);applyTheme.t=setTimeout(()=>h.classList.remove("theme-anim"),450)}
+ h.setAttribute("data-theme",t);document.querySelectorAll(".theme-toggle").forEach(b=>{b.setAttribute("aria-checked",t==="dark");b.setAttribute("aria-label",t==="dark"?"Switch to light theme":"Switch to dark theme")})}
+document.querySelectorAll(".theme-toggle").forEach(b=>b.onclick=()=>{const t=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";applyTheme(t,true);try{localStorage.setItem("themePreference",t)}catch(e){}});
+applyTheme(document.documentElement.getAttribute("data-theme")||"light");
+
+/* ======================= state ======================= */
+const LV=[4,3,2,1,0],DIR="__DIRECT__";
+const SEC=[["fce","First Call Escalation"],["onb","Onboarding Not Connected"],["ref","Refunds"],["fin","Fintech",[["baj","Fintech: Bajaj"],["fib","Fintech: Fibe"]]]];
+function fresh(){return{user:null,email:"",me:"",meName:"",role:"",top:4,lock:-1,rows:[],fys:[],fy:null,month:"",sel:{},want:{},wantLbl:{},sec:"fce",cat:"",q:"",page:1,size:20,sort:{k:"esc_date",dir:"desc"},team:{lvl:null,q:"",k:"n",dir:"desc",page:1,rows:[]},f:[],crumbs:[],loggingOut:false}}
+let S=fresh();
+
+/* ======================= views & auth ======================= */
+function show(id){document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!==id);document.querySelector(".theme-fixed").hidden=id==="app"}
+function showLogin(msg,ok){show("login");say("lMsg",msg,ok);$("lPass").value="";setTimeout(()=>$("lEmail").focus(),50)}
+async function route(s){
+ if(!s){showLogin();return}
+ if(!s.user.user_metadata?.password_changed){openPw("first");return}
+ enterApp(s.user);
+}
+function openPw(m){S.pwMode=m;$("pwTitle").textContent=m==="recover"?"Reset your password":"Choose a password";
+ $("pwSub").textContent=m==="first"?"Set your own password before you continue.":"Choose a new password for your account.";$("pwForm").reset();say("pMsg","");show("setpw")}
+
+/* sign in, with a short pause after repeated wrong passwords */
+let fails=0,lockUntil=0;
+$("loginForm").onsubmit=async e=>{e.preventDefault();
+ if(Date.now()<lockUntil){say("lMsg","Too many attempts. Try again in "+Math.ceil((lockUntil-Date.now())/1000)+" seconds.");return}
+ busy(e.target,1);say("lMsg","");
+ const{data,error}=await sb.auth.signInWithPassword({email:$("lEmail").value.trim().toLowerCase(),password:$("lPass").value});
+ busy(e.target,0);
+ if(error){
+  if(/banned/i.test(error.message)){$("lPass").value="";inactiveModal();return}
+  if(++fails>=MAX_FAILS){fails=0;lockUntil=Date.now()+LOCK_MS;say("lMsg","Too many attempts. Try again in 60 seconds.");return}
+  say("lMsg","Incorrect email or password. First time here? Use the link below.");return}
+ fails=0;$("lPass").value="";route(data.session)};
+["lEmail","lPass"].forEach(id=>$(id).addEventListener("keyup",e=>{if(e.getModifierState)$("capsHint").hidden=!e.getModifierState("CapsLock")}));
+
+/* forgot password: same answer whether or not the email exists, and a cool-down between requests */
+$("forgotForm").onsubmit=async e=>{e.preventDefault();const b=$("fBtn");b.disabled=true;
+ await sb.auth.resetPasswordForEmail($("fEmail").value.trim().toLowerCase(),{redirectTo});
+ say("fMsg","If this email has access, a link is on its way. Check spam too.",1);
+ let n=RESEND_S;const t=setInterval(()=>{b.textContent="Send again in "+(--n)+"s";if(n<=0){clearInterval(t);b.disabled=false;b.textContent="Send link"}},1000)};
+$("toForgot").onclick=()=>{say("fMsg","");$("fEmail").value=$("lEmail").value;show("forgot")};
+$("toLogin").onclick=()=>showLogin();
+
+/* first-time / reset password */
+$("pwForm").onsubmit=async e=>{e.preventDefault();const p=$("p1").value;
+ if(!pwOk(p)){say("pMsg","Use at least 8 characters, with a letter and a number.");return}
+ if(p!==$("p2").value){say("pMsg","The two passwords do not match.");return}
+ busy(e.target,1);const{error}=await sb.auth.updateUser({password:p,data:{password_changed:true}});busy(e.target,0);
+ if(error){say("pMsg",error.message);return}
+ history.replaceState(null,"",location.pathname);const{data}=await sb.auth.getSession();route(data.session)};
+
+/* change password from inside the dashboard: the current password is checked first */
+$("chPw").onclick=()=>{
+ modal('<h3>Change password</h3><label class="lbl" for="cp">Current password</label><input id="cp" type="password" autocomplete="current-password"><label class="lbl" for="np">New password</label><input id="np" type="password" autocomplete="new-password"><div class="hint">At least 8 characters, with a letter and a number.</div><label class="lbl" for="npc">Confirm new password</label><input id="npc" type="password" autocomplete="new-password"><p id="cpMsg" class="msg" role="alert"></p><div class="actions"><button class="gh" type="button" id="cpNo">Cancel</button><button class="pri" type="button" id="cpGo">Update password</button></div>');
+ $("cpNo").onclick=closeModal;$("cpGo").onclick=savePw;["cp","np","npc"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")savePw()}));
+};
+async function savePw(){const cp=$("cp").value,np=$("np").value,b=$("cpGo");
+ if(!pwOk(np)){say("cpMsg","Use at least 8 characters, with a letter and a number.");return}
+ if(np!==$("npc").value){say("cpMsg","New password and confirmation do not match.");return}
+ if(np===cp){say("cpMsg","The new password must be different from the current one.");return}
+ b.disabled=true;b.textContent="Updating…";
+ const chk=await sb.auth.signInWithPassword({email:S.email,password:cp});
+ if(chk.error){b.disabled=false;b.textContent="Update password";say("cpMsg","Your current password is not correct.");return}
+ const{error}=await sb.auth.updateUser({password:np,data:{password_changed:true}});
+ if(error){b.disabled=false;b.textContent="Update password";say("cpMsg",error.message);return}
+ closeModal();logoutNow("Password updated. Sign in with your new password.",true)}
+
+function inactiveModal(){modal('<h3>Account inactive</h3><p>Your account is inactive, so you no longer have dashboard access. Contact your administrator if this is wrong.</p><div class="actions"><button class="pri" type="button" id="inOk">OK</button></div>',"danger");$("inOk").onclick=closeModal}
+
+/* log out: ends the session and wipes every trace of the previous user from the page */
+function resetUI(){["who","period","hier","crumbs","months","act","kpis","trend","cats","aging","agK","agSub","teamSec","tbl","side","ph"].forEach(id=>$(id).innerHTML="");
+ $("fy").innerHTML="";$("selNote").hidden=true;$("teamSec").hidden=true;$("fce").hidden=true;$("ph").hidden=true;$("q").value="";$("toastRoot").innerHTML=""}
+async function logoutNow(msg,ok){S.loggingOut=true;clearTimeout(idleT);try{await sb.auth.signOut({scope:"local"})}catch(e){}
+ S=fresh();resetUI();closeModal();$("lEmail").value="";showLogin(msg||"You have been logged out.",ok!==false)}
+$("out").onclick=()=>{modal('<h3>Log out?</h3><p>You will need to sign in again to view the dashboard.</p><div class="actions"><button class="gh" type="button" id="lo1">Stay</button><button class="pri" type="button" id="lo2">Log out</button></div>');$("lo1").onclick=closeModal;$("lo2").onclick=()=>logoutNow()};
+
+/* session ended elsewhere (expired, revoked) */
+sb.auth.onAuthStateChange(ev=>{if(ev==="PASSWORD_RECOVERY")openPw("recover");if(ev==="SIGNED_OUT"&&S.user&&!S.loggingOut)logoutNow("Your session has ended. Please sign in again.",false)});
+
+/* idle timeout */
+let idleT=null;
+function bumpIdle(){if(!S.user)return;clearTimeout(idleT);idleT=setTimeout(()=>logoutNow("You were logged out after 30 minutes of inactivity.",false),IDLE_MS)}
+["click","keydown","scroll","touchstart"].forEach(ev=>document.addEventListener(ev,bumpIdle,{passive:true}));
+
+/* browser Back button: asks before leaving, and leaving logs out */
+function guardHistory(){history.replaceState({base:1},"",location.pathname);history.pushState({dash:1},"",location.pathname)}
+window.addEventListener("popstate",e=>{if(!S.user||(e.state&&e.state.dash))return;
+ modal('<h3>Leave the dashboard?</h3><p>Going back will log you out of the dashboard. Please confirm.</p><div class="actions"><button class="gh" type="button" id="bk1">No, stay</button><button class="pri" type="button" id="bk2">Yes, log out</button></div>',"danger");
+ $("bk1").onclick=()=>{closeModal();history.pushState({dash:1},"",location.pathname)};$("bk2").onclick=()=>logoutNow()});
+
+/* ======================= app ======================= */
+async function enterApp(user){show("app");if(!S.user)guardHistory();S.user=user;S.email=(user.email||"").toLowerCase();bumpIdle();await loadApp()}
+async function loadApp(){
+ resetUI();
+ const{data:me,error}=await sb.from("employees").select("emp_name,role,status,lwd").maybeSingle();
+ if(error){if(/jwt|expired|401/i.test(error.message))return logoutNow("Your session has ended. Please sign in again.",false);$("ph").hidden=false;$("ph").textContent="Could not load your profile: "+error.message;return}
+ if(me&&((me.status||"").trim().toLowerCase()!=="active"||(me.lwd&&me.lwd<today()))){await logoutNow("Your account is inactive.",false);inactiveModal();return}
+ const role=(me?.role||"").trim().toUpperCase();
+ if(!me||!(ADMIN.includes(role)||role in LVR)){$("who").textContent=S.email;$("ph").hidden=false;$("ph").textContent="Your account does not have dashboard access. Contact your administrator.";return}
+ S.role=role;S.me=S.email;S.meName=me.emp_name||S.email;S.top=ADMIN.includes(role)?4:LVR[role];S.lock=ADMIN.includes(role)?-1:LVR[role];
+ $("who").textContent=S.meName+" · "+(role==="ADMIN"?"Administrator":role);
+ side();setSec("fce");
+ await loadData();
+}
 async function fetchAll(){let all=[],from=0;for(;;){const{data,error}=await sb.from("first_call_escalation").select("esc_date,user_id,product_category,escalation_category,status,l0,l1,l2,l3,l4,l0_name,l1_name,l2_name,l3_name,l4_name").order("esc_date",{ascending:false}).order("user_id").order("escalation_category").range(from,from+999);if(error)throw error;all=all.concat(data);if(data.length<1000)break;from+=1000}return all}
-function prep(r){const open=(r.status||"").trim().toLowerCase()!=="resolved",age=open&&r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;return{...r,m:(r.esc_date||"").slice(0,7),open,age,b:age==null?-1:age<=3?0:age<=7?1:age<=15?2:age<=30?3:4,escalation_category:r.escalation_category||"(blank)",product_category:r.product_category||"",user_id:r.user_id||""}}
-async function loadApp(user){
- const{data:me}=await sb.from("employees").select("emp_name,role").maybeSingle(),role=(me?.role||"").toUpperCase();
- if(!me||!(ADMIN.includes(role)||role in LV)){$("who").textContent=user.email;$("main").innerHTML='<div class="panel empty">Your account does not have dashboard access. Contact your administrator.</div>';$("side").innerHTML="";return}
- $("who").textContent=me.emp_name+" · "+role;S.top=ADMIN.includes(role)?4:LV[role];S.lock=ADMIN.includes(role)?-1:LV[role];S.me=user.email.toLowerCase();S.sel={};S.month=S.cat=S.q="";
- side();setSec("fce");$("tbl").innerHTML='<div class="empty">Loading…</div>';
- try{S.rows=(await fetchAll()).map(prep)}catch(e){$("tbl").innerHTML='<div class="empty">Could not load data: '+esc(e.message)+"</div>";return}
- render()}
-function side(){$("side").innerHTML=SEC.map(([id,t,sub])=>`<button class="nv${S.sec===id?" on":""}" data-s="${id}">${t}</button>`+(sub||[]).map(([i,n])=>`<button class="nv sub${S.sec===i?" on":""}" data-s="${i}">${n}</button>`).join("")).join("")}
+function prep(r){const open=(r.status||"").trim().toLowerCase()!=="resolved",age=open&&r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;
+ const o={...r,m:(r.esc_date||"").slice(0,7),fy:fyOf(r.esc_date),open,age,b:age==null?-1:age<=3?0:age<=7?1:age<=15?2:age<=30?3:4,escalation_category:r.escalation_category||"(blank)",product_category:r.product_category||"",user_id:r.user_id||""};
+ LV.forEach(k=>{if(o["l"+k]&&!o["l"+k+"_name"])o["l"+k+"_name"]=o["l"+k]});return o}
+async function loadData(){
+ $("tbl").innerHTML='<div class="empty">Loading…</div>';
+ let raw;try{raw=await fetchAll()}catch(e){if(/jwt|expired|401/i.test(e.message))return logoutNow("Your session has ended. Please sign in again.",false);$("tbl").innerHTML='<div class="empty">Could not load data: '+esc(e.message)+"</div>";return}
+ S.rows=raw.map(prep);S.fys=[...new Set(S.rows.map(r=>r.fy).filter(v=>v!=null))].sort((a,b)=>b-a);
+ if(!S.fys.length){$("fce").hidden=true;$("ph").hidden=false;$("ph").textContent="No escalation records are available for your access yet.";return}
+ if(!S.fys.includes(S.fy)){S.fy=S.fys[0];S.month=""}
+ applySel(S.want,false);
+}
+$("refresh").onclick=async()=>{const b=$("refresh");b.disabled=true;b.textContent="Refreshing…";await loadData();b.disabled=false;b.textContent="Refresh data";toast("Data refreshed.")};
+function side(){$("side").innerHTML=SEC.map(([id,t,sub])=>`<button class="nv${S.sec===id?" on":""}" data-s="${id}" type="button">${t}</button>`+(sub||[]).map(([i,n])=>`<button class="nv sub${S.sec===i?" on":""}" data-s="${i}" type="button">${n}</button>`).join("")).join("")}
 function setSec(id){S.sec=id;side();$("fce").hidden=id!=="fce";$("ph").hidden=id==="fce";if(id!=="fce")$("ph").textContent="No data for this section yet. It will appear here once its tab is filled in and synced."}
 $("side").onclick=e=>{const b=e.target.closest("[data-s]");if(b)setSec(b.dataset.s)};
 
-/* ---------- filtering ---------- */
-const lv=[4,3,2,1,0],imp=k=>S.auto&&S.auto[k],H=()=>S.rows.filter(r=>lv.every(k=>!S.sel[k]||imp(k)||r["l"+k]===S.sel[k]));
-function render(){const h=H(),hc=S.cat?h.filter(r=>r.escalation_category===S.cat):h,f=S.month?hc.filter(r=>r.m===S.month):hc,hm=S.month?h.filter(r=>r.m===S.month):h;S.f=f;
- drawFilters();drawKpis(f);$("trend").innerHTML=trend(hc);$("cats").innerHTML=cats(hm);drawAging(hc,f);drawTable()}
-function drawFilters(){let h="";const cur=H(),low=k=>lv.some(j=>j<k&&S.sel[j]&&!imp(j));
- for(let k=S.top;k>=0;k--){const above=S.rows.filter(r=>lv.every(j=>j===k||!S.sel[j]||imp(j)||r["l"+j]===S.sel[j])),o=new Map();above.forEach(r=>{if(r["l"+k])o.set(r["l"+k],r["l"+k+"_name"]||r["l"+k])});
-  if(!o.size)continue; /* level blank for everyone here: skip straight to the next one */
-  const lock=k===S.lock,opts=lock?[[S.me,((S.rows.find(r=>r["l"+k]===S.me)||{})["l"+k+"_name"])||S.me]]:[...o].sort((a,b)=>a[1].localeCompare(b[1])),n=new Set(cur.map(r=>r["l"+k]).filter(Boolean)).size,lab=!S.sel[k]&&low(k)?(n===0?"n/a":n>1?"Multiple ("+n+")":"All"):"All";
-  h+=`<div><label>L${k}${lock?" (you)":""}</label><select data-k="${k}"${lock?" disabled":""}>${lock?"":`<option value="">${lab}</option>`}${opts.map(([e,n])=>`<option value="${esc(e)}"${S.sel[k]===e?" selected":""}>${esc(n)}</option>`).join("")}</select></div>`}
- $("hier").innerHTML=h;
- const ms=mons(S.rows).slice(-18);$("months").innerHTML=ms.map(m=>`<button class="mo${S.month===m?" on":""}" data-m="${m}">${fm(m)}</button>`).join("");
- const any=Object.values(S.sel).some(Boolean)||S.month||S.cat;$("act").innerHTML=(S.month?`<span class="chip">Month: ${fm(S.month)}</span>`:"")+(S.cat?`<span class="chip">Category: ${esc(S.cat)}</span>`:"")+(any?'<button class="gh" id="clr">Clear filters</button>':"")}
-function refill(){for(const j in S.auto)S.sel[j]="";S.auto={};const m=lv.filter(k=>S.sel[k]);if(!m.length)return;
- for(let j=Math.min(...m)+1;j<=S.top;j++){if(S.sel[j]||j===S.lock)continue;
-  const rs=H(),v=new Set(rs.map(r=>r["l"+j]).filter(Boolean));if(rs.length&&v.size===1){S.sel[j]=[...v][0];S.auto[j]=true}}}
-$("hier").onchange=e=>{const k=+e.target.dataset.k;if(S.auto)delete S.auto[k];S.sel[k]=e.target.value;S.page=1;refill();render()};
-$("months").onclick=e=>{const b=e.target.closest("[data-m]");if(b){S.month=S.month===b.dataset.m?"":b.dataset.m;S.page=1;render()}};
-$("act").onclick=e=>{if(e.target.id==="clr"){S.sel={};S.auto={};S.month=S.cat="";S.page=1;render()}};
-$("trend").onclick=e=>{const b=e.target.closest("[data-m]");if(b){S.month=S.month===b.dataset.m?"":b.dataset.m;S.page=1;render()}};
-$("cats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){S.cat=S.cat===b.dataset.c?"":b.dataset.c;S.page=1;render()}};
-$("q").oninput=e=>{S.q=e.target.value;S.page=1;drawTable()};
+/* ======================= hierarchy (same rules as the reference dashboard) =======================
+   - Levels above your own are hidden; your own level is locked to you.
+   - Filters work top-down: pick L4, then L3 under that L4, and so on.
+     A level stays disabled ("Select L4 first") until the level above it is chosen.
+   - "Direct (no L3)" lists the cases where that level is blank, so blank L1/L2/L3 go straight to the next level.
+     If a level is blank for everyone in view, it is skipped automatically.
+   - Lists only show people who have data in the selected year and month.
+   - Your choice is remembered when you switch month. If someone has no data that month,
+     the nearest level above is shown and a note explains it.                                  */
+const match=(r,k,v)=>v===DIR?!r["l"+k]:r["l"+k]===v;
+const scope=()=>S.rows.filter(r=>r.fy===S.fy&&(!S.month||r.m===S.month));
+const selFilter=rows=>rows.filter(r=>LV.every(k=>!S.sel[k]||match(r,k,S.sel[k])));
+function walk(sel){
+ let pool=scope(),ok=true,last=null,need=null,invalid=null;const out=[];
+ for(const k of LV){
+  if(k>S.top){out.push({k,st:"above"});continue}
+  if(k===S.lock){out.push({k,st:"lock",last});last=k;continue}
+  if(!ok){out.push({k,st:"wait",last,need});continue}
+  const nm=new Map();let blank=0;pool.forEach(r=>{const e=r["l"+k];if(e){if(!nm.has(e))nm.set(e,r["l"+k+"_name"]||e)}else blank++});
+  if(!nm.size){out.push({k,st:"pass",last});continue}
+  const v=sel[k]||"",good=!v||(v===DIR?blank>0:nm.has(v));if(!good&&invalid==null)invalid=k;
+  out.push({k,st:"open",last,opts:[...nm].sort((a,b)=>a[1].localeCompare(b[1])),dir:blank>0,v:good?v:""});
+  if(v&&good){pool=pool.filter(r=>match(r,k,v));last=k}else{ok=false;need=k}
+ }
+ return{out,pool,invalid};
+}
+const optLabel=(o,v)=>v===DIR?"Direct (no L"+o.k+")":(new Map(o.opts).get(v)||v);
+function applySel(want,remember){
+ const s={};LV.forEach(k=>{if(want[k]&&k!==S.lock&&k<=S.top)s[k]=want[k]});
+ let w=walk(s);
+ for(let i=0;i<6&&w.invalid!=null;i++){const k=[0,1,2,3,4].find(j=>s[j]);if(k==null)break;delete s[k];w=walk(s)}  // step up one level at a time
+ S.sel={};w.out.forEach(o=>{if(o.st==="open"&&o.v)S.sel[o.k]=o.v});
+ if(remember){S.want={...S.sel};S.wantLbl={};w.out.forEach(o=>{if(o.st==="open"&&o.v)S.wantLbl[o.k]=optLabel(o,o.v)})}
+ S.page=1;S.team.page=1;render(w);
+}
+function pickLevel(k,v){const s={...S.sel};s[k]=v;LV.forEach(j=>{if(j<k)delete s[j]});applySel(s,true)}
+$("hier").onchange=e=>{const k=e.target.dataset.k;if(k!=null)pickLevel(+k,e.target.value)};
+function drawHier(w){
+ $("hier").innerHTML=w.out.map(o=>{const k=o.k;if(o.st==="above")return"";
+  if(o.st==="lock")return`<div class="f lock"><label class="lbl">L${k} (you)</label><select disabled aria-label="L${k} (you)"><option>${esc(S.meName)}</option></select></div>`;
+  const lab=o.last==null?"L"+k:"L"+k+" under "+(o.last===S.lock?"you":"selected L"+o.last);
+  if(o.st==="wait")return`<div class="f"><label class="lbl">${lab}</label><select disabled aria-label="${lab}"><option>Select L${o.need} first</option></select></div>`;
+  if(o.st==="pass")return`<div class="f"><label class="lbl">${lab}</label><select disabled aria-label="${lab}"><option>No L${k} here (direct)</option></select></div>`;
+  return`<div class="f"><label class="lbl" for="h${k}">${lab}</label><select id="h${k}" data-k="${k}"><option value="">All L${k} in view</option>${o.dir?`<option value="${DIR}"${o.v===DIR?" selected":""}>Direct (no L${k})</option>`:""}${o.opts.map(([e,n])=>`<option value="${esc(e)}"${o.v===e?" selected":""}>${esc(n)}</option>`).join("")}</select></div>`}).join("");
+}
+function drawCrumbs(w){
+ const parts=[{label:S.lock<0?"Organisation":"You · L"+S.lock,sel:{}}];let acc={};
+ w.out.forEach(o=>{if(o.st==="open"&&o.v){acc={...acc,[o.k]:o.v};parts.push({label:"L"+o.k+": "+optLabel(o,o.v),sel:{...acc}})}});
+ S.crumbs=parts;
+ $("crumbs").innerHTML=parts.map((p,i)=>(i?'<span class="sep">›</span>':"")+(i===parts.length-1?`<span class="cur">${esc(p.label)}</span>`:`<button type="button" data-i="${i}">${esc(p.label)}</button>`)).join("");
+}
+$("crumbs").onclick=e=>{const b=e.target.closest("[data-i]");if(b)applySel(S.crumbs[+b.dataset.i].sel,true)};
+const periodTxt=()=>S.month?fml(S.month):fyLabel(S.fy)+" (full year)";
+function drawSelNote(){
+ const el=$("selNote"),miss=LV.filter(k=>S.want[k]&&S.want[k]!==S.sel[k]);
+ if(!miss.length){el.hidden=true;el.innerHTML="";return}
+ el.innerHTML="<span>📌 Your selection is kept: "+miss.map(k=>"L"+k+" <b>"+esc(S.wantLbl[k]||S.want[k])+"</b>").join(", ")+" has no data in "+esc(periodTxt())+", so the nearest available level is shown. Switch period to see it again.</span><button type=\"button\" id=\"snUse\">Use this view instead</button>";
+ el.hidden=false;$("snUse").onclick=()=>applySel(S.sel,true);
+}
 
-/* ---------- widgets ---------- */
-function drawKpis(f){const n=f.length,res=f.filter(r=>!r.open).length,op=n-res,ag=f.filter(r=>r.open).map(r=>r.age),avg=ag.length?ag.reduce((a,b)=>a+b,0)/ag.length:0,o7=ag.filter(a=>a>7).length,u=new Set(f.map(r=>r.user_id)).size;
- const K=[["Total escalations",n.toLocaleString(),"in current view",""],["Resolved",res.toLocaleString(),pc(res,n)+" of total","good"],["Yet to resolve",op.toLocaleString(),pc(op,n)+" of total","bad"],["Resolved %",pc(res,n),"resolution rate","good"],["Avg age of open",avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",o7.toLocaleString(),pc(o7,op)+" of open","bad"],["Unique users",u.toLocaleString(),"distinct user IDs",""]];
- $("kpis").innerHTML=K.map(([a,b,c,d])=>`<div class="kpi ${d}"><span>${a}</span><b>${b}</b><small>${c}</small></div>`).join("")}
-function trend(rs){const ms=mons(rs).slice(-12);if(!ms.length)return'<div class="empty">No data for this selection.</div>';
- const by=ms.map(m=>{const x=rs.filter(r=>r.m===m),a=x.filter(r=>!r.open).length;return{m,a,o:x.length-a,p:a/x.length*100}});
- const W=760,H=300,L=44,R=44,T=30,B=34,iw=W-L-R,ih=H-T-B,sl=iw/ms.length,bw=Math.min(22,sl*.3),mx=nice(Math.max(...by.map(b=>Math.max(b.a,b.o)))/.62),y=v=>T+ih-v/mx*ih,yp=p=>T+ih-p/100*ih;
+/* ======================= period: financial year + month grid ======================= */
+function drawPeriod(){
+ $("fy").innerHTML=S.fys.map(f=>`<option value="${f}"${f===S.fy?" selected":""}>${fyLabel(f)}</option>`).join("");
+ const avail=new Set(S.rows.filter(r=>r.fy===S.fy).map(r=>r.m));
+ $("months").innerHTML=`<button type="button" class="mo${S.month?"":" on"}" data-m="" aria-pressed="${!S.month}">Full year</button>`+
+  fyMonths(S.fy).map(m=>{const na=!avail.has(m);return`<button type="button" class="mo${S.month===m?" on":""}" data-m="${m}"${na?` disabled title="No data for ${fml(m)}"`:` title="${fml(m)}"`} aria-pressed="${S.month===m}">${MN[+m.slice(5)-1].toUpperCase()}</button>`}).join("");
+ $("period").textContent=fyLabel(S.fy)+" · "+(S.month?fml(S.month):"Full year");
+}
+function setMonth(m){if(m===S.month)return;S.month=m;applySel(S.want,false)}
+$("months").onclick=e=>{const b=e.target.closest("[data-m]");if(b&&!b.disabled)setMonth(b.dataset.m)};
+$("fy").onchange=e=>{S.fy=+e.target.value;S.month="";applySel(S.want,false)};
+
+/* ======================= render ======================= */
+function render(w){
+ w=w||walk(S.sel);
+ drawPeriod();drawHier(w);drawCrumbs(w);drawSelNote();
+ const h=w.pool,f=S.cat?h.filter(r=>r.escalation_category===S.cat):h;S.f=f;
+ const fyRows=selFilter(S.rows.filter(r=>r.fy===S.fy)),fyC=S.cat?fyRows.filter(r=>r.escalation_category===S.cat):fyRows;
+ drawKpis(f);$("trend").innerHTML=trend(fyC);$("cats").innerHTML=cats(h);drawAging(fyC,f);drawTeam(f);drawTable();
+ const any=Object.keys(S.sel).length||S.month||S.cat||S.q;
+ $("act").innerHTML=(S.cat?`<span class="chip">Category: ${esc(S.cat)}</span>`:"")+(any?'<button class="gh" type="button" id="clr">Clear all filters</button>':"");
+}
+$("act").onclick=e=>{if(e.target.id==="clr"){S.cat="";S.q="";$("q").value="";S.month="";applySel({},true)}};
+$("trend").onclick=e=>{const b=e.target.closest("[data-m]");if(b)setMonth(S.month===b.dataset.m?"":b.dataset.m)};
+$("cats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){S.cat=S.cat===b.dataset.c?"":b.dataset.c;S.page=1;S.team.page=1;render()}};
+
+function drawKpis(f){const n=f.length,res=f.filter(r=>!r.open).length,op=n-res,ag=f.filter(r=>r.open).map(r=>r.age??0),avg=ag.length?ag.reduce((a,b)=>a+b,0)/ag.length:0,o7=ag.filter(a=>a>7).length,o30=ag.filter(a=>a>30).length,u=new Set(f.map(r=>r.user_id)).size;
+ const K=[["Total escalations",n.toLocaleString(),"in current view",""],["Resolved",res.toLocaleString(),pc(res,n)+" of total","good"],["Yet to resolve",op.toLocaleString(),pc(op,n)+" of total","bad"],["Resolved %",pc(res,n),"resolution rate",n&&res/n>=.8?"good":n?"warn":""],["Avg age of open",avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",o7.toLocaleString(),pc(o7,op)+" of open","bad"],["Open > 30 days",o30.toLocaleString(),pc(o30,op)+" of open","bad"],["Unique users",u.toLocaleString(),"distinct user IDs",""]];
+ $("kpis").innerHTML=K.map(([a,b,c,d])=>`<div class="kpi ${d}"><span>${a}</span><b class="num">${b}</b><small>${c}</small></div>`).join("")}
+
+function trend(rs){const ms=fyMonths(S.fy);if(!rs.length)return'<div class="empty">No data for this selection.</div>';
+ const by=ms.map(m=>{const x=rs.filter(r=>r.m===m),a=x.filter(r=>!r.open).length;return{m,n:x.length,a,o:x.length-a,p:x.length?a/x.length*100:null}});
+ const W=760,H=300,L=44,R=44,T=30,B=34,iw=W-L-R,ih=H-T-B,sl=iw/ms.length,bw=Math.min(20,sl*.3),mx=nice(Math.max(1,...by.map(b=>Math.max(b.a,b.o)))/.62),y=v=>T+ih-v/mx*ih,yp=p=>T+ih-p/100*ih;
  let s=`<svg viewBox="0 0 ${W} ${H}" class="ch" role="img" aria-label="Monthly resolved vs yet to resolve with resolved percentage">`;
  for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L-6}" y="${y(v)+4}" text-anchor="end">${Math.round(v)}</text>`}
  [0,50,100].forEach(p=>s+=`<text class="ax" x="${W-R+6}" y="${yp(p)+4}">${p}%</text>`);
  by.forEach((b,i)=>{const cx=L+sl*(i+.5);if(b.m===S.month)s+=`<rect class="band" x="${L+sl*i}" y="${T-8}" width="${sl}" height="${ih+8}" rx="8"/>`;
-  s+=`<rect class="res" x="${cx-bw-1}" y="${y(b.a)}" width="${bw}" height="${T+ih-y(b.a)}" rx="3"/><rect class="opn" x="${cx+1}" y="${y(b.o)}" width="${bw}" height="${T+ih-y(b.o)}" rx="3"/><text class="ax" x="${cx}" y="${H-12}" text-anchor="middle">${fm(b.m)}</text><rect class="hit" data-m="${b.m}" x="${L+sl*i}" y="${T-8}" width="${sl}" height="${ih+8+26}"><title>${fm(b.m)}: ${b.a} resolved, ${b.o} yet to resolve (${b.p.toFixed(1)}%)</title></rect>`});
- s+=`<polyline class="ln" points="${by.map((b,i)=>(L+sl*(i+.5))+","+yp(b.p)).join(" ")}"/>`;
- by.forEach((b,i)=>{const cx=L+sl*(i+.5);s+=`<circle class="pt" cx="${cx}" cy="${yp(b.p)}" r="3.5"/><rect class="pl" x="${cx-17}" y="${yp(b.p)-26}" width="34" height="16" rx="8"/><text class="pt2" x="${cx}" y="${yp(b.p)-14.5}" text-anchor="middle">${Math.round(b.p)}%</text>`});
+  if(b.n)s+=`<rect class="res" x="${cx-bw-1}" y="${y(b.a)}" width="${bw}" height="${T+ih-y(b.a)}" rx="3"/><rect class="opn" x="${cx+1}" y="${y(b.o)}" width="${bw}" height="${T+ih-y(b.o)}" rx="3"/><rect class="hit" data-m="${b.m}" x="${L+sl*i}" y="${T-8}" width="${sl}" height="${ih+34}"><title>${fml(b.m)}: ${b.a} resolved, ${b.o} yet to resolve (${b.p.toFixed(1)}%)</title></rect>`;
+  else s+=`<text class="nd" x="${cx}" y="${T+ih-6}" text-anchor="middle">No data</text>`;
+  s+=`<text class="ax" x="${cx}" y="${H-12}" text-anchor="middle">${fm(b.m)}</text>`});
+ const pts=by.map((b,i)=>({x:L+sl*(i+.5),b})).filter(q=>q.b.p!=null);
+ if(pts.length)s+=`<path class="ln" d="${pts.map((q,i)=>(i?"L":"M")+q.x.toFixed(1)+" "+yp(q.b.p).toFixed(1)).join(" ")}"/>`;
+ pts.forEach(q=>{const yy=yp(q.b.p);s+=`<circle class="pt" cx="${q.x}" cy="${yy}" r="3.5"/><rect class="pl" x="${q.x-17}" y="${yy-26}" width="34" height="16" rx="8"/><text class="pt2" x="${q.x}" y="${yy-14.5}" text-anchor="middle">${Math.round(q.b.p)}%</text>`});
  return s+"</svg>"}
+
 function cats(rs){const g={};rs.forEach(r=>{const c=g[r.escalation_category]||(g[r.escalation_category]={a:0,o:0});r.open?c.o++:c.a++});
  const L=Object.entries(g).sort((a,b)=>b[1].a+b[1].o-a[1].a-a[1].o).slice(0,15);if(!L.length)return'<div class="empty">No data for this selection.</div>';const mx=Math.max(...L.map(([,c])=>c.a+c.o));
- return L.map(([n,c])=>`<div class="hb${S.cat===n?" on":""}" data-c="${esc(n)}" title="${esc(n)}"><span>${esc(n)}</span><div class="tk"><i style="width:${c.a/mx*100}%;background:var(--res)"></i><i style="width:${c.o/mx*100}%;background:var(--opn)"></i></div><b>${c.a}/${c.o}</b></div>`).join("")}
-function drawAging(hc,f){const op=f.filter(r=>r.open),n=[0,0,0,0,0];op.forEach(r=>n[r.b]++);
+ return L.map(([n,c])=>`<div class="hb${S.cat===n?" on":""}" data-c="${esc(n)}" title="${esc(n)}: ${c.a} resolved, ${c.o} yet to resolve"><span>${esc(n)}</span><div class="tk"><i style="width:${c.a/mx*100}%;background:var(--res)"></i><i style="width:${c.o/mx*100}%;background:var(--opn)"></i></div><b class="num">${c.a}/${c.o}</b></div>`).join("")}
+
+const BL=["0-3 d","4-7 d","8-15 d","16-30 d","30+ d"],BC=["var(--green)","var(--cyan)","var(--amber)","var(--opn)","var(--red)"];
+function drawAging(fyC,f){const op=f.filter(r=>r.open),n=[0,0,0,0,0];op.forEach(r=>{if(r.b>=0)n[r.b]++});
  $("agSub").textContent=op.length+" unresolved case(s) in the current view, by days since raised.";
- $("agK").innerHTML=n.map((v,i)=>`<div class="kpi" style="padding:9px 11px"><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${BC[i]};margin-right:5px"></i>${BL[i]}</span><b style="font-size:18px">${v}</b></div>`).join("");
- const ms=mons(hc).slice(-12),by=ms.map(m=>{const c=[0,0,0,0,0];hc.filter(r=>r.m===m&&r.open).forEach(r=>c[r.b]++);return c});
- if(!ms.length||!by.some(c=>c.some(Boolean))){$("aging").innerHTML='<div class="empty">No unresolved cases.</div>';return}
- const W=520,Hh=250,L=36,T=14,B=32,iw=W-L-8,ih=Hh-T-B,sl=iw/ms.length,bw=Math.min(26,sl*.55),mx=nice(Math.max(...by.map(c=>c.reduce((a,b)=>a+b,0)))),y=v=>T+ih-v/mx*ih;
+ $("agK").innerHTML=n.map((v,i)=>`<div class="kpi" style="padding:9px 11px"><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${BC[i]};margin-right:5px"></i>${BL[i]}</span><b class="num" style="font-size:18px">${v}</b></div>`).join("");
+ const ms=fyMonths(S.fy),by=ms.map(m=>{const c=[0,0,0,0,0];fyC.forEach(r=>{if(r.m===m&&r.open&&r.b>=0)c[r.b]++});return c});
+ if(!by.some(c=>c.some(Boolean))){$("aging").innerHTML='<div class="empty">No unresolved cases.</div>';return}
+ const W=520,Hh=250,L=36,T=14,B=34,iw=W-L-8,ih=Hh-T-B,sl=iw/ms.length,bw=Math.min(24,sl*.6),mx=nice(Math.max(...by.map(c=>c.reduce((a,b)=>a+b,0)))),y=v=>T+ih-v/mx*ih;
  let s=`<svg viewBox="0 0 ${W} ${Hh}" class="ch" role="img" aria-label="Unresolved cases by month raised and age bucket">`;
  for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line class="gl" x1="${L}" x2="${W-8}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L-6}" y="${y(v)+4}" text-anchor="end">${Math.round(v)}</text>`}
- by.forEach((c,i)=>{const cx=L+sl*(i+.5);let acc=0;c.forEach((v,j)=>{if(v){s+=`<rect x="${cx-bw/2}" y="${y(acc+v)}" width="${bw}" height="${y(acc)-y(acc+v)}" style="fill:${BC[j]}"><title>${fm(ms[i])} · ${BL[j]}: ${v}</title></rect>`;acc+=v}});s+=`<text class="ax" x="${cx}" y="${Hh-10}" text-anchor="middle">${fm(ms[i])}</text>`});
- $("aging").innerHTML=s+"</svg><p class=\"sub\">Each column is the month the case was raised. Colours show how old those still-open cases are today.</p>"}
-function drawTable(){const q=S.q.trim().toLowerCase(),a=q?S.f.filter(r=>(r.user_id+" "+r.product_category+" "+r.escalation_category).toLowerCase().includes(q)):S.f,pages=Math.max(1,Math.ceil(a.length/20));S.page=Math.min(S.page,pages);
- const v=a.slice((S.page-1)*20,S.page*20);
- $("tbl").innerHTML=a.length?`<table class="tbl"><thead><tr><th>Date</th><th>User ID</th><th>Product</th><th>Escalation category</th><th>Status</th><th>Age</th><th>L0</th><th>L1</th></tr></thead><tbody>${v.map(r=>`<tr><td>${r.esc_date?fd(r.esc_date):""}</td><td>${esc(r.user_id)}</td><td>${esc(r.product_category)}</td><td>${esc(r.escalation_category)}</td><td><span class="chip ${r.open?"b":"g"}">${r.open?"Yet to resolve":"Resolved"}</span></td><td>${r.open?r.age+" d":"–"}</td><td>${esc(r.l0_name)}</td><td>${esc(r.l1_name)}</td></tr>`).join("")}</tbody></table><div class="pg"><span>${a.length.toLocaleString()} record(s) · page ${S.page} of ${pages}</span><button class="gh" id="pv"${S.page<2?" disabled":""}>Prev</button><button class="gh" id="nx"${S.page>=pages?" disabled":""}>Next</button></div>`:'<div class="empty">No records match these filters.</div>'}
-$("tbl").onclick=e=>{if(e.target.id==="pv"){S.page--;drawTable()}if(e.target.id==="nx"){S.page++;drawTable()}};
+ by.forEach((c,i)=>{const cx=L+sl*(i+.5);let acc=0;c.forEach((v,j)=>{if(v){s+=`<rect x="${cx-bw/2}" y="${y(acc+v)}" width="${bw}" height="${y(acc)-y(acc+v)}" style="fill:${BC[j]}"><title>${fml(ms[i])} · ${BL[j]}: ${v}</title></rect>`;acc+=v}});
+  s+=`<text class="ax" x="${cx}" y="${Hh-18}" text-anchor="middle">${MN[+ms[i].slice(5)-1]}</text><text class="ax2" x="${cx}" y="${Hh-5}" text-anchor="middle">${ms[i].slice(2,4)}</text>`});
+ $("aging").innerHTML=s+'</svg><p class="sub">Each column is the month the case was raised. Colours show how old those still-open cases are today.</p>'}
 
+/* ======================= team performance (drill-down like the reference) ======================= */
+const TCOL=[["name","Name"],["mgr","Reports to"],["n","Total",1],["a","Resolved",1],["o","Yet to resolve",1],["pct","Resolved %",1],["avg","Avg open age",1],["o7","Open > 7 d",1]];
+function drawTeam(f){
+ const sec=$("teamSec");let base=5;LV.forEach(k=>{if(k===S.lock||(S.sel[k]&&k<=S.top))base=k});
+ const lv=LV.filter(k=>k<base&&k<=S.top&&f.some(r=>r["l"+k]));
+ if(!lv.length){sec.hidden=true;sec.innerHTML="";S.team.rows=[];return}
+ if(!lv.includes(S.team.lvl))S.team.lvl=lv[0];
+ const counts={};lv.forEach(k=>counts[k]=new Set(f.map(r=>r["l"+k]).filter(Boolean)).size);
+ const k=S.team.lvl,g=new Map();
+ f.forEach(r=>{const e=r["l"+k];if(!e)return;let x=g.get(e);if(!x){x={e,k,name:r["l"+k+"_name"]||e,n:0,a:0,o:0,ag:0,o7:0,mg:{}};g.set(e,x)}
+  x.n++;if(r.open){x.o++;x.ag+=r.age||0;if(r.age>7)x.o7++}else x.a++;
+  for(let j=k+1;j<=4;j++){if(r["l"+j]){const nm=(r["l"+j+"_name"]||r["l"+j])+" (L"+j+")";x.mg[nm]=(x.mg[nm]||0)+1;break}}});
+ S.team.rows=[...g.values()].map(x=>({...x,pct:x.a/x.n,avg:x.o?x.ag/x.o:null,mgr:Object.entries(x.mg).sort((a,b)=>b[1]-a[1]).map(z=>z[0]).join(", ")||"—"}));
+ sec.hidden=false;
+ sec.innerHTML=`<h2>Team performance</h2><p class="sub">People under the current selection, for ${esc(periodTxt())}. Select a row to drill down.</p>
+ <div class="toolbar"><div class="tabs" id="tTabs">${lv.map(l=>`<button type="button" class="tab${l===k?" on":""}" data-l="${l}">L${l}<span class="c">${counts[l]}</span></button>`).join("")}</div><span class="grow"></span>
+ <input id="tQ" type="search" placeholder="Search name or manager" aria-label="Search team" value="${esc(S.team.q)}"></div><div id="tTbl"></div>`;
+ drawTeamTable();
+}
+function drawTeamTable(){const T=S.team,q=T.q.trim().toLowerCase();
+ const rows=T.rows.filter(m=>!q||(m.name+" "+m.mgr+" "+m.e).toLowerCase().includes(q));
+ rows.sort((a,b)=>{let x=a[T.k],y=b[T.k];if(x==null)x=-1;if(y==null)y=-1;return(typeof x==="number"?x-y:String(x).localeCompare(String(y)))*(T.dir==="desc"?-1:1)});
+ const size=15,pages=Math.max(1,Math.ceil(rows.length/size));T.page=Math.min(T.page,pages);const v=rows.slice((T.page-1)*size,T.page*size);
+ $("tTbl").innerHTML=`<div class="tbox"><table class="tbl"><thead><tr>${TCOL.map(([c,l,r])=>`<th class="s${r?" r":""}${T.k===c?" on":""}" data-k="${c}">${l}<span class="ar">${T.k===c?(T.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`+
+  (v.length?v.map(m=>{const col=m.pct>=.8?"var(--green)":m.pct>=.5?"var(--amber)":"var(--red)";
+   return`<tr class="click" tabindex="0" data-e="${esc(m.e)}" data-l="${m.k}"><td><b>${esc(m.name)}</b></td><td>${esc(m.mgr)}</td><td class="r num">${m.n}</td><td class="r num">${m.a}</td><td class="r num">${m.o}</td><td class="r num">${pc(m.a,m.n)}<span class="pb"><i style="width:${m.pct*100}%;background:${col}"></i></span></td><td class="r num">${m.avg==null?"–":m.avg.toFixed(1)+" d"}</td><td class="r num">${m.o7}</td></tr>`}).join(""):`<tr><td colspan="${TCOL.length}" class="empty">No one matches this search.</td></tr>`)+
+  `</tbody></table></div><div class="pg"><span>${rows.length} person(s) · page ${T.page} of ${pages}</span><div><button class="gh" type="button" id="tPv"${T.page<2?" disabled":""}>Previous</button><button class="gh" type="button" id="tNx"${T.page>=pages?" disabled":""}>Next</button></div></div>`}
+$("teamSec").addEventListener("click",e=>{const T=S.team;
+ const tb=e.target.closest("#tTabs [data-l]");if(tb){T.lvl=+tb.dataset.l;T.page=1;T.k="n";T.dir="desc";drawTeam(S.f);return}
+ const th=e.target.closest("th[data-k]");if(th){const k=th.dataset.k;if(T.k===k)T.dir=T.dir==="desc"?"asc":"desc";else{T.k=k;T.dir=k==="name"||k==="mgr"?"asc":"desc"}drawTeamTable();return}
+ if(e.target.id==="tPv"){T.page--;drawTeamTable();return}if(e.target.id==="tNx"){T.page++;drawTeamTable();return}
+ const tr=e.target.closest("tr[data-e]");if(tr)drillTo(tr.dataset.e,+tr.dataset.l)});
+$("teamSec").addEventListener("keydown",e=>{const tr=e.target.closest&&e.target.closest("tr[data-e]");if(tr&&e.key==="Enter")drillTo(tr.dataset.e,+tr.dataset.l)});
+$("teamSec").addEventListener("input",e=>{if(e.target.id==="tQ"){S.team.q=e.target.value;S.team.page=1;drawTeamTable()}});
+/* clicking a person fills in their chain above them (most common manager at each level) and selects them */
+function drillTo(e,k){const rows=S.f.filter(r=>r["l"+k]===e),s={...S.sel};
+ for(let j=k+1;j<=S.top;j++){if(j===S.lock||s[j])continue;const c={};rows.forEach(r=>{const v=r["l"+j]||DIR;c[v]=(c[v]||0)+1});const best=Object.entries(c).sort((a,b)=>b[1]-a[1])[0];if(best)s[j]=best[0]}
+ s[k]=e;LV.forEach(j=>{if(j<k)delete s[j]});S.team.q="";applySel(s,true);window.scrollTo({top:0,behavior:"smooth"})}
+
+/* ======================= record table + CSV ======================= */
+const RCOL=[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["escalation_category","Escalation category"],["open","Status"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"]];
+function records(){const q=S.q.trim().toLowerCase();let a=q?S.f.filter(r=>(r.user_id+" "+r.product_category+" "+r.escalation_category+" "+LV.map(k=>r["l"+k+"_name"]||"").join(" ")).toLowerCase().includes(q)):S.f.slice();
+ const{k,dir}=S.sort;a.sort((x,y)=>{let p=x[k],q2=y[k];if(p==null)p=k==="age"?-1:"";if(q2==null)q2=k==="age"?-1:"";return(typeof p==="number"||typeof p==="boolean"?(+p)-(+q2):String(p).localeCompare(String(q2)))*(dir==="desc"?-1:1)});return a}
+function drawTable(){const a=records(),pages=Math.max(1,Math.ceil(a.length/S.size));S.page=Math.min(S.page,pages);const v=a.slice((S.page-1)*S.size,S.page*S.size);
+ $("tbl").innerHTML=a.length?`<div class="tbox"><table class="tbl"><thead><tr>${RCOL.map(([c,l,r])=>`<th class="s${r?" r":""}${S.sort.k===c?" on":""}" data-k="${c}">${l}<span class="ar">${S.sort.k===c?(S.sort.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr></thead><tbody>${v.map(r=>`<tr><td>${r.esc_date?fd(r.esc_date):"–"}</td><td>${esc(r.user_id)}</td><td>${esc(r.product_category)}</td><td>${esc(r.escalation_category)}</td><td><span class="chip ${r.open?"b":"g"}">${r.open?"Yet to resolve":"Resolved"}</span></td><td class="r num">${r.open&&r.age!=null?r.age+" d":"–"}</td><td>${esc(r.l0_name||"–")}</td><td>${esc(r.l1_name||"–")}</td><td>${esc(r.l2_name||"–")}</td></tr>`).join("")}</tbody></table></div><div class="pg"><span>${a.length.toLocaleString()} record(s) · page ${S.page} of ${pages}</span><div><button class="gh" type="button" id="pv"${S.page<2?" disabled":""}>Previous</button><button class="gh" type="button" id="nx"${S.page>=pages?" disabled":""}>Next</button></div></div>`:'<div class="empty">No records match these filters.</div>'}
+$("tbl").onclick=e=>{if(e.target.id==="pv"){S.page--;drawTable()}else if(e.target.id==="nx"){S.page++;drawTable()}else{const th=e.target.closest("th[data-k]");if(th){const k=th.dataset.k;if(S.sort.k===k)S.sort.dir=S.sort.dir==="desc"?"asc":"desc";else S.sort={k,dir:k==="esc_date"||k==="age"?"desc":"asc"};S.page=1;drawTable()}}};
+let qT;$("q").oninput=e=>{clearTimeout(qT);const x=e.target.value;qT=setTimeout(()=>{S.q=x;S.page=1;drawTable()},200)};
+$("size").onchange=e=>{S.size=+e.target.value;S.page=1;drawTable()};
+/* a leading = + - @ is neutralised so spreadsheet apps never run a cell as a formula */
+const csvCell=v=>{let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return/[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+$("exp").onclick=()=>{const a=records();if(!a.length){toast("Nothing to export.",true);return}
+ const head=["Date","User ID","Product category","Escalation category","Status","Age (days)","L0","L1","L2","L3","L4"];
+ const lines=[head].concat(a.map(r=>[r.esc_date?fd(r.esc_date):"",r.user_id,r.product_category,r.escalation_category,r.open?"Yet to Resolve":"Resolved",r.open&&r.age!=null?r.age:"",r.l0_name,r.l1_name,r.l2_name,r.l3_name,r.l4_name]));
+ const blob=new Blob(["﻿"+lines.map(l=>l.map(csvCell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),el=document.createElement("a");
+ el.href=u;el.download="escalations_"+(S.month||fyLabel(S.fy).replace(/\s/g,"_"))+".csv";document.body.appendChild(el);el.click();setTimeout(()=>{URL.revokeObjectURL(u);el.remove()},500);toast(a.length+" record(s) exported.")};
+
+/* ======================= start ======================= */
 (async()=>{const{data}=await sb.auth.getSession();if(isRecovery)openPw("recover");else route(data.session)})();
 </script></body></html>
