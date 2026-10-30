@@ -124,20 +124,17 @@ const lv=[4,3,2,1,0],imp=k=>S.auto&&S.auto[k],H=()=>S.rows.filter(r=>lv.every(k=
 function render(){const h=H(),hc=S.cat?h.filter(r=>r.escalation_category===S.cat):h,f=S.month?hc.filter(r=>r.m===S.month):hc,hm=S.month?h.filter(r=>r.m===S.month):h;S.f=f;
  drawFilters();drawKpis(f);$("trend").innerHTML=trend(hc);$("cats").innerHTML=cats(hm);drawAging(hc,f);drawTable()}
 function drawFilters(){let h="";const cur=H(),low=k=>lv.some(j=>j<k&&S.sel[j]&&!imp(j));
- for(let k=S.top;k>=0;k--){const above=S.rows.filter(r=>lv.every(j=>j<=k||!S.sel[j]||imp(j)||r["l"+j]===S.sel[j])),o=new Map();above.forEach(r=>{if(r["l"+k])o.set(r["l"+k],r["l"+k+"_name"]||r["l"+k])});
+ for(let k=S.top;k>=0;k--){const above=S.rows.filter(r=>lv.every(j=>j===k||!S.sel[j]||imp(j)||r["l"+j]===S.sel[j])),o=new Map();above.forEach(r=>{if(r["l"+k])o.set(r["l"+k],r["l"+k+"_name"]||r["l"+k])});
   if(!o.size)continue; /* level blank for everyone here: skip straight to the next one */
-  const lock=k===S.lock,opts=[...o].sort((a,b)=>a[1].localeCompare(b[1])),n=new Set(cur.map(r=>r["l"+k]).filter(Boolean)).size,lab=!S.sel[k]&&low(k)?(n===0?"n/a":n>1?"Multiple ("+n+")":"All"):"All";
+  const lock=k===S.lock,opts=lock?[[S.me,((S.rows.find(r=>r["l"+k]===S.me)||{})["l"+k+"_name"])||S.me]]:[...o].sort((a,b)=>a[1].localeCompare(b[1])),n=new Set(cur.map(r=>r["l"+k]).filter(Boolean)).size,lab=!S.sel[k]&&low(k)?(n===0?"n/a":n>1?"Multiple ("+n+")":"All"):"All";
   h+=`<div><label>L${k}${lock?" (you)":""}</label><select data-k="${k}"${lock?" disabled":""}>${lock?"":`<option value="">${lab}</option>`}${opts.map(([e,n])=>`<option value="${esc(e)}"${S.sel[k]===e?" selected":""}>${esc(n)}</option>`).join("")}</select></div>`}
  $("hier").innerHTML=h;
  const ms=mons(S.rows).slice(-18);$("months").innerHTML=ms.map(m=>`<button class="mo${S.month===m?" on":""}" data-m="${m}">${fm(m)}</button>`).join("");
  const any=Object.values(S.sel).some(Boolean)||S.month||S.cat;$("act").innerHTML=(S.month?`<span class="chip">Month: ${fm(S.month)}</span>`:"")+(S.cat?`<span class="chip">Category: ${esc(S.cat)}</span>`:"")+(any?'<button class="gh" id="clr">Clear filters</button>':"")}
-$("hier").onchange=e=>{const k=+e.target.dataset.k;
- for(const j of Object.keys(S.auto||{}))if(+j!==k)S.sel[j]="";
- S.auto={};S.sel[k]=e.target.value;for(let j=0;j<k;j++)S.sel[j]="";
- if(S.sel[k])for(let j=k+1;j<=S.top;j++){if(S.sel[j]||j===S.lock)continue;
-  const rs=H(),v=new Set(rs.map(r=>r["l"+j]).filter(Boolean));
-  if(rs.length&&v.size===1){S.sel[j]=[...v][0];S.auto[j]=true}}
- S.page=1;render()};
+function refill(){for(const j in S.auto)S.sel[j]="";S.auto={};const m=lv.filter(k=>S.sel[k]);if(!m.length)return;
+ for(let j=Math.min(...m)+1;j<=S.top;j++){if(S.sel[j]||j===S.lock)continue;
+  const rs=H(),v=new Set(rs.map(r=>r["l"+j]).filter(Boolean));if(rs.length&&v.size===1){S.sel[j]=[...v][0];S.auto[j]=true}}}
+$("hier").onchange=e=>{const k=+e.target.dataset.k;if(S.auto)delete S.auto[k];S.sel[k]=e.target.value;S.page=1;refill();render()};
 $("months").onclick=e=>{const b=e.target.closest("[data-m]");if(b){S.month=S.month===b.dataset.m?"":b.dataset.m;S.page=1;render()}};
 $("act").onclick=e=>{if(e.target.id==="clr"){S.sel={};S.auto={};S.month=S.cat="";S.page=1;render()}};
 $("trend").onclick=e=>{const b=e.target.closest("[data-m]");if(b){S.month=S.month===b.dataset.m?"":b.dataset.m;S.page=1;render()}};
