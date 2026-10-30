@@ -131,9 +131,15 @@ function drawFilters(){let h="";
  $("hier").innerHTML=h;
  const ms=mons(S.rows).slice(-18);$("months").innerHTML=ms.map(m=>`<button class="mo${S.month===m?" on":""}" data-m="${m}">${fm(m)}</button>`).join("");
  const any=Object.values(S.sel).some(Boolean)||S.month||S.cat;$("act").innerHTML=(S.month?`<span class="chip">Month: ${fm(S.month)}</span>`:"")+(S.cat?`<span class="chip">Category: ${esc(S.cat)}</span>`:"")+(any?'<button class="gh" id="clr">Clear filters</button>':"")}
-$("hier").onchange=e=>{const k=+e.target.dataset.k;S.sel[k]=e.target.value;for(let j=0;j<k;j++)S.sel[j]="";S.page=1;render()};
+$("hier").onchange=e=>{const k=+e.target.dataset.k;
+ for(const j of Object.keys(S.auto||{}))if(+j!==k)S.sel[j]="";
+ S.auto={};S.sel[k]=e.target.value;for(let j=0;j<k;j++)S.sel[j]="";
+ if(S.sel[k])for(let j=k+1;j<=S.top;j++){if(S.sel[j]||j===S.lock)continue;
+  const rs=S.rows.filter(r=>lv.every(i=>!S.sel[i]||r["l"+i]===S.sel[i])),v=new Set(rs.map(r=>r["l"+j]));
+  if(rs.length&&v.size===1&&!v.has(null)&&!v.has("")){S.sel[j]=[...v][0];S.auto[j]=true}}
+ S.page=1;render()};
 $("months").onclick=e=>{const b=e.target.closest("[data-m]");if(b){S.month=S.month===b.dataset.m?"":b.dataset.m;S.page=1;render()}};
-$("act").onclick=e=>{if(e.target.id==="clr"){S.sel={};S.month=S.cat="";S.page=1;render()}};
+$("act").onclick=e=>{if(e.target.id==="clr"){S.sel={};S.auto={};S.month=S.cat="";S.page=1;render()}};
 $("trend").onclick=e=>{const b=e.target.closest("[data-m]");if(b){S.month=S.month===b.dataset.m?"":b.dataset.m;S.page=1;render()}};
 $("cats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){S.cat=S.cat===b.dataset.c?"":b.dataset.c;S.page=1;render()}};
 $("q").oninput=e=>{S.q=e.target.value;S.page=1;drawTable()};
