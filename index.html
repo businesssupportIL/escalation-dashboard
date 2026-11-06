@@ -140,6 +140,15 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 .modal h3{font-size:17px;margin-bottom:8px}.modal p{margin:0 0 14px;color:var(--muted)}.modal.danger{border-color:rgba(255,112,129,.45)}.modal .lbl{margin-top:12px}
 .actions{display:flex;gap:8px;margin-top:16px}.actions>*{flex:1;margin-top:0}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--toast);color:var(--text);border:1px solid var(--line);padding:10px 16px;border-radius:10px;z-index:70;box-shadow:0 10px 30px var(--shl);font-size:13px;max-width:90vw}.toast.bad{border-color:rgba(255,112,129,.5)}
+.paid-grid.wide{grid-template-columns:minmax(240px,.75fr) minmax(520px,1.5fr)}.paid-grid.wide .tbl th,.paid-grid.wide .tbl td{padding:8px 8px}
+.pl-row.v{grid-template-columns:16px minmax(110px,1fr) 50px 56px minmax(80px,auto)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--btn2);color:var(--btn2tx);border-radius:999px;padding:6px 14px;font-weight:700;font-size:12.5px}
+.tab:hover{border-color:var(--cyan);color:var(--hovtx)}.tab.on{background:linear-gradient(90deg,#1757bb,#168cc7);color:#fff;border-color:#4bcaff}
+.bar i.hot{background:linear-gradient(90deg,#6b4bd6,#a184ff)}
+.hero-n{grid-template-columns:repeat(4,minmax(130px,1fr))!important}.hero-n div[data-ovgo]{cursor:pointer;transition:border-color .15s,transform .15s}.hero-n div[data-ovgo]:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.focus{grid-template-columns:minmax(220px,1fr) auto}
+@media(max-width:1300px){.focus{grid-template-columns:1fr}.hero-n{grid-template-columns:repeat(2,minmax(130px,1fr))!important}.hero-n div{text-align:left}}
 @media(max-width:1100px){.g2{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.months{grid-template-columns:repeat(7,1fr)}.months .mo:first-child{grid-column:span 7}.paid-grid{grid-template-columns:1fr}}
 @media(max-width:820px){.lay{grid-template-columns:1fr}.side{position:static}.top{position:static}.toolbar input{width:100%}.focus{grid-template-columns:1fr}.hero-n div{text-align:left}.user-meta{display:none}}
 @media(max-width:640px){.months{grid-template-columns:repeat(4,1fr)}.months .mo:first-child{grid-column:span 4}.kpis{grid-template-columns:1fr 1fr}.theme-toggle em{display:none}.ag-tiles{grid-template-columns:repeat(3,1fr)}.brand img{width:42px;height:42px}.card{padding:18px}}
@@ -245,29 +254,48 @@ function applyTheme(t,anim){const h=document.documentElement;if(anim){h.classLis
 document.querySelectorAll(".theme-toggle").forEach(b=>b.onclick=()=>{const t=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";applyTheme(t,true);try{localStorage.setItem("themePreference",t)}catch(e){}});
 applyTheme(document.documentElement.getAttribute("data-theme")||"light");
 
-/* ======================= datasets =======================
-   Each Google Sheet tab synced to Supabase. To add Refunds / Fintech later, add an entry here. */
+/* ======================= data sources (one per Google Sheet tab) ======================= */
 const LVCOLS="l0,l1,l2,l3,l4,l0_name,l1_name,l2_name,l3_name,l4_name";
-const BUCKETS={
- fce:[{k:"res",l:"Resolved",col:["#9dffd5","#2fd49a","#18a06f"]},{k:"pen",l:"Yet to resolve",col:["#ffe7ad","#ffbb3d","#d98a0b"]}],
- onb:[{k:"onb",l:"Onboarded Already",col:["#9dffd5","#2fd49a","#18a06f"]},{k:"rtc",l:"Ready to connect",col:["#c4e1ff","#4a98f0","#1d5fb8"]},{k:"ref",l:"Refund Requested",col:["#e2d4ff","#a184ff","#6b4bd6"]},{k:"pen",l:"Pending",col:["#ffe7ad","#ffbb3d","#d98a0b"]},{k:"oth",l:"Other",col:["#dce8f5","#8fa8c2","#5b7590"]}]
+const SRC={
+ fce:{table:"first_call_escalation",kind:"case",cls:"fce",cols:"esc_date,user_id,product_category,escalation_category,status,"+LVCOLS},
+ onb:{table:"onboarding_not_connected",kind:"case",cls:"onb",cols:"esc_date,user_id,product_category,sales_bucketing,extra,"+LVCOLS},
+ ref:{table:"refunds",kind:"money",cls:"ref",cols:"esc_date,user_id,product_category,status,amount,extra,"+LVCOLS},
+ baj:{table:"fintech_bajaj",kind:"money",cls:"fin",lender:"Bajaj",cols:"esc_date,user_id,product_category,status,emi_confirmation,amount,extra,"+LVCOLS},
+ fib:{table:"fintech_fibe",kind:"money",cls:"fin",lender:"Fibe",cols:"esc_date,user_id,product_category,status,emi_confirmation,amount,extra,"+LVCOLS}
 };
-const CHIP={res:"g",onb:"g",rtc:"",ref:"p",pen:"b",oth:"n"};
-const DS={
- fce:{table:"first_call_escalation",title:"First Call Escalation",cols:"esc_date,user_id,product_category,escalation_category,status,"+LVCOLS,catField:"escalation_category",catTitle:"By escalation category",
-  cls:r=>(r.status||"").trim().toLowerCase()==="resolved"?"res":"pen",resolved:k=>k==="res"},
- onb:{table:"onboarding_not_connected",title:"Onboarding Not Connected",cols:"esc_date,user_id,product_category,sales_bucketing,extra,"+LVCOLS,catField:"product_category",catTitle:"By product category",
-  cls:r=>{const t=(r.sales_bucketing||"").trim().toLowerCase().replace(/\s+/g," ");if(!t)return"pen";if(t.startsWith("onboard"))return"onb";if(t.startsWith("ready"))return"rtc";if(t.includes("refund"))return"ref";return"oth"},
-  resolved:k=>k==="onb"||k==="rtc"||k==="ref"}
+const st=s=>String(s||"").trim().toLowerCase().replace(/\s+/g," ");
+/* how each row is classified */
+const CLS={
+ fce:r=>st(r.status)==="resolved"?"res":"pen",                                   // blank / anything else = yet to resolve
+ onb:r=>{const t=st(r.sales_bucketing);if(!t)return"pen";if(t.startsWith("onboard"))return"onb";if(t.startsWith("ready"))return"rtc";if(t.includes("refund"))return"ref";return"oth"},  // blank = pending
+ ref:r=>{const t=st(r.status);return t==="retained"?"ret":t==="refunded"?"rfd":"oth"},  // Refund Status
+ fin:r=>{const t=st(r.status);return t==="retained"?"ret":t.includes("fst")?"fst":"oth"}  // Order Status
 };
-const bLabel=(ds,k,r)=>k==="oth"&&r?.sales_bucketing?r.sales_bucketing:(BUCKETS[ds].find(b=>b.k===k)||{}).l||k;
+const RESOLVED={fce:k=>k==="res",onb:k=>k==="onb"||k==="rtc"||k==="ref"};
+const C={green:["#9dffd5","#2fd49a","#18a06f"],amber:["#ffe7ad","#ffbb3d","#d98a0b"],blue:["#c4e1ff","#4a98f0","#1d5fb8"],purple:["#e2d4ff","#a184ff","#6b4bd6"],red:["#ffc0c8","#ff6b80","#d23a52"],grey:["#dce8f5","#8fa8c2","#5b7590"],cyan:["#b8f0ff","#39bdf0","#1686b8"]};
+const FINKEYS=[{k:"ret",l:"Retained",col:C.green},{k:"fst",l:"Cancelled (FST)",col:C.red},{k:"oth",l:"Other status",col:C.grey}];
+/* dashboard sections. Fintech combines the Bajaj and Fibe tabs. */
+const VIEWS={
+ fce:{title:"First Call Escalation",kind:"case",src:["fce"],keys:[{k:"res",l:"Resolved",col:C.green},{k:"pen",l:"Yet to resolve",col:C.amber}],catField:"escalation_category",catTitle:"By escalation category",penL:"yet to resolve"},
+ onb:{title:"Onboarding Not Connected",kind:"case",src:["onb"],keys:[{k:"onb",l:"Onboarded Already",col:C.green},{k:"rtc",l:"Ready to connect",col:C.blue},{k:"ref",l:"Refund Requested",col:C.purple},{k:"pen",l:"Pending",col:C.amber},{k:"oth",l:"Other",col:C.grey}],catField:"product_category",catTitle:"By product category",penL:"pending"},
+ ref:{title:"Refunds",kind:"money",src:["ref"],keys:[{k:"ret",l:"Retained",col:C.green},{k:"rfd",l:"Refunded",col:C.red},{k:"oth",l:"Not updated",col:C.grey}],good:"ret",bad:"rfd",line:"good",goodL:"Retained",badL:"Refunded",lineL:"Retained %",unit:"Punched"},
+ fin:{title:"Fintech · Bajaj + Fibe",kind:"money",fin:1,src:["baj","fib"],keys:FINKEYS,good:"ret",bad:"fst",line:"bad",goodL:"Retained",badL:"Cancelled (FST)",lineL:"Cancelled %",unit:"Loans"},
+ baj:{title:"Fintech · Bajaj",kind:"money",fin:1,src:["baj"],keys:FINKEYS,good:"ret",bad:"fst",line:"bad",goodL:"Retained",badL:"Cancelled (FST)",lineL:"Cancelled %",unit:"Loans"},
+ fib:{title:"Fintech · Fibe",kind:"money",fin:1,src:["fib"],keys:FINKEYS,good:"ret",bad:"fst",line:"bad",goodL:"Retained",badL:"Cancelled (FST)",lineL:"Cancelled %",unit:"Loans"}
+};
+const CHIP={res:"g",onb:"g",rtc:"",ref:"p",pen:"b",oth:"n",ret:"g",rfd:"r",fst:"r"};
+function bLabel(view,k,r){if(k==="oth"&&r){if(r.sales_bucketing)return r.sales_bucketing;if(r.status&&VIEWS[view].kind==="money")return r.status}return(VIEWS[view].keys.find(b=>b.k===k)||{}).l||k}
+const INR=new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0});
+const money=v=>INR.format(v||0);
+const moneyShort=v=>{v=v||0;const a=Math.abs(v);if(a>=1e7)return"₹"+(v/1e7).toFixed(2)+" Cr";if(a>=1e5)return"₹"+(v/1e5).toFixed(2)+" L";return INR.format(v)};
+const shortAmt=v=>{const a=Math.abs(v);if(a>=1e7)return"₹"+(v/1e7).toFixed(1)+"Cr";if(a>=1e5)return"₹"+(v/1e5).toFixed(1)+"L";if(a>=1e3)return"₹"+(v/1e3).toFixed(1)+"K";return"₹"+Math.round(v)};
 
 /* ======================= state ======================= */
 const LV=[4,3,2,1,0],DIR="__DIRECT__";
-const SEC=[["ov","Dashboard Overview","📊"],["fce","First Call Escalation","📞"],["onb","Onboarding Not Connected","🔌"],["ref","Refunds","↩️"],["fin","Fintech","💳",[["baj","Fintech: Bajaj"],["fib","Fintech: Fibe"]]]];
-function fresh(){return{user:null,email:"",me:"",meName:"",role:"",top:4,lock:-1,data:{},ds:"fce",fy:null,month:"",sel:{},want:{},wantLbl:{},sec:"ov",cat:"",bk:"",q:"",page:1,size:20,sort:{k:"esc_date",dir:"desc"},ovSort:{fce:{k:"n",dir:"desc"},onb:{k:"n",dir:"desc"}},f:[],crumbs:[],ovRows:{},loggingOut:false}}
+const SEC=[["ov","Dashboard Overview","📊"],["fce","First Call Escalation","📞"],["onb","Onboarding Not Connected","🔌"],["ref","Refunds","↩️"],["fin","Fintech","💳",[["baj","Fintech Bajaj"],["fib","Fintech Fibe"]]]];
+function fresh(){return{user:null,email:"",me:"",meName:"",role:"",top:4,lock:-1,data:{},ds:"fce",fy:null,month:"",sel:{},want:{},wantLbl:{},sec:"ov",cat:"",catDim:"",dim:"",bk:"",q:"",page:1,size:20,tmode:"count",sort:{k:"esc_date",dir:"desc"},ovSort:{},f:[],crumbs:[],ovRows:{},note:"",loggingOut:false}}
 let S=fresh();
-let finOpen=false;try{finOpen=localStorage.getItem("finOpen")==="1"}catch(e){}
+let finOpen=false;   // Fintech starts collapsed
 
 /* ======================= views & auth ======================= */
 function show(id){document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!==id);document.querySelector(".theme-fixed").hidden=id==="app"}
@@ -352,41 +380,50 @@ async function loadApp(){
  await loadData();
 }
 async function fetchAll(d){let all=[],from=0;for(;;){const{data,error}=await sb.from(d.table).select(d.cols).order("esc_date",{ascending:false,nullsFirst:false}).order("user_id").range(from,from+999);if(error)throw error;all=all.concat(data);if(data.length<1000)break;from+=1000}return all}
-function prep(r,ds){const d=DS[ds],k=d.cls(r),res=d.resolved(k),open=k==="pen",age=open&&r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;
- const o={...r,k,res,open,age,m:(r.esc_date||"").slice(0,7),fy:fyOf(r.esc_date),b:age==null?-1:age<=3?0:age<=7?1:age<=15?2:age<=30?3:4,product_category:r.product_category||"",user_id:r.user_id||""};
- if(ds==="fce")o.escalation_category=r.escalation_category||"(blank)";if(ds==="onb")o.product_category=r.product_category||"(blank)";
- LV.forEach(k2=>{if(o["l"+k2]&&!o["l"+k2+"_name"])o["l"+k2+"_name"]=o["l"+k2]});return o}
+function prep(r,src){const sd=SRC[src],k=CLS[sd.cls](r);
+ if(sd.kind==="money"&&!r.esc_date)return null;   // Refunds / Fintech count only rows with a Month
+ const o={...r,src,k,m:(r.esc_date||"").slice(0,7),fy:fyOf(r.esc_date),product_category:r.product_category||"(blank)",user_id:r.user_id||""};
+ if(sd.kind==="case"){o.res=RESOLVED[sd.cls](k);o.open=k==="pen";o.age=o.open&&r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;o.b=o.age==null?-1:o.age<=3?0:o.age<=7?1:o.age<=15?2:o.age<=30?3:4;if(sd.cls==="fce")o.escalation_category=r.escalation_category||"(blank)"}
+ else{o.amt=Number(r.amount)||0;o.lender=sd.lender||"";o.aw=st(r.emi_confirmation)==="upcoming";o.emi_confirmation=r.emi_confirmation||"(blank)"}
+ LV.forEach(j=>{if(o["l"+j]&&!o["l"+j+"_name"])o["l"+j+"_name"]=o["l"+j]});return o}
 async function loadData(){
- const res=await Promise.all(Object.keys(DS).map(async ds=>{try{return[ds,{rows:(await fetchAll(DS[ds])).map(r=>prep(r,ds))}]}catch(e){return[ds,{rows:[],err:e.message||String(e),code:e.code}]}}));
+ const res=await Promise.all(Object.keys(SRC).map(async k=>{try{return[k,{rows:(await fetchAll(SRC[k])).map(r=>prep(r,k)).filter(Boolean)}]}catch(e){return[k,{rows:[],err:e.message||String(e),code:e.code}]}}));
  if(res.some(([,v])=>authErr(v.err)))return logoutNow("Your session has ended. Please sign in again.",false);
  S.data=Object.fromEntries(res);setSec(S.sec);
 }
 $("refresh").onclick=async()=>{const b=$("refresh");b.disabled=true;b.textContent="Refreshing…";await loadData();b.disabled=false;b.textContent="Refresh data";toast("Data refreshed.")};
+const viewRows=v=>VIEWS[v].src.flatMap(s=>S.data[s]?.rows||[]);
+const isSetup=d=>/PGRST205|42P01|does not exist|schema cache/i.test((d?.err||"")+" "+(d?.code||""));
+const setupMsg=(d,t)=>isSetup(d)?t+" is not set up yet. Run the setup SQL in Supabase, then run the sync.":"Could not load "+t+": "+(d?.err||"");
 
-/* ======================= left pane (Fintech expands / collapses) ======================= */
+/* ======================= left pane =======================
+   Fintech starts collapsed. Clicking it opens the combined Bajaj + Fibe view and shows the
+   Bajaj / Fibe buttons; clicking it again while on that view collapses the list. */
 function side(){
- const nb=(id,t,ic,cls)=>`<button class="nv${cls||""}${S.sec===id?" on":""}" data-s="${id}" type="button"${S.sec===id?' aria-current="page"':""}>${ic?`<span class="ic">${ic}</span>`:""}<span>${t}</span></button>`;
+ const nb=(id,t,ic,sub)=>`<button class="nv${sub?" sub":""}${S.sec===id?" on":""}" data-s="${id}" type="button"${S.sec===id?' aria-current="page"':""}>${ic?`<span class="ic">${ic}</span>`:""}<span>${t}</span></button>`;
  $("side").innerHTML=SEC.map(([id,t,ic,sub])=>{
   if(!sub)return nb(id,t,ic);
   const inside=sub.some(s=>s[0]===S.sec),open=finOpen||inside;
-  return`<button class="nv${inside?" grp-on":""}" data-grp="${id}" type="button" aria-expanded="${open}" aria-controls="grp-${id}"><span class="ic">${ic}</span><span>${t}</span><span class="cv" aria-hidden="true">›</span></button><div class="subs" id="grp-${id}"${open?"":" hidden"}>${sub.map(([i,n])=>nb(i,n,"",""+" sub")).join("")}</div>`}).join("");
+  return`<button class="nv${S.sec===id?" on":""}${inside?" grp-on":""}" data-s="${id}" data-grp="1" type="button" aria-expanded="${open}" aria-controls="grp-${id}"${S.sec===id?' aria-current="page"':""}><span class="ic">${ic}</span><span>${t}</span><span class="cv" aria-hidden="true">›</span></button><div class="subs" id="grp-${id}"${open?"":" hidden"}>${sub.map(([i,n])=>nb(i,n,"",1)).join("")}</div>`}).join("");
 }
-$("side").onclick=e=>{const g=e.target.closest("[data-grp]");
- if(g){finOpen=g.getAttribute("aria-expanded")!=="true";try{localStorage.setItem("finOpen",finOpen?"1":"0")}catch(x){}side();return}
- const b=e.target.closest("[data-s]");if(b){setSec(b.dataset.s);window.scrollTo({top:0})}};
+$("side").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;const id=b.dataset.s;
+ if(b.dataset.grp){if(S.sec===id){finOpen=!finOpen;side();return}finOpen=true}
+ setSec(id);window.scrollTo({top:0})};
 function setSec(id){
- S.sec=id;side();S.cat="";S.bk="";S.q="";S.page=1;
- const isDs=id in DS;$("ph").hidden=true;$("filt").hidden=true;$("dash").innerHTML="";
+ S.sec=id;side();S.cat="";S.catDim="";S.dim="";S.bk="";S.q="";S.page=1;S.note="";S.sort={k:"esc_date",dir:"desc"};
+ $("ph").hidden=true;$("filt").hidden=true;$("dash").innerHTML="";
  if(id==="ov"){ensurePeriod();$("filt").hidden=false;renderOv();return}
- if(!isDs){$("ph").hidden=false;$("ph").textContent="No data for this section yet. It will appear here once its tab is filled in and synced.";$("period").textContent=SEC.flat(2).includes(id)?"":"";return}
- const d=S.data[id];
- if(d?.err){$("ph").hidden=false;$("ph").textContent=/PGRST205|42P01|does not exist|schema cache/i.test(d.err+" "+d.code)?"This section is not set up yet. Run onboarding_setup.sql in Supabase, then run the sync.":"Could not load "+DS[id].title+": "+d.err;return}
- if(!d||!d.rows.length){$("ph").hidden=false;$("ph").textContent="No "+DS[id].title+" records are available for your access yet.";return}
+ const v=VIEWS[id];if(!v)return;
+ const errs=v.src.filter(s=>S.data[s]?.err);
+ if(errs.length===v.src.length){$("ph").hidden=false;$("ph").textContent=setupMsg(S.data[errs[0]],v.title);$("period").textContent=v.title;return}
+ if(errs.length)S.note=errs.map(s=>setupMsg(S.data[s],"Fintech "+(SRC[s].lender||SRC[s].table))).join(" ")+" Showing the rest.";
+ if(!viewRows(id).length){$("ph").hidden=false;$("ph").textContent=(S.note?S.note+" ":"")+"No "+v.title+" records are available for your access yet.";$("period").textContent=v.title;return}
  S.ds=id;ensurePeriod();$("filt").hidden=false;applySel(S.want,false);
 }
+const secName=id=>{for(const[i,t,,sub]of SEC){if(i===id)return t;for(const[j,n]of sub||[])if(j===id)return n}return""};
 
 /* ======================= period: financial year + month grid ======================= */
-const rowsOf=()=>S.sec==="ov"?Object.values(S.data).flatMap(d=>d.rows||[]):(S.data[S.ds]?.rows||[]);
+const rowsOf=()=>S.sec==="ov"?Object.values(S.data).flatMap(d=>d.rows||[]):viewRows(S.ds);
 function fysAvail(){return[...new Set(rowsOf().map(r=>r.fy).filter(v=>v!=null))].sort((a,b)=>b-a)}
 function ensurePeriod(){const fys=fysAvail();
  if(S.fy!=="all"&&!fys.includes(S.fy)){S.fy=fys.length?fys[0]:"all";S.month=""}
@@ -403,7 +440,7 @@ function drawPeriod(){
  if(S.fy!=="all"){const avail=new Set(rowsOf().filter(r=>r.fy===S.fy).map(r=>r.m));
   $("months").innerHTML=`<button type="button" class="mo${S.month?"":" on"}" data-m="" aria-pressed="${!S.month}">Full year</button>`+
    fyMonths(S.fy).map(m=>{const na=!avail.has(m);return`<button type="button" class="mo${S.month===m?" on":""}" data-m="${m}"${na?` disabled title="No data for ${fml(m)}"`:` title="${fml(m)}"`} aria-pressed="${S.month===m}">${MN[+m.slice(5)-1].toUpperCase()}</button>`}).join("")}
- $("period").textContent=(S.sec==="ov"?"Dashboard Overview":DS[S.ds].title)+" · "+(S.fy==="all"?"All time":fyLabel(S.fy)+" · "+(S.month?fml(S.month):"Full year"));
+ $("period").textContent=(S.sec==="ov"?"Dashboard Overview":VIEWS[S.ds].title)+" · "+(S.fy==="all"?"All time":fyLabel(S.fy)+" · "+(S.month?fml(S.month):"Full year"));
 }
 function setMonth(m){if(m===S.month||S.fy==="all")return;S.month=m;S.page=1;S.sec==="ov"?renderOv():applySel(S.want,false)}
 $("months").onclick=e=>{const b=e.target.closest("[data-m]");if(b&&!b.disabled)setMonth(b.dataset.m)};
@@ -460,71 +497,124 @@ $("crumbs").onclick=e=>{const b=e.target.closest("[data-i]");if(b)applySel(S.cru
 function drawSelNote(){
  const el=$("selNote"),miss=LV.filter(k=>S.want[k]&&S.want[k]!==S.sel[k]);
  if(!miss.length||S.sec==="ov"){el.hidden=true;el.innerHTML="";return}
- el.innerHTML="<span>📌 Your selection is kept: "+miss.map(k=>"L"+k+" <b>"+esc(S.wantLbl[k]||S.want[k])+"</b>").join(", ")+" has no "+esc(DS[S.ds].title)+" data in "+esc(periodTxt())+", so the nearest available level is shown.</span><button type=\"button\" id=\"snUse\">Use this view instead</button>";
+ el.innerHTML="<span>📌 Your selection is kept: "+miss.map(k=>"L"+k+" <b>"+esc(S.wantLbl[k]||S.want[k])+"</b>").join(", ")+" has no "+esc(VIEWS[S.ds].title)+" data in "+esc(periodTxt())+", so the nearest available level is shown.</span><button type=\"button\" id=\"snUse\">Use this view instead</button>";
  el.hidden=false;$("snUse").onclick=()=>applySel(S.sel,true);
 }
 
 /* ======================= summary maths =======================
    First Call Escalation: Resolved vs Yet to resolve (blank status = yet to resolve).
-   Onboarding Not Connected (base = Sales Bucketing):
-     Escalated Total = all rows · Onboarded Already / Ready to connect / Refund Requested = rows with that value
-     Pending = blank Sales Bucketing · Resolution % = (Onboarded + Ready + Refund) / Escalated Total
-     Pendency % = Pending / Escalated Total                                                            */
+   Onboarding Not Connected (base = Sales Bucketing): Pending = blank;
+     Resolution % = (Onboarded + Ready + Refund) / Escalated Total; Pendency % = Pending / Escalated Total.
+   Refunds (rows with a Month): Punched = all rows; Retained / Refunded by Refund Status; revenue = Sale Claim Amount;
+     Retained % = Retained count / Punched count; Refunded % = Refunded count / Punched count.
+   Fintech (rows with a Month): Loans Processed = all rows; Retained / Cancelled (FST) by Order Status; value = Order Amount;
+     Cancelled % = FST count / Loans Processed count; Awaiting FST Cycle = EMI Confirmation "Upcoming".            */
 function summ(rows){const s={n:rows.length,res:0,pen:0,ag:0,o7:0,o30:0,b:{}};
  rows.forEach(r=>{s.b[r.k]=(s.b[r.k]||0)+1;if(r.res)s.res++;if(r.open){s.pen++;s.ag+=r.age||0;if(r.age>7)s.o7++;if(r.age>30)s.o30++}});
  s.rp=s.n?s.res/s.n:0;s.pp=s.n?s.pen/s.n:0;s.avg=s.pen?s.ag/s.pen:null;return s}
+function summM(rows){const s={n:rows.length,v:0,b:{},aw:0,awv:0};
+ rows.forEach(r=>{s.v+=r.amt;const b=s.b[r.k]||(s.b[r.k]={n:0,v:0});b.n++;b.v+=r.amt;if(r.aw){s.aw++;s.awv+=r.amt}});
+ ["ret","rfd","fst","oth"].forEach(k=>s[k]=s.b[k]||{n:0,v:0});return s}
+
+/* ======================= breakdown dimensions ======================= */
+const dimVal=(r,d)=>d.startsWith("x:")?(r.extra?.[d.slice(2)]||"(blank)"):(r[d]||"(blank)");
+function dimList(rows){const v=VIEWS[S.ds],out=[];
+ if(v.kind==="case")return[{k:v.catField,l:v.catTitle.replace(/^By /,"")}];
+ if(rows.some(r=>r.product_category&&r.product_category!=="(blank)"))out.push({k:"product_category",l:"Product category"});
+ if(v.fin)out.push({k:"emi_confirmation",l:"EMI Confirmation"});
+ if(S.ds==="fin")out.push({k:"lender",l:"Lender"});
+ const cnt={};rows.forEach(r=>{if(r.extra)for(const[k,x]of Object.entries(r.extra)){const m=cnt[k]||(cnt[k]=new Map());m.set(x,(m.get(x)||0)+1)}});
+ for(const[k,m]of Object.entries(cnt)){const filled=[...m.values()].reduce((a,b)=>a+b,0);if(m.size>=2&&m.size<=40&&filled>=rows.length*.3)out.push({k:"x:"+k,l:k})}
+ return out}
 
 /* ======================= render a section ======================= */
 function render(w){
  if(S.sec==="ov")return renderOv();
  w=w||walk(S.sel);drawPeriod();drawHier(w);drawCrumbs(w);drawSelNote();
- const ds=S.ds,d=DS[ds],cf=d.catField,base=w.pool,cat=S.cat?base.filter(r=>r[cf]===S.cat):base,f=S.bk?cat.filter(r=>r.k===S.bk):cat;S.f=f;
- const year=selFilter(rowsOf().filter(inYear)),yc=S.cat?year.filter(r=>r[cf]===S.cat):year,yf=S.bk?yc.filter(r=>r.k===S.bk):yc;
+ const v=VIEWS[S.ds],base=w.pool,dims=dimList(base);
+ if(!dims.some(d=>d.k===S.dim))S.dim=dims[0]?.k||"";
+ const cat=S.cat?base.filter(r=>dimVal(r,S.catDim)===S.cat):base,f=S.bk?cat.filter(r=>r.k===S.bk):cat;S.f=f;
+ const year=selFilter(rowsOf().filter(inYear)),yc=S.cat?year.filter(r=>dimVal(r,S.catDim)===S.cat):year;
+ const catL=(dims.find(d=>d.k===S.catDim)||{l:S.catDim.replace(/^x:/,"")}).l;
  const any=Object.keys(S.sel).length||S.month||S.cat||S.bk||S.q;
- $("act").innerHTML=(S.cat?`<span class="chip">${ds==="fce"?"Category":"Product"}: ${esc(S.cat)}</span>`:"")+(S.bk?`<span class="chip ${CHIP[S.bk]}">${esc(bLabel(ds,S.bk))}</span>`:"")+(any?'<button class="gh" type="button" id="clr">Clear all filters</button>':"");
- const s=summ(f);
- const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
-  :[["Escalated Total",N(s.n),"in current view","info"],["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Pending",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"pending ÷ total","warn"],["Avg age of pending",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Pending > 7 days",N(s.o7),pc(s.o7,s.pen)+" of pending","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
- const lab=ds==="fce"?{a:"Resolved",b:"Yet to resolve",p:"Resolution %"}:{a:"Resolved (onboarded + ready + refund)",b:"Pending",p:"Resolution %"};
+ $("act").innerHTML=(S.cat?`<span class="chip">${esc(catL)}: ${esc(S.cat)}</span>`:"")+(S.bk?`<span class="chip ${CHIP[S.bk]}">${esc(bLabel(S.ds,S.bk))}</span>`:"")+(any?'<button class="gh" type="button" id="clr">Clear all filters</button>':"");
+ const note=S.note?`<div class="sel-note" style="margin:0 0 14px">${esc(S.note)}</div>`:"";
  const catRows=S.bk?base.filter(r=>r.k===S.bk):base;
- $("dash").innerHTML=
-  `<div class="kpis">${K.map(([a,b,c,t])=>`<div class="kpi ${t}"><span>${a}</span><b class="num">${b}</b><small>${c}</small></div>`).join("")}</div>`+
-  `<section class="panel"><div class="block-h"><div><h2>Month-on-month: ${esc(lab.a.split(" (")[0].toLowerCase()==="resolved"?"resolved":"")} vs ${esc(lab.b.toLowerCase())}</h2><p class="sub">${S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter."} Months with no records show “No data”.</p></div></div>`+
-  `<div class="trend-legend"><span><i class="sw res"></i>${esc(lab.a)}</span><span><i class="sw pen"></i>${esc(lab.b)}</span><span><i class="sw pct"></i>${esc(lab.p)}</span></div><div class="trend-chart">${trendChart(yf.length?yf:yc,chartMonths(yc))}</div></section>`+
-  `<section class="panel"><div class="block-h"><div><h2>${ds==="fce"?"Status split":"Sales Bucketing split"}</h2><p class="sub">Share of the current view. Click a row to filter.</p></div></div>${pieBlock(ds,cat)}</section>`+
-  `<div class="g2"><section class="panel"><div class="block-h"><div><h2>Aging of ${ds==="fce"?"unresolved cases":"pending cases"}</h2><p class="sub">${N(s.pen)} ${ds==="fce"?"unresolved":"pending"} case(s) in the current view, by days since raised.</p></div></div>${agingBlock(f,yc,chartMonths(yc))}</section>`+
-  `<section class="panel"><div class="block-h"><div><h2>${d.catTitle}</h2><p class="sub">Descending by volume. Click a row to filter. <span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> ${ds==="fce"?"yet to resolve":"pending"}</p></div></div><div class="hbars">${catBars(catRows,cf)}</div></section></div>`+
-  `<section class="panel"><div class="block-h"><div><h2>Record-level drill-down</h2><p class="sub">Every record in the current view. Click a row to see all its details.</p></div></div>
-   <div class="toolbar"><input id="q" type="search" placeholder="Search user ID, product, category, name" aria-label="Search records" value="${esc(S.q)}"><span class="grow"></span>
-   <select id="size" aria-label="Rows per page">${[20,50,100].map(n=>`<option${n===S.size?" selected":""}>${n}</option>`).join("")}</select><button class="gh" id="exp" type="button">Export CSV</button></div><div id="tbl"></div></section>`;
+ $("dash").innerHTML=note+(v.kind==="money"?moneyBody(v,f,cat,yc,catRows,dims):caseBody(v,f,cat,yc,catRows))+recordsPanel();
  drawTable();
 }
-$("act").onclick=e=>{if(e.target.id==="clr"){S.cat="";S.bk="";S.q="";S.month="";applySel({},true)}};
+$("act").onclick=e=>{if(e.target.id==="clr"){S.cat="";S.catDim="";S.bk="";S.q="";S.month="";applySel({},true)}};
+const kpiHtml=K=>`<div class="kpis">${K.map(([a,b,c,t,ti])=>`<div class="kpi ${t}"${ti?` title="${esc(ti)}"`:""}><span>${a}</span><b class="num">${b}</b><small>${c}</small></div>`).join("")}</div>`;
+const panel=(title,sub,body,extra)=>`<section class="panel"><div class="block-h"><div><h2>${title}</h2>${sub?`<p class="sub">${sub}</p>`:""}</div>${extra||""}</div>${body}</section>`;
+
+function caseBody(v,f,cat,yc,catRows){
+ const s=summ(f),ds=S.ds;
+ const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
+  :[["Escalated Total",N(s.n),"in current view","info"],["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Pending",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"pending ÷ total","warn"],["Avg age of pending",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Pending > 7 days",N(s.o7),pc(s.o7,s.pen)+" of pending","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
+ const ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null}});
+ const lab=ds==="fce"?"Yet to resolve":"Pending";
+ return kpiHtml(K)+
+  panel("Month-on-month: resolved vs "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
+   `<div class="trend-legend"><span><i class="sw res"></i>${ds==="fce"?"Resolved":"Resolved (onboarded + ready + refund)"}</span><span><i class="sw pen"></i>${lab}</span><span><i class="sw pct"></i>Resolution %</span></div><div class="trend-chart">${trendChart(pts,{unit:"Cases",tip:p=>`${p.a} resolved · ${p.b} ${lab.toLowerCase()} · ${(p.p*100).toFixed(1)}% resolution`})}</div>`)+
+  panel(ds==="fce"?"Status split":"Sales Bucketing split","Share of the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:ds==="fce"?"Status":"Sales Bucketing"}))+
+  `<div class="g2">`+panel("Aging of "+(ds==="fce"?"unresolved cases":"pending cases"),`${N(s.pen)} ${ds==="fce"?"unresolved":"pending"} case(s) in the current view, by days since raised.`,agingBlock(f,yc,ms))+
+  panel(v.catTitle,`Descending by volume. Click a row to filter. <span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> ${v.penL}`,`<div class="hbars">${catBars(catRows,v.catField)}</div>`)+`</div>`;
+}
+
+function moneyBody(v,f,cat,yc,catRows,dims){
+ const s=summM(f),isFin=!!v.fin;
+ const K=!isFin?[
+   ["Punched Count",N(s.n),"rows with a Month","info"],["Punched Revenue",moneyShort(s.v),"Sale Claim Amount","info",money(s.v)],
+   ["Retained Count",N(s.ret.n),pc(s.ret.n,s.n)+" of punched","good"],["Retained Revenue",moneyShort(s.ret.v),pc(s.ret.v,s.v)+" of revenue","good",money(s.ret.v)],
+   ["Refunded Count",N(s.rfd.n),pc(s.rfd.n,s.n)+" of punched","bad"],["Refunded Revenue",moneyShort(s.rfd.v),pc(s.rfd.v,s.v)+" of revenue","bad",money(s.rfd.v)],
+   ["Retained %",pc(s.ret.n,s.n,2),"retained ÷ punched (count)",s.n&&s.ret.n/s.n>=.5?"good":"warn"],["Refunded %",pc(s.rfd.n,s.n,2),"refunded ÷ punched (count)","warn"]]
+  .concat(s.oth.n?[["Status not updated",N(s.oth.n),"neither Retained nor Refunded","",money(s.oth.v)]]:[])
+  :[["Loans Processed",N(s.n),"rows with a Month","info"],["Loans Processed Value",moneyShort(s.v),"Order Amount","info",money(s.v)],
+   ["Retained",N(s.ret.n),pc(s.ret.n,s.n)+" of loans","good"],["Retained Value",moneyShort(s.ret.v),pc(s.ret.v,s.v)+" of value","good",money(s.ret.v)],
+   ["Cancelled (FST)",N(s.fst.n),pc(s.fst.n,s.n)+" of loans","bad"],["Cancelled (FST) Value",moneyShort(s.fst.v),pc(s.fst.v,s.v)+" of value","bad",money(s.fst.v)],
+   ["Cancelled %",pc(s.fst.n,s.n,2),"FST ÷ loans processed (count)","warn"],["Awaiting FST Cycle",N(s.aw),"EMI Confirmation = Upcoming","pur",money(s.awv)]]
+  .concat(s.oth.n?[["Other order status",N(s.oth.n),"neither Retained nor FST","",money(s.oth.v)]]:[]);
+ const ms=chartMonths(yc),val=a=>a.reduce((t,r)=>t+r.amt,0),mode=S.tmode;
+ const pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),g=x.filter(r=>r.k===v.good),b=x.filter(r=>r.k===v.bad);
+  return{m,n:x.length,a:mode==="value"?val(g):g.length,b:mode==="value"?val(b):b.length,p:x.length?(v.line==="good"?g.length:b.length)/x.length:null,gn:g.length,bn:b.length,gv:val(g),bv:val(b)}});
+ const fmt=mode==="value"?shortAmt:x=>N(Math.round(x));
+ const toggle=`<div class="tabs" role="group" aria-label="Show count or value"><button type="button" class="tab${mode==="count"?" on":""}" data-tmode="count" aria-pressed="${mode==="count"}">Count</button><button type="button" class="tab${mode==="value"?" on":""}" data-tmode="value" aria-pressed="${mode==="value"}">${isFin?"Value":"Revenue"}</button></div>`;
+ let h=kpiHtml(K)+
+  panel(`Month-on-month: ${v.goodL} vs ${v.badL}`,(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+` The line is ${v.lineL} on count.`,
+   `<div class="trend-legend"><span><i class="sw res"></i>${v.goodL}</span><span><i class="sw pen"></i>${v.badL}</span><span><i class="sw pct"></i>${v.lineL}</span></div><div class="trend-chart">${trendChart(pts,{fmt,unit:mode==="value"?"Amount (₹)":v.unit,tip:p=>`${N(p.n)} ${v.unit.toLowerCase()} · ${v.goodL} ${p.gn} (${moneyShort(p.gv)}) · ${v.badL} ${p.bn} (${moneyShort(p.bv)}) · ${v.lineL} ${(p.p*100).toFixed(1)}%`})}</div>`,toggle);
+ h+=panel(isFin?"Order Status split":"Refund Status split","Count and amount in the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:isFin?"Order Status":"Refund Status",money:1}));
+ if(S.ds==="fin")h+=panel("Bajaj vs Fibe","Same filters, split by lender. Click a lender to open its own view.",lenderBlock(cat));
+ const brk=`<label class="lbl" for="dim" style="margin:0 6px 0 0;display:inline">Breakdown by</label><select id="dim" style="width:auto;padding:7px 10px">${dims.map(d=>`<option value="${esc(d.k)}"${d.k===S.dim?" selected":""}>${esc(d.l)}</option>`).join("")}</select>`;
+ const right=isFin?panel("EMI Confirmation",`${N(s.aw)} loan(s) awaiting the FST cycle (Upcoming). Click a row to filter.`,`<div class="hbars">${simpleBars(f,"emi_confirmation",x=>x.toLowerCase()==="upcoming")}</div>`)
+  :panel("Revenue by status","Sale Claim Amount in the current view.",`<div class="hbars">${statusValueBars(v,cat)}</div>`);
+ h+=`<div class="g2">`+panel("Breakdown",`Descending by count. Click a row to filter. <span style="color:var(--blue)">■</span> ${v.goodL.toLowerCase()} · <span style="color:#d98a0b">■</span> ${v.badL.toLowerCase()}`,dims.length?`<div class="hbars">${moneyBars(catRows,S.dim,v)}</div>`:'<div class="empty">No columns to break down by.</div>',dims.length?`<div>${brk}</div>`:"")+right+`</div>`;
+ return h;
+}
 
 /* ---------- Achievers-style month trend: twin gradient columns + glowing % line ---------- */
-function trendChart(rows,ms){
- const pts=ms.map(m=>{const x=rows.filter(r=>r.m===m),a=x.filter(r=>r.res).length,b=x.filter(r=>r.open).length;return{m,n:x.length,a,b,p:x.length?a/x.length:null}});
+function trendChart(pts,o){
  if(!pts.some(p=>p.n))return'<div class="empty">No data for this selection.</div>';
- const u="t"+(++UID),W=920,H=340,pl=56,pr=60,pt=30,pb=46,iw=W-pl-pr,ih=H-pt-pb,slot=iw/pts.length,bw=Math.min(26,slot*.3);
+ const fmt=o.fmt||(x=>N(Math.round(x)));
+ const u="t"+(++UID),W=920,H=340,pl=62,pr=60,pt=30,pb=46,iw=W-pl-pr,ih=H-pt-pb,slot=iw/pts.length,bw=Math.min(26,slot*.3);
  const amtMax=nice(Math.max(1,...pts.map(p=>Math.max(p.a,p.b)))/0.58),bTop=pt+26,bBot=pt+ih*0.34;
  const yA=v=>pt+ih-(v/amtMax)*ih,yP=v=>bBot-v*(bBot-bTop);
- let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly resolved versus pending with resolution percentage"><defs>
+ let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Month-on-month chart"><defs>
   <linearGradient id="${u}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fdcff"/><stop offset=".55" stop-color="#2b8cff"/><stop offset="1" stop-color="#1747a8"/></linearGradient>
   <linearGradient id="${u}o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd98a"/><stop offset=".6" stop-color="#ff9a2e"/><stop offset="1" stop-color="#e2600c"/></linearGradient>
   <linearGradient id="${u}l" gradientUnits="userSpaceOnUse" x1="${pl}" y1="0" x2="${W-pr}" y2="0"><stop offset="0" stop-color="#4bd39a"/><stop offset=".5" stop-color="#34c5ff"/><stop offset="1" stop-color="#b18cff"/></linearGradient>
   <linearGradient id="${u}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34c5ff" stop-opacity=".22"/><stop offset="1" stop-color="#34c5ff" stop-opacity="0"/></linearGradient>
   <filter id="${u}g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
- for(let g=0;g<=5;g++){const v=amtMax*g/5,y=yA(v);s+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" style="stroke:var(${g?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${g?"3 5":"0"}"/><text x="${pl-10}" y="${y+4}" text-anchor="end" style="fill:var(--ch-ax)" font-size="11">${Math.round(v)}</text>`}
+ for(let g=0;g<=5;g++){const v=amtMax*g/5,y=yA(v);s+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" style="stroke:var(${g?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${g?"3 5":"0"}"/><text x="${pl-10}" y="${y+4}" text-anchor="end" style="fill:var(--ch-ax)" font-size="11">${fmt(v)}</text>`}
  s+=`<line x1="${W-pr+4}" x2="${W-pr+4}" y1="${bTop}" y2="${bBot}" style="stroke:var(--ch-pct-line)"/>`;
  [0,.5,1].forEach(f=>{const y=bBot-f*(bBot-bTop);s+=`<line x1="${W-pr+1}" x2="${W-pr+7}" y1="${y}" y2="${y}" style="stroke:var(--ch-pct-line)"/><text x="${W-pr+11}" y="${y+4}" style="fill:var(--ch-pct)" font-size="11">${f*100}%</text>`});
- s+=`<text x="16" y="${pt+ih/2}" transform="rotate(-90 16 ${pt+ih/2})" text-anchor="middle" style="fill:var(--ch-ax2)" font-size="11">Cases</text>`;
+ s+=`<text x="14" y="${pt+ih/2}" transform="rotate(-90 14 ${pt+ih/2})" text-anchor="middle" style="fill:var(--ch-ax2)" font-size="11">${esc(o.unit||"")}</text>`;
  const line=[];
  pts.forEach((p,i)=>{const cx=pl+slot*(i+.5),sel=p.m===S.month;
   if(sel)s+=`<rect x="${pl+slot*i+3}" y="${pt}" width="${slot-6}" height="${ih}" rx="8" style="fill:var(--ch-band);stroke:var(--ch-band-bd)"/>`;
-  s+=`<g class="mo2"><title>${fml(p.m)}${p.n?` — ${p.a} resolved · ${p.b} pending · ${(p.p*100).toFixed(1)}% resolution`:" — no data"}</title>`;
+  s+=`<g class="mo2"><title>${fml(p.m)}${p.n?" — "+esc(o.tip(p)):" — no data"}</title>`;
   if(p.n){const ha=Math.max(p.a?2:0,p.a/amtMax*ih),hb=Math.max(p.b?2:0,p.b/amtMax*ih),xa=cx-bw-2,xb=cx+2;
    s+=`<rect class="tb" x="${xa}" y="${pt+ih-ha}" width="${bw}" height="${ha}" rx="4" fill="url(#${u}r)"/><rect class="tb" x="${xb}" y="${pt+ih-hb}" width="${bw}" height="${hb}" rx="4" fill="url(#${u}o)"/>`+
-    `<text x="${xa+bw/2}" y="${pt+ih-ha-6}" text-anchor="middle" style="fill:var(--ch-res)" font-size="10.5" font-weight="700">${p.a}</text><text x="${xb+bw/2}" y="${pt+ih-hb-6}" text-anchor="middle" style="fill:var(--ch-pen)" font-size="10.5" font-weight="700">${p.b}</text>`;
+    `<text x="${xa+bw/2}" y="${pt+ih-ha-6}" text-anchor="middle" style="fill:var(--ch-res)" font-size="10.5" font-weight="700">${fmt(p.a)}</text><text x="${xb+bw/2}" y="${pt+ih-hb-6}" text-anchor="middle" style="fill:var(--ch-pen)" font-size="10.5" font-weight="700">${fmt(p.b)}</text>`;
    line.push({x:cx,y:yP(p.p),v:p.p})}
   else s+=`<text x="${cx}" y="${pt+ih-8}" text-anchor="middle" style="fill:var(--ch-nodata)" font-size="10">No data</text>`;
   s+=`<text x="${cx}" y="${H-pb+20}" text-anchor="middle" style="fill:var(${sel?"--ch-mon-sel":p.n?"--ch-mon":"--ch-mon-na"})" font-size="12" font-weight="${sel?800:600}">${MN[+p.m.slice(5)-1].toUpperCase()}</text><text x="${cx}" y="${H-pb+34}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${p.m.slice(0,4)}</text>`;
@@ -538,13 +628,14 @@ function trendChart(rows,ms){
 }
 
 /* ---------- Achievers-style transparent 3D glass pie + legend ---------- */
-function pieBlock(ds,rows){
+function pieBlock(keys,rows,o){
  const tot=rows.length;if(!tot)return'<div class="empty">No records in this view.</div>';
- const groups=BUCKETS[ds].map(b=>({...b,label:b.l,count:rows.filter(r=>r.k===b.k).length})).filter(g=>g.count);
+ const groups=keys.map(b=>{const x=rows.filter(r=>r.k===b.k);return{...b,label:b.l,count:x.length,val:o.money?x.reduce((t,r)=>t+r.amt,0):0}}).filter(g=>g.count);
+ const tv=groups.reduce((t,g)=>t+g.val,0),V=o.money?" v":"";
  return`<div class="paid-grid"><div class="pie3d">${pie3d(groups,tot)}</div><div>`+
-  `<div class="pl-row pl-head"><span></span><span>${ds==="fce"?"Status":"Sales Bucketing"}</span><span class="r">Count</span><span class="r">Share</span></div>`+
-  groups.map(g=>`<div class="pl-row click${S.bk===g.k?" on":""}" data-bk="${g.k}" role="button" tabindex="0" title="Filter to ${esc(g.label)}"><i class="pl-sw" style="background:linear-gradient(180deg,${g.col[0]},${g.col[1]});border-color:${g.col[0]}"></i><span><span class="chip ${CHIP[g.k]}">${esc(g.label)}</span></span><b class="r num">${N(g.count)}</b><span class="r num">${pc(g.count,tot)}</span></div>`).join("")+
-  `<div class="pl-row pl-tot"><span></span><span>Total</span><b class="r num">${N(tot)}</b><span class="r num">100%</span></div></div></div>`;
+  `<div class="pl-row pl-head${V}"><span></span><span>${esc(o.title)}</span><span class="r">Count</span><span class="r">Share</span>${o.money?'<span class="r">Amount</span>':""}</div>`+
+  groups.map(g=>`<div class="pl-row click${V}${S.bk===g.k?" on":""}" data-bk="${g.k}" role="button" tabindex="0" title="Filter to ${esc(g.label)}"><i class="pl-sw" style="background:linear-gradient(180deg,${g.col[0]},${g.col[1]});border-color:${g.col[0]}"></i><span><span class="chip ${CHIP[g.k]}">${esc(g.label)}</span></span><b class="r num">${N(g.count)}</b><span class="r num">${pc(g.count,tot)}</span>${o.money?`<b class="r num" title="${esc(money(g.val))}">${moneyShort(g.val)}</b>`:""}</div>`).join("")+
+  `<div class="pl-row pl-tot${V}"><span></span><span>Total</span><b class="r num">${N(tot)}</b><span class="r num">100%</span>${o.money?`<b class="r num" title="${esc(money(tv))}">${moneyShort(tv)}</b>`:""}</div></div></div>`;
 }
 function pie3d(groups,total){
  const W=700,H=330,cx=350,cy=136,rx=160,ry=82,dep=32,TAU=Math.PI*2,u="p"+(++UID);
@@ -558,9 +649,9 @@ function pie3d(groups,total){
  groups.forEach((x,i)=>{const sp=TAU*x.count/total;sl.push({x,i,a,b:a+sp,m:a+sp/2});a+=sp;
   defs+=`<linearGradient id="${u}t${i}" x1="0" y1="0" x2="0.5" y2="1"><stop offset="0" stop-color="${x.col[0]}" stop-opacity=".34"/><stop offset=".55" stop-color="${x.col[1]}" stop-opacity=".18"/><stop offset="1" stop-color="${x.col[2]}" stop-opacity=".44"/></linearGradient><linearGradient id="${u}s${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${x.col[1]}" stop-opacity=".3"/><stop offset="1" stop-color="${x.col[2]}" stop-opacity=".14"/></linearGradient>`});
  defs+="</defs>";
- const tip=x=>`<title>${esc(x.label)}: ${N(x.count)} (${(x.count/total*100).toFixed(1)}%)</title>`;
+ const tip=x=>`<title>${esc(x.label)}: ${N(x.count)} (${(x.count/total*100).toFixed(1)}%)${x.val?" · "+esc(money(x.val)):""}</title>`;
  const wall=(s0,e0,i,x,op)=>`<path class="pwall" d="M${P(s0)} A${rx} ${ry} 0 0 1 ${P(e0)} L${P(e0,dep)} A${rx} ${ry} 0 0 0 ${P(s0,dep)} Z" fill="url(#${u}s${i})" fill-opacity="${op}" stroke="${x.col[0]}" stroke-opacity=".35" stroke-width=".8">${tip(x)}</path>`;
- let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Split of cases">`+defs;
+ let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Split chart">`+defs;
  sl.forEach(q=>{s+=`<path d="M${cx} ${cy+dep+14} L${P(q.a,dep+14)} A${rx} ${ry} 0 ${(q.b-q.a)>Math.PI?1:0} 1 ${P(q.b,dep+14)} Z" fill="${q.x.col[1]}" opacity=".22" filter="url(#${u}glow)"/>`});
  s+=`<ellipse cx="${cx}" cy="${cy+dep}" rx="${rx}" ry="${ry}" style="fill:var(--glass-floor);stroke:var(--glass-floor-bd)" stroke-width="1"/>`;
  sl.forEach(q=>{[[-Math.PI/2,0],[Math.PI,1.5*Math.PI]].forEach(r=>{const s0=Math.max(q.a,r[0]),e0=Math.min(q.b,r[1]);if(s0<e0)s+=wall(s0,e0,q.i,q.x,.45)})});
@@ -573,10 +664,19 @@ function pie3d(groups,total){
  const L=[],R=[];
  sl.forEach(q=>{const c=Math.cos(q.m),sn=Math.sin(q.m),fr=sn>0;(c>=0?R:L).push({q,ax:cx+rx*.98*c,ay:cy+ry*.98*sn+(fr?dep*.55:0),y:cy+(ry+18)*sn+(fr?dep*.6:0),right:c>=0})});
  [L,R].forEach(list=>{list.sort((p,q)=>p.y-q.y);for(let k=1;k<list.length;k++)if(list[k].y-list[k-1].y<36)list[k].y=list[k-1].y+36;const over=list.length?list[list.length-1].y-(H-24):0;if(over>0)list.forEach(p=>p.y-=over);list.forEach(p=>{if(p.y<18)p.y=18})});
- L.concat(R).forEach(p=>{const x=p.q.x,ex=p.right?cx+rx+22:cx-rx-22,tx=ex+(p.right?10:-10),an=p.right?"start":"end",st=`--c0:${x.col[0]};--c2:${x.col[2]}`;
-  s+=`<polyline points="${p.ax.toFixed(1)},${p.ay.toFixed(1)} ${ex.toFixed(1)},${p.y.toFixed(1)} ${(ex+(p.right?6:-6)).toFixed(1)},${p.y.toFixed(1)}" fill="none" class="plab-l" style="${st}" stroke-opacity=".85" stroke-width="1.2"/><circle cx="${p.ax.toFixed(1)}" cy="${p.ay.toFixed(1)}" r="2.8" class="plab" style="${st}"/>`+
-   `<text x="${tx.toFixed(1)}" y="${(p.y-3).toFixed(1)}" text-anchor="${an}" class="plab" style="${st}" font-size="12.5" font-weight="800">${esc(x.label)}</text><text x="${tx.toFixed(1)}" y="${(p.y+12).toFixed(1)}" text-anchor="${an}" style="fill:var(--tx2)" font-size="11.5" font-weight="600">${N(x.count)} (${(x.count/total*100).toFixed(1)}%)</text>`});
+ L.concat(R).forEach(p=>{const x=p.q.x,ex=p.right?cx+rx+22:cx-rx-22,tx=ex+(p.right?10:-10),an=p.right?"start":"end",stl=`--c0:${x.col[0]};--c2:${x.col[2]}`;
+  s+=`<polyline points="${p.ax.toFixed(1)},${p.ay.toFixed(1)} ${ex.toFixed(1)},${p.y.toFixed(1)} ${(ex+(p.right?6:-6)).toFixed(1)},${p.y.toFixed(1)}" fill="none" class="plab-l" style="${stl}" stroke-opacity=".85" stroke-width="1.2"/><circle cx="${p.ax.toFixed(1)}" cy="${p.ay.toFixed(1)}" r="2.8" class="plab" style="${stl}"/>`+
+   `<text x="${tx.toFixed(1)}" y="${(p.y-3).toFixed(1)}" text-anchor="${an}" class="plab" style="${stl}" font-size="12.5" font-weight="800">${esc(x.label)}</text><text x="${tx.toFixed(1)}" y="${(p.y+12).toFixed(1)}" text-anchor="${an}" style="fill:var(--tx2)" font-size="11.5" font-weight="600">${N(x.count)} (${(x.count/total*100).toFixed(1)}%)${x.val?" · "+shortAmt(x.val):""}</text>`});
  return s+"</svg>";
+}
+
+/* ---------- Fintech: lender comparison (combined view) ---------- */
+function lenderBlock(rows){
+ const L=[["baj","Bajaj",C.blue],["fib","Fibe",C.purple]].map(([k,l,col])=>{const x=rows.filter(r=>r.src===k);return{k,label:l,col,count:x.length,val:x.reduce((t,r)=>t+r.amt,0),s:summM(x)}});
+ const tot=L.reduce((t,g)=>t+g.count,0);if(!tot)return'<div class="empty">No loans in this view.</div>';
+ const T=summM(rows);
+ const row=(g,s,cls,attr)=>`<tr class="${cls}"${attr}><td class="who"><b>${esc(g)}</b></td><td class="r num">${N(s.n)}</td><td class="r num" title="${esc(money(s.v))}">${moneyShort(s.v)}</td><td class="r num">${N(s.ret.n)}</td><td class="r num" title="${esc(money(s.ret.v))}">${moneyShort(s.ret.v)}</td><td class="r num">${N(s.fst.n)}</td><td class="r num" title="${esc(money(s.fst.v))}">${moneyShort(s.fst.v)}</td><td class="r num">${pc(s.fst.n,s.n,2)}</td><td class="r num">${N(s.aw)}</td></tr>`;
+ return`<div class="paid-grid wide"><div class="pie3d">${pie3d(L.filter(g=>g.count),tot)}</div><div class="tbox" style="max-height:none"><table class="tbl"><thead><tr><th>Lender</th><th class="r">Loans</th><th class="r">Value</th><th class="r">Retained</th><th class="r">Retained Value</th><th class="r">FST</th><th class="r">FST Value</th><th class="r">Cancelled %</th><th class="r">Awaiting</th></tr></thead><tbody>${L.map(g=>row(g.label,g.s,"click",` data-view="${g.k}" tabindex="0" title="Open Fintech ${g.label}"`)).join("")}</tbody><tfoot>${row("Total",T,"","")}</tfoot></table></div></div>`;
 }
 
 /* ---------- aging: bucket tiles + stacked gradient columns by month raised ---------- */
@@ -596,85 +696,124 @@ function agingBlock(f,yrRows,ms){
  return h+s+'</svg><p class="sub">Each column is the month the case was raised; colours show how old those still-open cases are today.</p>';
 }
 
-/* ---------- category / product bars (descending) ---------- */
+/* ---------- horizontal bars (descending) ---------- */
 function catBars(rows,cf){const g={};rows.forEach(r=>{const c=g[r[cf]]||(g[r[cf]]={a:0,o:0,n:0});c.n++;if(r.res)c.a++;else if(r.open)c.o++});
  const L=Object.entries(g).sort((a,b)=>b[1].n-a[1].n).slice(0,15);if(!L.length)return'<div class="empty">No data for this selection.</div>';const mx=Math.max(...L.map(([,c])=>c.n));
- return L.map(([n,c])=>`<div class="hbar${S.cat===n?" on":""}" data-c="${esc(n)}" role="button" tabindex="0" title="${esc(n)}: ${c.a} resolved, ${c.o} pending of ${c.n}"><span class="t">${esc(n)}</span><div class="bar"><i class="res" style="width:${c.a/mx*100}%"></i><i class="pen" style="width:${c.o/mx*100}%"></i></div><span class="num"><b>${N(c.n)}</b> · ${pc(c.a,c.n,0)} resolved</span></div>`).join("")}
+ return L.map(([n,c])=>`<div class="hbar${S.cat===n&&S.catDim===cf?" on":""}" data-c="${esc(n)}" data-dim="${cf}" role="button" tabindex="0" title="${esc(n)}: ${c.a} resolved, ${c.o} pending of ${c.n}"><span class="t">${esc(n)}</span><div class="bar"><i class="res" style="width:${c.a/mx*100}%"></i><i class="pen" style="width:${c.o/mx*100}%"></i></div><span class="num"><b>${N(c.n)}</b> · ${pc(c.a,c.n,0)} resolved</span></div>`).join("")}
+function moneyBars(rows,dim,v){const g={};rows.forEach(r=>{const key=dimVal(r,dim),c=g[key]||(g[key]={n:0,v:0,a:0,b:0});c.n++;c.v+=r.amt;if(r.k===v.good)c.a++;else if(r.k===v.bad)c.b++});
+ const L=Object.entries(g).sort((a,b)=>b[1].n-a[1].n).slice(0,15);if(!L.length)return'<div class="empty">No data for this selection.</div>';const mx=Math.max(...L.map(([,c])=>c.n));
+ const ratio=c=>v.line==="good"?pc(c.a,c.n,0)+" "+v.goodL.toLowerCase():pc(c.b,c.n,0)+" cancelled";
+ return L.map(([n,c])=>`<div class="hbar${S.cat===n&&S.catDim===dim?" on":""}" data-c="${esc(n)}" data-dim="${esc(dim)}" role="button" tabindex="0" title="${esc(n)}: ${c.n} · ${esc(money(c.v))} · ${v.goodL} ${c.a} · ${v.badL} ${c.b}"><span class="t">${esc(n)}</span><div class="bar"><i class="res" style="width:${c.a/mx*100}%"></i><i class="pen" style="width:${c.b/mx*100}%"></i></div><span class="num"><b>${N(c.n)}</b> · ${moneyShort(c.v)} · ${ratio(c)}</span></div>`).join("")}
+function simpleBars(rows,dim,hot){const g={};rows.forEach(r=>{const key=dimVal(r,dim),c=g[key]||(g[key]={n:0,v:0});c.n++;c.v+=r.amt});
+ const L=Object.entries(g).sort((a,b)=>b[1].n-a[1].n).slice(0,15);if(!L.length)return'<div class="empty">No data for this selection.</div>';const mx=Math.max(...L.map(([,c])=>c.n));
+ return L.map(([n,c])=>`<div class="hbar${S.cat===n&&S.catDim===dim?" on":""}" data-c="${esc(n)}" data-dim="${esc(dim)}" role="button" tabindex="0"><span class="t">${hot(n)?`<span class="chip p">${esc(n)}</span>`:esc(n)}</span><div class="bar"><i class="${hot(n)?"hot":"res"}" style="width:${c.n/mx*100}%"></i></div><span class="num"><b>${N(c.n)}</b> · ${moneyShort(c.v)}</span></div>`).join("")}
+function statusValueBars(v,rows){const tot=rows.reduce((t,r)=>t+r.amt,0)||1;
+ return v.keys.map(b=>{const x=rows.filter(r=>r.k===b.k),val=x.reduce((t,r)=>t+r.amt,0);if(!x.length)return"";return`<div class="hbar${S.bk===b.k?" on":""}" data-bk="${b.k}" role="button" tabindex="0"><span class="t"><span class="chip ${CHIP[b.k]}">${esc(b.l)}</span></span><div class="bar"><i style="width:${val/tot*100}%;background:linear-gradient(90deg,${b.col[2]},${b.col[1]})"></i></div><span class="num"><b>${moneyShort(val)}</b> · ${pc(val,tot,1)}</span></div>`}).join("")||'<div class="empty">No data for this selection.</div>'}
 
 /* ======================= record table + detail + CSV ======================= */
-const RCOL={fce:[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["escalation_category","Escalation category"],["k","Status"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"]],
- onb:[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["k","Sales Bucketing"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"],["l4_name","L4"]]};
+function rcols(){const v=VIEWS[S.ds];
+ if(S.ds==="fce")return[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["escalation_category","Escalation category"],["k","Status"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"]];
+ if(S.ds==="onb")return[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["k","Sales Bucketing"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"],["l4_name","L4"]];
+ return[["m","Month"],["user_id",v.fin?"User / Order ID":"User ID"],["product_category","Product"],["k",v.fin?"Order Status":"Refund Status"],["amt",v.fin?"Order Amount":"Sale Claim Amount",1]].concat(v.fin?[["emi_confirmation","EMI Confirmation"]]:[],S.ds==="fin"?[["lender","Lender"]]:[],[["l0_name","L0"],["l1_name","L1"],["l4_name","L4"]]);
+}
+const recordsPanel=()=>panel("Record-level drill-down","Every record in the current view. Click a row to see all its details.",
+ `<div class="toolbar"><input id="q" type="search" placeholder="Search ID, product, status, name, any column" aria-label="Search records" value="${esc(S.q)}"><span class="grow"></span>
+ <select id="size" aria-label="Rows per page">${[20,50,100].map(n=>`<option${n===S.size?" selected":""}>${n}</option>`).join("")}</select><button class="gh" id="exp" type="button">Export CSV</button></div><div id="tbl"></div>`);
 function records(){const q=S.q.trim().toLowerCase();
- let a=q?S.f.filter(r=>(r.user_id+" "+r.product_category+" "+(r.escalation_category||"")+" "+(r.sales_bucketing||"")+" "+LV.map(k=>(r["l"+k+"_name"]||"")+" "+(r["l"+k]||"")).join(" ")+" "+(r.extra?Object.values(r.extra).join(" "):"")).toLowerCase().includes(q)):S.f.slice();
- const{k,dir}=S.sort;a.sort((x,y)=>{let p=x[k],q2=y[k];if(p==null)p=k==="age"?-1:"";if(q2==null)q2=k==="age"?-1:"";return(typeof p==="number"?p-q2:String(p).localeCompare(String(q2)))*(dir==="desc"?-1:1)});return a}
-function drawTable(){const host=$("tbl");if(!host)return;const ds=S.ds,a=records(),pages=Math.max(1,Math.ceil(a.length/S.size));S.page=Math.min(S.page,pages);const v=a.slice((S.page-1)*S.size,S.page*S.size);S.pageRows=v;
- const cell=(r,c)=>c==="esc_date"?(r.esc_date?fd(r.esc_date):"–"):c==="k"?`<span class="chip ${CHIP[r.k]}">${esc(bLabel(ds,r.k,r))}</span>`:c==="age"?(r.open&&r.age!=null?r.age+" d":"–"):esc(r[c]||"–");
- host.innerHTML=a.length?`<div class="tbox"><table class="tbl"><thead><tr>${RCOL[ds].map(([c,l,r])=>`<th class="s${r?" r":""}${S.sort.k===c?" on":""}" data-k="${c}">${l}<span class="ar">${S.sort.k===c?(S.sort.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr></thead><tbody>${v.map((r,i)=>`<tr class="click" tabindex="0" data-i="${i}">${RCOL[ds].map(([c,,rr])=>`<td${rr?' class="r num"':""}>${cell(r,c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="pg"><span>${N(a.length)} record(s) · page ${S.page} of ${pages}</span><div><button class="gh" type="button" id="pv"${S.page<2?" disabled":""}>Previous</button><button class="gh" type="button" id="nx"${S.page>=pages?" disabled":""}>Next</button></div></div>`:'<div class="empty">No records match these filters.</div>'}
-function detail(r){const ds=S.ds,rows=[["Date",r.esc_date?fd(r.esc_date):"–"],["User ID",r.user_id],["Product",r.product_category]];
- if(ds==="fce")rows.push(["Escalation category",r.escalation_category],["Status",r.status||"(blank) – yet to resolve"]);else rows.push(["Sales Bucketing",r.sales_bucketing||"(blank) – pending"]);
- if(r.open)rows.push(["Age",(r.age??"–")+" days"]);LV.forEach(k=>{if(r["l"+k])rows.push(["L"+k,r["l"+k+"_name"]+" · "+r["l"+k]])});
- if(r.extra)Object.entries(r.extra).forEach(([k,v])=>rows.push([k,v]));
- modal(`<h3>${esc(DS[ds].title)} record</h3><div class="facts">${rows.map(([k,v])=>`<div class="fact"><span>${esc(k)}</span><b>${esc(v||"–")}</b></div>`).join("")}</div><div class="actions"><button class="pri" type="button" id="dOk">Close</button></div>`);$("dOk").onclick=closeModal}
-const csvCell=v=>{let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return/[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-function exportCsv(){const ds=S.ds,a=records();if(!a.length){toast("Nothing to export.",true);return}
- const xk=ds==="onb"?[...new Set(a.flatMap(r=>r.extra?Object.keys(r.extra):[]))]:[];
- const head=["Date","User ID","Product category"].concat(ds==="fce"?["Escalation category","Status"]:["Sales Bucketing"],["Age (days)","L0","L1","L2","L3","L4"],xk);
- const lines=[head].concat(a.map(r=>[r.esc_date?fd(r.esc_date):"",r.user_id,r.product_category].concat(ds==="fce"?[r.escalation_category,r.open?"Yet to Resolve":"Resolved"]:[r.sales_bucketing||"Pending"],[r.open&&r.age!=null?r.age:"",r.l0_name,r.l1_name,r.l2_name,r.l3_name,r.l4_name],xk.map(k=>r.extra?.[k]??""))));
- const blob=new Blob(["﻿"+lines.map(l=>l.map(csvCell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),el=document.createElement("a");
- el.href=u;el.download=DS[ds].table+"_"+(S.month||String(fyLabel(S.fy)).replace(/\s/g,"_"))+".csv";document.body.appendChild(el);el.click();setTimeout(()=>{URL.revokeObjectURL(u);el.remove()},500);toast(a.length+" record(s) exported.")}
+ let a=q?S.f.filter(r=>[r.user_id,r.product_category,r.escalation_category,r.sales_bucketing,r.status,r.emi_confirmation,r.lender].concat(LV.map(k=>(r["l"+k+"_name"]||"")+" "+(r["l"+k]||"")),r.extra?Object.values(r.extra):[]).join(" ").toLowerCase().includes(q)):S.f.slice();
+ const{k,dir}=S.sort;a.sort((x,y)=>{let p=x[k],q2=y[k];if(p==null)p=k==="age"||k==="amt"?-1:"";if(q2==null)q2=k==="age"||k==="amt"?-1:"";return(typeof p==="number"?p-q2:String(p).localeCompare(String(q2)))*(dir==="desc"?-1:1)});return a}
+function drawTable(){const host=$("tbl");if(!host)return;const cols=rcols(),a=records(),pages=Math.max(1,Math.ceil(a.length/S.size));S.page=Math.min(S.page,pages);const v=a.slice((S.page-1)*S.size,S.page*S.size);S.pageRows=v;
+ if(!cols.some(c=>c[0]===S.sort.k))S.sort={k:cols[0][0],dir:"desc"};
+ const cell=(r,c)=>c==="esc_date"?(r.esc_date?fd(r.esc_date):"–"):c==="m"?(r.m?fml(r.m):"–"):c==="k"?`<span class="chip ${CHIP[r.k]}">${esc(bLabel(S.ds,r.k,r))}</span>`:c==="age"?(r.open&&r.age!=null?r.age+" d":"–"):c==="amt"?money(r.amt):esc(r[c]||"–");
+ host.innerHTML=a.length?`<div class="tbox"><table class="tbl"><thead><tr>${cols.map(([c,l,r])=>`<th class="s${r?" r":""}${S.sort.k===c?" on":""}" data-k="${c}">${l}<span class="ar">${S.sort.k===c?(S.sort.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr></thead><tbody>${v.map((r,i)=>`<tr class="click" tabindex="0" data-i="${i}">${cols.map(([c,,rr])=>`<td${rr?' class="r num"':""}>${cell(r,c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="pg"><span>${N(a.length)} record(s)${VIEWS[S.ds].kind==="money"?" · "+money(a.reduce((t,r)=>t+r.amt,0)):""} · page ${S.page} of ${pages}</span><div><button class="gh" type="button" id="pv"${S.page<2?" disabled":""}>Previous</button><button class="gh" type="button" id="nx"${S.page>=pages?" disabled":""}>Next</button></div></div>`:'<div class="empty">No records match these filters.</div>'}
+function detail(r){const v=VIEWS[S.ds],rows=[];
+ if(v.kind==="money"){rows.push(["Month",r.m?fml(r.m):"–"],["User / Order ID",r.user_id],["Product",r.product_category],[v.fin?"Order Status":"Refund Status",r.status||"(blank)"],[v.fin?"Order Amount":"Sale Claim Amount",money(r.amt)]);if(v.fin)rows.push(["EMI Confirmation",r.emi_confirmation],["Lender",r.lender])}
+ else{rows.push(["Date",r.esc_date?fd(r.esc_date):"–"],["User ID",r.user_id],["Product",r.product_category]);
+  if(S.ds==="fce")rows.push(["Escalation category",r.escalation_category],["Status",r.status||"(blank) – yet to resolve"]);else rows.push(["Sales Bucketing",r.sales_bucketing||"(blank) – pending"]);
+  if(r.open)rows.push(["Age",(r.age??"–")+" days"])}
+ LV.forEach(k=>{if(r["l"+k])rows.push(["L"+k,r["l"+k+"_name"]+" · "+r["l"+k]])});
+ if(r.extra)Object.entries(r.extra).forEach(([k,x])=>rows.push([k,x]));
+ modal(`<h3>${esc(v.title)} record</h3><div class="facts">${rows.map(([k,x])=>`<div class="fact"><span>${esc(k)}</span><b>${esc(x||"–")}</b></div>`).join("")}</div><div class="actions"><button class="pri" type="button" id="dOk">Close</button></div>`);$("dOk").onclick=closeModal}
+const csvCell=x=>{let s=String(x??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return/[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+function exportCsv(){const v=VIEWS[S.ds],a=records();if(!a.length){toast("Nothing to export.",true);return}
+ const xk=[...new Set(a.flatMap(r=>r.extra?Object.keys(r.extra):[]))],lv=r=>[r.l0_name,r.l1_name,r.l2_name,r.l3_name,r.l4_name];let head,line;
+ if(v.kind==="money"){head=["Month","User / Order ID","Product category",v.fin?"Order Status":"Refund Status",v.fin?"Order Amount":"Sale Claim Amount"].concat(v.fin?["EMI Confirmation","Lender"]:[],["L0","L1","L2","L3","L4"],xk);
+  line=r=>[r.m?fml(r.m):"",r.user_id,r.product_category,r.status||"",r.amt].concat(v.fin?[r.emi_confirmation,r.lender]:[],lv(r),xk.map(k=>r.extra?.[k]??""))}
+ else{head=["Date","User ID","Product category"].concat(S.ds==="fce"?["Escalation category","Status"]:["Sales Bucketing"],["Age (days)","L0","L1","L2","L3","L4"],xk);
+  line=r=>[r.esc_date?fd(r.esc_date):"",r.user_id,r.product_category].concat(S.ds==="fce"?[r.escalation_category,r.open?"Yet to Resolve":"Resolved"]:[r.sales_bucketing||"Pending"],[r.open&&r.age!=null?r.age:""],lv(r),xk.map(k=>r.extra?.[k]??""))}
+ const blob=new Blob(["\ufeff"+[head].concat(a.map(line)).map(l=>l.map(csvCell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),el=document.createElement("a");
+ el.href=u;el.download=v.title.replace(/[^A-Za-z0-9]+/g,"_")+"_"+(S.month||String(fyLabel(S.fy)).replace(/\s/g,"_"))+".csv";document.body.appendChild(el);el.click();setTimeout(()=>{URL.revokeObjectURL(u);el.remove()},500);toast(a.length+" record(s) exported.")}
 
 /* section interactions (one delegated listener; the section body is redrawn on every filter change) */
 $("dash").addEventListener("click",e=>{const t=e.target;
  if(S.sec==="ov")return ovClick(e);
+ const tm=t.closest("[data-tmode]");if(tm){S.tmode=tm.dataset.tmode;render();return}
+ const vw=t.closest("[data-view]");if(vw){setSec(vw.dataset.view);window.scrollTo({top:0,behavior:"smooth"});return}
  const m=t.closest("[data-m]");if(m){setMonth(S.month===m.dataset.m?"":m.dataset.m);return}
  const bk=t.closest("[data-bk]");if(bk){S.bk=S.bk===bk.dataset.bk?"":bk.dataset.bk;S.page=1;render();return}
- const c=t.closest("[data-c]");if(c){S.cat=S.cat===c.dataset.c?"":c.dataset.c;S.page=1;render();return}
+ const c=t.closest("[data-c]");if(c){const d=c.dataset.dim;if(S.cat===c.dataset.c&&S.catDim===d){S.cat="";S.catDim=""}else{S.cat=c.dataset.c;S.catDim=d}S.page=1;render();return}
  if(t.id==="pv"){S.page--;drawTable();return}if(t.id==="nx"){S.page++;drawTable();return}if(t.id==="exp"){exportCsv();return}
- const th=t.closest("#tbl th[data-k]");if(th){const k=th.dataset.k;if(S.sort.k===k)S.sort.dir=S.sort.dir==="desc"?"asc":"desc";else S.sort={k,dir:k==="esc_date"||k==="age"?"desc":"asc"};S.page=1;drawTable();return}
+ const th=t.closest("#tbl th[data-k]");if(th){const k=th.dataset.k;if(S.sort.k===k)S.sort.dir=S.sort.dir==="desc"?"asc":"desc";else S.sort={k,dir:["esc_date","m","age","amt"].includes(k)?"desc":"asc"};S.page=1;drawTable();return}
  const tr=t.closest("#tbl tr[data-i]");if(tr)detail(S.pageRows[+tr.dataset.i]);
 });
-$("dash").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const el=e.target.closest("[data-bk],[data-c],tr[data-i],tr[data-go]");if(el){e.preventDefault();el.click()}});
+$("dash").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const el=e.target.closest("[data-bk],[data-c],[data-view],tr[data-i],tr[data-go],[data-ovgo]");if(el){e.preventDefault();el.click()}});
 let qT;$("dash").addEventListener("input",e=>{if(e.target.id==="q"){clearTimeout(qT);const x=e.target.value;qT=setTimeout(()=>{S.q=x;S.page=1;drawTable()},200)}});
-$("dash").addEventListener("change",e=>{if(e.target.id==="size"){S.size=+e.target.value;S.page=1;drawTable()}});
+$("dash").addEventListener("change",e=>{if(e.target.id==="size"){S.size=+e.target.value;S.page=1;drawTable()}if(e.target.id==="dim"){S.dim=e.target.value;render()}});
 
 /* ======================= Dashboard Overview =======================
    Team Level Escalations Summary at the logged-in person's own level only:
    Admin / L5 / NS / L4 → one row per L4 · L3 → their own L3 row · … · L0 → their own row. */
 const ovLevel=()=>S.lock>=0?S.lock:4;
-function ovGroups(ds){const lvl=ovLevel(),rows=(S.data[ds]?.rows||[]).filter(inPeriod).filter(r=>S.lock<0||r["l"+lvl]===S.me),g=new Map();
+const OV=[["fce","First Call Escalation"],["onb","Onboarding Not Connected"],["ref","Refunds"],["fin","Fintech (Bajaj + Fibe)"]];
+function ovGroups(view){const lvl=ovLevel(),kind=VIEWS[view].kind,rows=viewRows(view).filter(inPeriod).filter(r=>S.lock<0||r["l"+lvl]===S.me),g=new Map();
  rows.forEach(r=>{const e=r["l"+lvl]||DIR;let x=g.get(e);if(!x){x={e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,rows:[]};g.set(e,x)}x.rows.push(r)});
- return{rows,list:[...g.values()].map(x=>({...x,...summ(x.rows)}))}}
-const OVCOL={fce:[["name","Name"],["n","Escalated Total",1],["res","Resolved",1],["pen","Yet to Resolve",1,1],["rp","Resolution %",1],["pp","Pendency %",1],["avg","Avg open age",1],["o7","Open > 7 d",1,1]],
- onb:[["name","Name"],["n","Escalated Total",1],["onb","Onboarded Already",1],["rtc","Ready to connect",1,1],["ref","Refund Requested",1,1],["pen","Pending",1,1],["rp","Resolution %",1],["pp","Pendency %",1]]};
-function ovVal(x,k){return k in x?x[k]:(x.b[k]||0)}
-function ovTable(ds){
- const d=S.data[ds];if(d?.err)return`<div class="empty">${/PGRST205|42P01|does not exist|schema cache/i.test(d.err+" "+d.code)?"Not set up yet. Run onboarding_setup.sql in Supabase, then run the sync.":"Could not load: "+esc(d.err)}</div>`;
- const{rows,list}=ovGroups(ds);if(!list.length)return'<div class="empty">No records for '+esc(periodTxt())+'.</div>';
- const lvl=ovLevel(),cols=OVCOL[ds].concat(ds==="onb"&&list.some(x=>x.b.oth)?[["oth","Other",1]]:[]),so=S.ovSort[ds],T=summ(rows);
- list.sort((a,b)=>{let x=so.k==="name"?a.name:ovVal(a,so.k),y=so.k==="name"?b.name:ovVal(b,so.k);if(x==null)x=-1;if(y==null)y=-1;return(typeof x==="number"?x-y:String(x).localeCompare(String(y)))*(so.dir==="desc"?-1:1)});
- S.ovRows[ds]=list;
- const fmtv=(x,k,tot)=>{if(k==="rp"){const v=x.rp;const col=v>=.95?"var(--green)":v>=.85?"var(--amber)":"var(--red)";return pc(x.res,x.n,2)+`<span class="pb"><i style="width:${v*100}%;background:${col}"></i></span>`}
-  if(k==="pp")return pc(x.pen,x.n,0);if(k==="avg")return x.avg==null?"–":x.avg.toFixed(1)+" d";return N(ovVal(x,k))};
- const head=`<tr>${cols.map(([k,l,r])=>`<th class="s${r?" r":""}${so.k===k?" on":""}" data-ok="${ds}" data-k="${k}">${k==="name"?"L"+lvl+(lvl===4?" · Regional Head":""):l}<span class="ar">${so.k===k?(so.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr>`;
- const body=list.map((x,i)=>`<tr class="${x.e===DIR&&S.lock>=0?"":"click"}" tabindex="0" data-go="${ds}" data-i="${i}" title="Open ${esc(DS[ds].title)} for ${esc(x.name)}">${cols.map(([k,,r])=>k==="name"?`<td class="who"><b>${esc(x.name)}</b>${x.e!==DIR?`<small>${esc(x.e)}</small>`:""}</td>`:`<td class="r num">${fmtv(x,k)}</td>`).join("")}</tr>`).join("");
- const foot=`<tr>${cols.map(([k,,r,hl])=>k==="name"?"<td>Grand Total</td>":`<td class="r num${hl&&ovVal(T,k)?" hl":""}">${fmtv(T,k,1)}</td>`).join("")}</tr>`;
- return`<div class="tbox"><table class="tbl"><thead>${head}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`;
+ const sf=kind==="case"?summ:summM;return{T:sf(rows),list:[...g.values()].map(x=>({...x,s:sf(x.rows)}))}}
+const pctBar=(a,b,good,warn,inv)=>{const v=b?a/b:0,col=inv?(v<=good?"var(--green)":v<=warn?"var(--amber)":"var(--red)"):(v>=good?"var(--green)":v>=warn?"var(--amber)":"var(--red)");return pc(a,b,2)+`<span class="pb"><i style="width:${v*100}%;background:${col}"></i></span>`};
+const OVCOL={
+ fce:[{k:"n",l:"Escalated Total",g:s=>s.n},{k:"res",l:"Resolved",g:s=>s.res},{k:"pen",l:"Yet to Resolve",g:s=>s.pen,hl:1},{k:"rp",l:"Resolution %",g:s=>s.rp,f:s=>pctBar(s.res,s.n,.95,.85)},{k:"pp",l:"Pendency %",g:s=>s.pp,f:s=>pc(s.pen,s.n,0)},{k:"avg",l:"Avg open age",g:s=>s.avg??-1,f:s=>s.avg==null?"–":s.avg.toFixed(1)+" d"},{k:"o7",l:"Open > 7 d",g:s=>s.o7,hl:1}],
+ onb:[{k:"n",l:"Escalated Total",g:s=>s.n},{k:"onb",l:"Onboarded Already",g:s=>s.b.onb||0},{k:"rtc",l:"Ready to connect",g:s=>s.b.rtc||0,hl:1},{k:"ref",l:"Refund Requested",g:s=>s.b.ref||0,hl:1},{k:"pen",l:"Pending",g:s=>s.pen,hl:1},{k:"rp",l:"Resolution %",g:s=>s.rp,f:s=>pctBar(s.res,s.n,.95,.85)},{k:"pp",l:"Pendency %",g:s=>s.pp,f:s=>pc(s.pen,s.n,0)}],
+ ref:[{k:"n",l:"Punched",g:s=>s.n},{k:"v",l:"Punched Revenue",g:s=>s.v,m:1},{k:"rn",l:"Retained",g:s=>s.ret.n},{k:"rv",l:"Retained Revenue",g:s=>s.ret.v,m:1},{k:"fn",l:"Refunded",g:s=>s.rfd.n,hl:1},{k:"fv",l:"Refunded Revenue",g:s=>s.rfd.v,m:1,hl:1},{k:"rp",l:"Retained %",g:s=>s.n?s.ret.n/s.n:0,f:s=>pctBar(s.ret.n,s.n,.6,.4)},{k:"fp",l:"Refunded %",g:s=>s.n?s.rfd.n/s.n:0,f:s=>pc(s.rfd.n,s.n,2)}],
+ fin:[{k:"n",l:"Loans Processed",g:s=>s.n},{k:"v",l:"Loans Value",g:s=>s.v,m:1},{k:"rn",l:"Retained",g:s=>s.ret.n},{k:"rv",l:"Retained Value",g:s=>s.ret.v,m:1},{k:"fn",l:"Cancelled (FST)",g:s=>s.fst.n,hl:1},{k:"fv",l:"FST Value",g:s=>s.fst.v,m:1,hl:1},{k:"cp",l:"Cancelled %",g:s=>s.n?s.fst.n/s.n:0,f:s=>pctBar(s.fst.n,s.n,.1,.2,1)},{k:"aw",l:"Awaiting FST Cycle",g:s=>s.aw,hl:1}]
+};
+const ovFmt=(c,s)=>c.f?c.f(s):c.m?`<span title="${esc(money(c.g(s)))}">${moneyShort(c.g(s))}</span>`:N(c.g(s));
+function ovTable(view){
+ const v=VIEWS[view],errs=v.src.filter(s=>S.data[s]?.err);
+ if(errs.length===v.src.length)return`<div class="empty">${esc(setupMsg(S.data[errs[0]],v.title))}</div>`;
+ const{T,list}=ovGroups(view);if(!list.length)return'<div class="empty">No records for '+esc(periodTxt())+'.</div>';
+ const lvl=ovLevel(),cols=OVCOL[view].concat(view==="onb"&&list.some(x=>x.s.b.oth)?[{k:"oth",l:"Other",g:s=>s.b.oth||0}]:[]);
+ const so=S.ovSort[view]||(S.ovSort[view]={k:"n",dir:"desc"});
+ const key=x=>so.k==="name"?x.name:(cols.find(c=>c.k===so.k)||cols[0]).g(x.s);
+ list.sort((a,b)=>{const x=key(a),y=key(b);return(typeof x==="number"?x-y:String(x).localeCompare(String(y)))*(so.dir==="desc"?-1:1)});
+ S.ovRows[view]=list;
+ const head=`<tr><th class="s${so.k==="name"?" on":""}" data-ok="${view}" data-k="name">L${lvl}${lvl===4?" · Regional Head":""}<span class="ar">${so.k==="name"?(so.dir==="desc"?"▼":"▲"):"↕"}</span></th>${cols.map(c=>`<th class="s r${so.k===c.k?" on":""}" data-ok="${view}" data-k="${c.k}">${c.l}<span class="ar">${so.k===c.k?(so.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr>`;
+ const body=list.map((x,i)=>`<tr class="${x.e===DIR&&S.lock>=0?"":"click"}" tabindex="0" data-go="${view}" data-i="${i}" title="Open ${esc(v.title)} for ${esc(x.name)}"><td class="who"><b>${esc(x.name)}</b>${x.e!==DIR?`<small>${esc(x.e)}</small>`:""}</td>${cols.map(c=>`<td class="r num">${ovFmt(c,x.s)}</td>`).join("")}</tr>`).join("");
+ const foot=`<tr><td>Grand Total</td>${cols.map(c=>`<td class="r num${c.hl&&c.g(T)?" hl":""}">${ovFmt(c,T)}</td>`).join("")}</tr>`;
+ const part=errs.length?`<div class="sel-note" style="margin:0 0 10px">${esc(errs.map(s=>setupMsg(S.data[s],"Fintech "+SRC[s].lender)).join(" "))}</div>`:"";
+ return part+`<div class="tbox"><table class="tbl"><thead>${head}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`;
 }
+const OVSUB={
+ fce:"Resolution % = resolved ÷ escalated; Pendency % = yet to resolve ÷ escalated.",
+ onb:"Based on Sales Bucketing. Pending = blank. Resolution % = (Onboarded Already + Ready to connect + Refund Requested) ÷ Escalated Total; Pendency % = Pending ÷ Escalated Total.",
+ ref:"Rows with a Month. Revenue = Sale Claim Amount. Retained % and Refunded % are on count.",
+ fin:"Bajaj + Fibe, rows with a Month. Value = Order Amount. Cancelled % = FST ÷ Loans Processed (count). Awaiting = EMI Confirmation “Upcoming”."
+};
 function renderOv(){
  ensurePeriod();drawPeriod();$("hier").innerHTML="";$("crumbs").innerHTML="";$("selNote").hidden=true;$("act").innerHTML="";
- const lvl=ovLevel(),f=summ((S.data.fce?.rows||[]).filter(inPeriod)),o=summ((S.data.onb?.rows||[]).filter(inPeriod));
+ const lvl=ovLevel(),R=v=>viewRows(v).filter(inPeriod),f=summ(R("fce")),o=summ(R("onb")),rf=summM(R("ref")),fn=summM(R("fin"));
  const roleTxt=S.role==="ADMIN"?"Administrator":S.role;
+ const card=(v,t,n,sub)=>`<div data-ovgo="${v}" role="button" tabindex="0" title="Open ${esc(t)}"><span>${t}</span><b class="num">${n}</b><small>${sub}</small></div>`;
  $("dash").innerHTML=`<section class="panel focus"><div><div class="sub">${esc(periodTxt())} · Dashboard Overview</div><h2>${esc(S.meName)}</h2><div class="chips"><span class="chip">${esc(roleTxt)}</span><span class="chip p">Summary at L${lvl} level</span>${S.lock<0?'<span class="chip n">All teams</span>':'<span class="chip n">Your team only</span>'}</div></div>
-  <div class="hero-n"><div><span>First Call Escalation</span><b class="num">${N(f.n)}</b><small>${pc(f.res,f.n,2)} resolved · ${N(f.pen)} open</small></div><div><span>Onboarding Not Connected</span><b class="num">${N(o.n)}</b><small>${pc(o.res,o.n,2)} resolved · ${N(o.pen)} pending</small></div></div></section>`+
-  `<section class="panel"><div class="block-h"><div><h2>Team Level Escalations Summary · First Call Escalation</h2><p class="sub">One row per L${lvl}, ${esc(periodTxt())}. Resolution % = resolved ÷ escalated; Pendency % = yet to resolve ÷ escalated. Click a row to open its dashboard.</p></div></div>${ovTable("fce")}</section>`+
-  `<section class="panel"><div class="block-h"><div><h2>Team Level Escalations Summary · Onboarding Not Connected</h2><p class="sub">Based on Sales Bucketing. Pending = blank. Resolution % = (Onboarded Already + Ready to connect + Refund Requested) ÷ Escalated Total; Pendency % = Pending ÷ Escalated Total.</p></div></div>${ovTable("onb")}</section>`;
+  <div class="hero-n">${card("fce","First Call Escalation",N(f.n),pc(f.res,f.n,2)+" resolved · "+N(f.pen)+" open")+card("onb","Onboarding Not Connected",N(o.n),pc(o.res,o.n,2)+" resolved · "+N(o.pen)+" pending")+card("ref","Refunds",N(rf.n),pc(rf.ret.n,rf.n,2)+" retained · "+moneyShort(rf.v))+card("fin","Fintech",N(fn.n),pc(fn.fst.n,fn.n,2)+" cancelled · "+N(fn.aw)+" awaiting")}</div></section>`+
+  OV.map(([v,t])=>`<section class="panel"><div class="block-h"><div><h2>Team Level Escalations Summary · ${t}</h2><p class="sub">One row per L${lvl}, ${esc(periodTxt())}. ${OVSUB[v]} Click a row to open its dashboard.</p></div></div>${ovTable(v)}</section>`).join("");
 }
 function ovClick(e){
+ const card=e.target.closest("[data-ovgo]");if(card){const v=card.dataset.ovgo;if(v==="fin")finOpen=true;setSec(v);window.scrollTo({top:0,behavior:"smooth"});return}
  const th=e.target.closest("th[data-ok]");if(th){const so=S.ovSort[th.dataset.ok],k=th.dataset.k;if(so.k===k)so.dir=so.dir==="desc"?"asc":"desc";else{so.k=k;so.dir=k==="name"?"asc":"desc"}renderOv();return}
  const tr=e.target.closest("tr[data-go]");if(!tr||!tr.classList.contains("click"))return;
- const ds=tr.dataset.go,x=S.ovRows[ds][+tr.dataset.i],lvl=ovLevel();
+ const view=tr.dataset.go,x=S.ovRows[view][+tr.dataset.i],lvl=ovLevel();
  if(lvl!==S.lock){S.want={[lvl]:x.e};S.wantLbl={[lvl]:x.name}}
- setSec(ds);if(lvl!==S.lock&&S.ds===ds)applySel(S.want,true);window.scrollTo({top:0,behavior:"smooth"});
+ if(view==="fin")finOpen=true;
+ setSec(view);if(lvl!==S.lock&&S.ds===view)applySel(S.want,true);window.scrollTo({top:0,behavior:"smooth"});
 }
 
 /* ======================= start ======================= */
