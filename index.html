@@ -155,13 +155,27 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 /* ---------- frozen filters + scorecards ---------- */
 #fs{height:0}#freeze{position:sticky;top:var(--topH,76px);z-index:15}
 .fsum{display:none;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}.fsum b{color:var(--text);margin-right:4px}.fsum .gh{padding:5px 10px;font-size:12px}
-#freeze.stuck{margin-left:-8px;margin-right:-8px;padding:8px 8px 0;background:var(--bg1);border-radius:0 0 16px 16px;box-shadow:0 16px 30px var(--sh)}
+#freeze.stuck{margin-left:-8px;margin-right:-8px;padding:6px 8px 0;background:var(--bg1);border-radius:0 0 16px 16px;box-shadow:0 16px 30px var(--sh)}
 [data-theme=dark] #freeze.stuck{background:#050c17}
-#freeze.stuck #filt{padding:8px 14px;margin-bottom:8px}
-#freeze.stuck .filters,#freeze.stuck .hier,#freeze.stuck .crumbs,#freeze.stuck .sel-note,#freeze.stuck .act{display:none!important}
-#freeze.stuck .fsum{display:flex}
-#freeze.stuck .kpis{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(124px,1fr);overflow-x:auto;gap:8px;margin-bottom:8px;padding-bottom:2px}
-#freeze.stuck .kpi{padding:7px 10px}#freeze.stuck .kpi b{font-size:17px;margin:1px 0 0}#freeze.stuck .kpi small{display:none}#freeze.stuck .kpi span{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#freeze.stuck #filt{padding:8px 12px;margin-bottom:6px;border-radius:14px}
+#freeze.stuck .filters{grid-template-columns:150px minmax(0,1fr);gap:10px}
+#freeze.stuck .lbl{font-size:10.5px;margin-bottom:2px}
+#freeze.stuck select{padding:4px 8px;font-size:12px;border-radius:8px}
+#freeze.stuck .mo{padding:3px 4px;font-size:10.5px;border-radius:8px}
+#freeze.stuck .hier{margin-top:6px;gap:8px}
+#freeze.stuck .crumbs{display:none}
+#freeze.stuck .sel-note{margin-top:4px;padding:3px 10px;font-size:11.5px}
+#freeze.stuck .act{margin-top:4px}#freeze.stuck .act .gh{padding:3px 9px;font-size:11.5px}
+#freeze.stuck .kpis{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(118px,1fr);overflow-x:auto;gap:6px;margin-bottom:8px;padding-bottom:2px}
+#freeze.stuck .kpi{padding:6px 10px}#freeze.stuck .kpi b{font-size:16px;margin:0}#freeze.stuck .kpi small{display:none}#freeze.stuck .kpi span{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mg{display:flex;align-items:center;gap:6px;margin:6px 0 2px}.gauge{width:118px;height:70px;flex:none}.mv{min-width:0}.mv b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.1}.mv span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}.mv small{display:block;font-size:11px;color:var(--faint)}
+.mcard.good .mv b{color:var(--green)}.mcard.warn .mv b{color:var(--amber)}.mcard.bad .mv b{color:var(--red)}
+.md{min-width:0}.md .grow{flex:1;min-width:4px}.md .spk{flex:0 1 72px;min-width:40px;display:flex}.mcard .spk .spark{width:100%;height:26px}.md small{white-space:nowrap}
+.bk{padding:10px 8px;border-radius:10px;cursor:pointer;border:1px solid transparent}.bk:hover{background:var(--soft);border-color:var(--l2)}.bk-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:13px}.bk-h .num{font-size:18px}.bk small{display:block;margin-top:6px;font-size:11.5px;color:var(--faint)}.bk small b{color:var(--text)}
+.bk-leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--tx2);margin-bottom:6px}.bk-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.donut{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:center}.donut svg{width:180px;height:180px}
+.dl{display:grid;gap:2px}.dl>div{display:grid;grid-template-columns:12px minmax(0,1fr) auto 44px;gap:10px;align-items:center;padding:6px 4px;border-bottom:1px solid var(--soft);font-size:12.5px}.dl i{width:12px;height:12px;border-radius:3px}.dl span b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dl small{color:var(--faint);font-size:11px}.dl .num{text-align:right}
+@media(max-width:640px){.donut{grid-template-columns:1fr;justify-items:center}}
 .fit svg,svg.agsvg{max-height:var(--fitH,520px)}.fit>svg{display:block;width:100%;height:auto}svg.agsvg{width:100%;height:auto;display:block}
 .tbox{max-height:calc(var(--fitH,520px) + 40px)}
 /* ---------- management overview ---------- */
@@ -221,7 +235,6 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
  <nav class="crumbs" id="crumbs" aria-label="Hierarchy path"></nav>
  <div id="selNote" class="sel-note" role="status" hidden></div>
  <div class="act" id="act"></div>
- <div class="fsum" id="fsum"></div>
 </div><div id="kbar"></div></div>
 <div id="dash"></div>
 </main></div></section>
@@ -290,7 +303,7 @@ applyTheme(document.documentElement.getAttribute("data-theme")||"light");
 /* ======================= data sources (one per Google Sheet tab) ======================= */
 const LVCOLS="l0,l1,l2,l3,l4,l0_name,l1_name,l2_name,l3_name,l4_name";
 const SRC={
- fce:{table:"first_call_escalation",kind:"case",cls:"fce",cols:"esc_date,user_id,product_category,escalation_category,status,"+LVCOLS},
+ fce:{table:"first_call_escalation",kind:"case",cls:"fce",cols:"esc_date,user_id,product_category,escalation_category,status,extra,"+LVCOLS},
  onb:{table:"onboarding_not_connected",kind:"case",cls:"onb",cols:"esc_date,user_id,product_category,sales_bucketing,extra,"+LVCOLS},
  ref:{table:"refunds",kind:"money",cls:"ref",cols:"esc_date,user_id,product_category,status,amount,extra,"+LVCOLS},
  baj:{table:"fintech_bajaj",kind:"money",cls:"fin",lender:"Bajaj",cols:"esc_date,user_id,product_category,status,emi_confirmation,amount,extra,"+LVCOLS},
@@ -310,7 +323,7 @@ const FINKEYS=[{k:"ret",l:"Retained",col:C.green},{k:"fst",l:"Cancelled (FST)",c
 /* dashboard sections. Fintech combines the Bajaj and Fibe tabs. */
 const VIEWS={
  fce:{title:"First Call Escalation",kind:"case",src:["fce"],keys:[{k:"res",l:"Resolved",col:C.green},{k:"pen",l:"Yet to resolve",col:C.amber}],catField:"escalation_category",catTitle:"By escalation category",penL:"yet to resolve"},
- onb:{title:"Onboarding Not Connected",kind:"case",src:["onb"],keys:[{k:"onb",l:"Onboarded Already",col:C.green},{k:"rtc",l:"Ready to connect",col:C.blue},{k:"ref",l:"Refund Requested",col:C.purple},{k:"pen",l:"Pending",col:C.amber},{k:"oth",l:"Other",col:C.grey}],catField:"product_category",catTitle:"By product category",penL:"pending"},
+ onb:{title:"Onboarding Not Connected",kind:"case",src:["onb"],keys:[{k:"onb",l:"Onboarded Already",col:C.green},{k:"rtc",l:"Ready to connect",col:C.blue},{k:"ref",l:"Refund Requested",col:C.purple},{k:"pen",l:"Open",col:C.amber},{k:"oth",l:"Other",col:C.grey}],catField:"",catTitle:"By team",penL:"open"},
  ref:{title:"Refunds",kind:"money",src:["ref"],keys:[{k:"ret",l:"Retained",col:C.green},{k:"rfd",l:"Refunded",col:C.red},{k:"oth",l:"Not updated",col:C.grey}],good:"ret",bad:"rfd",line:"good",goodL:"Retained",badL:"Refunded",lineL:"Retained %",unit:"Punched"},
  fin:{title:"Fintech · Bajaj + Fibe",kind:"money",fin:1,src:["baj","fib"],keys:FINKEYS,good:"ret",bad:"fst",line:"bad",goodL:"Retained",badL:"Cancelled (FST)",lineL:"Cancelled %",unit:"Loans"},
  baj:{title:"Fintech · Bajaj",kind:"money",fin:1,src:["baj"],keys:FINKEYS,good:"ret",bad:"fst",line:"bad",goodL:"Retained",badL:"Cancelled (FST)",lineL:"Cancelled %",unit:"Loans"},
@@ -326,7 +339,7 @@ const shortAmt=v=>{const a=Math.abs(v);if(a>=1e7)return"₹"+(v/1e7).toFixed(1)+
 /* ======================= state ======================= */
 const LV=[4,3,2,1,0],DIR="__DIRECT__";
 const SEC=[["ov","Dashboard Overview","📊"],["fce","First Call Escalation","📞"],["onb","Onboarding Not Connected","🔌"],["ref","Refunds","↩️"],["fin","Fintech","💳",[["baj","Fintech Bajaj"],["fib","Fintech Fibe"]]]];
-function fresh(){return{user:null,email:"",me:"",meName:"",role:"",top:4,lock:-1,data:{},ds:"fce",fy:null,month:"",sel:{},want:{},wantLbl:{},sec:"ov",cat:"",catDim:"",dim:"",bk:"",q:"",page:1,size:20,tmode:"count",sort:{k:"esc_date",dir:"desc"},ovSort:{},f:[],crumbs:[],ovRows:{},note:"",loggingOut:false}}
+function fresh(){return{user:null,email:"",me:"",meName:"",role:"",top:4,lock:-1,data:{},ds:"fce",fy:null,month:"",sel:{},want:{},wantLbl:{},sec:"ov",cat:"",catDim:"",dim:"",bk:"",q:"",page:1,size:20,tmode:"count",sort:{k:"Date",dir:"desc"},ovSort:{},f:[],crumbs:[],ovRows:{},note:"",loggingOut:false}}
 let S=fresh();
 let finOpen=false;   // Fintech starts collapsed
 
@@ -381,7 +394,7 @@ async function savePw(){const cp=$("cp").value,np=$("np").value,b=$("cpGo");
 
 function inactiveModal(){modal('<h3>Account inactive</h3><p>Your account is inactive, so you no longer have dashboard access. Contact your administrator if this is wrong.</p><div class="actions"><button class="pri" type="button" id="inOk">OK</button></div>',"danger");$("inOk").onclick=closeModal}
 
-function resetUI(){["who","whoSub","hier","crumbs","months","act","dash","side","ph","kbar","fsum"].forEach(id=>$(id).innerHTML="");if(typeof unstick==="function"&&stuck)unstick();
+function resetUI(){["who","whoSub","hier","crumbs","months","act","dash","side","ph","kbar"].forEach(id=>$(id).innerHTML="");if(typeof unstick==="function"&&stuck)unstick();
  $("period").textContent="Sales Escalation & Resolution Management";$("fy").innerHTML="";$("selNote").hidden=true;$("filt").hidden=true;$("ph").hidden=true;$("toastRoot").innerHTML=""}
 async function logoutNow(msg,ok){S.loggingOut=true;clearTimeout(idleT);try{await sb.auth.signOut({scope:"local"})}catch(e){}
  S=fresh();resetUI();closeModal();$("lEmail").value="";showLogin(msg||"You have been logged out.",ok!==false)}
@@ -409,15 +422,18 @@ async function loadApp(){
  if(!me||!(ADMIN.includes(role)||role in LVR)){$("who").textContent=S.email;$("ph").hidden=false;$("ph").textContent="Your account does not have dashboard access. Contact your administrator.";return}
  S.role=role;S.me=S.email;S.meName=me.emp_name||S.email;S.top=ADMIN.includes(role)?4:LVR[role];S.lock=ADMIN.includes(role)?-1:LVR[role];
  $("who").textContent=S.meName;$("whoSub").textContent=S.email+" · "+(role==="ADMIN"?"Administrator":role);
+ if(!canOv()&&S.sec==="ov")S.sec="fce";
  side();$("dash").innerHTML='<div class="kpis">'+'<div class="skel" style="height:86px"></div>'.repeat(6)+'</div><div class="skel" style="height:300px"></div>';
  await loadData();
 }
-async function fetchAll(d){let all=[],from=0;for(;;){const{data,error}=await sb.from(d.table).select(d.cols).order("esc_date",{ascending:false,nullsFirst:false}).order("user_id").range(from,from+999);if(error)throw error;all=all.concat(data);if(data.length<1000)break;from+=1000}return all}
+async function fetchAll(d){let all=[],from=0,cols=d.cols;for(;;){const{data,error}=await sb.from(d.table).select(cols).order("esc_date",{ascending:false,nullsFirst:false}).order("user_id").range(from,from+999);
+ if(error){if(/extra/i.test(error.message||"")&&/(^|,)extra(,|$)/.test(cols)){cols=cols.replace(/(^|,)extra(?=,|$)/,"").replace(/^,/,"");all=[];from=0;continue}throw error}all=all.concat(data);if(data.length<1000)break;from+=1000}return all}
 function prep(r,src){const sd=SRC[src],k=CLS[sd.cls](r);
  if(sd.kind==="money"&&!r.esc_date)return null;   // Refunds / Fintech count only rows with a Month
  const o={...r,src,k,m:(r.esc_date||"").slice(0,7),fy:fyOf(r.esc_date),product_category:r.product_category||"(blank)",user_id:r.user_id||""};
- if(sd.kind==="case"){o.res=RESOLVED[sd.cls](k);o.open=k==="pen";o.age=o.open&&r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;o.b=o.age==null?-1:o.age<=3?0:o.age<=7?1:o.age<=15?2:o.age<=30?3:4;if(sd.cls==="fce")o.escalation_category=r.escalation_category||"(blank)"}
+ if(sd.kind==="case"){o.res=RESOLVED[sd.cls](k);o.open=k==="pen";o.age=o.open&&r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;o.b=o.age==null?-1:o.age<=3?0:o.age<=7?1:o.age<=15?2:o.age<=30?3:4;if(sd.cls==="fce")o.escalation_category=r.escalation_category||"No Category Updated"}
  else{o.amt=Number(r.amount)||0;o.lender=sd.lender||"";o.aw=st(r.emi_confirmation)==="upcoming";o.emi_confirmation=r.emi_confirmation||"(blank)"}
+ if(r.extra&&typeof r.extra==="object"){o.xn={};for(const[k,v]of Object.entries(r.extra))o.xn[nz(k)]=v}
  LV.forEach(j=>{if(o["l"+j]&&!o["l"+j+"_name"])o["l"+j+"_name"]=o["l"+j]});return o}
 async function loadData(){
  const res=await Promise.all(Object.keys(SRC).map(async k=>{try{return[k,{rows:(await fetchAll(SRC[k])).map(r=>prep(r,k)).filter(Boolean)}]}catch(e){return[k,{rows:[],err:e.message||String(e),code:e.code}]}}));
@@ -434,7 +450,7 @@ const setupMsg=(d,t)=>isSetup(d)?t+" is not set up yet. Run the setup SQL in Sup
    Bajaj / Fibe buttons; clicking it again while on that view collapses the list. */
 function side(){
  const nb=(id,t,ic,sub)=>`<button class="nv${sub?" sub":""}${S.sec===id?" on":""}" data-s="${id}" type="button"${S.sec===id?' aria-current="page"':""}>${ic?`<span class="ic">${ic}</span>`:""}<span>${t}</span></button>`;
- $("side").innerHTML=SEC.map(([id,t,ic,sub])=>{
+ $("side").innerHTML=SEC.filter(([id])=>id!=="ov"||canOv()).map(([id,t,ic,sub])=>{
   if(!sub)return nb(id,t,ic);
   const inside=sub.some(s=>s[0]===S.sec),open=finOpen||inside;
   return`<button class="nv${S.sec===id?" on":""}${inside?" grp-on":""}" data-s="${id}" data-grp="1" type="button" aria-expanded="${open}" aria-controls="grp-${id}"${S.sec===id?' aria-current="page"':""}><span class="ic">${ic}</span><span>${t}</span><span class="cv" aria-hidden="true">›</span></button><div class="subs" id="grp-${id}"${open?"":" hidden"}>${sub.map(([i,n])=>nb(i,n,"",1)).join("")}</div>`}).join("");
@@ -443,7 +459,8 @@ $("side").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;const id
  if(b.dataset.grp){if(S.sec===id){finOpen=!finOpen;side();return}finOpen=true}
  setSec(id);window.scrollTo({top:0})};
 function setSec(id){
- S.sec=id;side();S.cat="";S.catDim="";S.dim="";S.bk="";S.q="";S.page=1;S.note="";S.sort={k:"esc_date",dir:"desc"};
+ if(id==="ov"&&!canOv())id="fce";
+ S.sec=id;side();S.cat="";S.catDim="";S.dim="";S.bk="";S.q="";S.page=1;S.note="";S.sort={k:"Date",dir:"desc"};
  $("ph").hidden=true;$("filt").hidden=true;$("dash").innerHTML="";$("kbar").innerHTML="";
  if(id==="ov"){ensurePeriod();$("filt").hidden=false;renderOv();return}
  const v=VIEWS[id];if(!v)return;
@@ -549,23 +566,31 @@ function summM(rows){const s={n:rows.length,v:0,b:{},aw:0,awv:0};
  rows.forEach(r=>{s.v+=r.amt;const b=s.b[r.k]||(s.b[r.k]={n:0,v:0});b.n++;b.v+=r.amt;if(r.aw){s.aw++;s.awv+=r.amt}});
  ["ret","rfd","fst","oth"].forEach(k=>s[k]=s.b[k]||{n:0,v:0});return s}
 
-/* ======================= breakdown dimensions ======================= */
-const dimVal=(r,d)=>d.startsWith("x:")?(r.extra?.[d.slice(2)]||"(blank)"):(r[d]||"(blank)");
-function dimList(rows){const v=VIEWS[S.ds],out=[];
- if(v.kind==="case")return[{k:v.catField,l:v.catTitle.replace(/^By /,"")}];
- if(rows.some(r=>r.product_category&&r.product_category!=="(blank)"))out.push({k:"product_category",l:"Product category"});
- if(v.fin)out.push({k:"emi_confirmation",l:"EMI Confirmation"});
- if(S.ds==="fin")out.push({k:"lender",l:"Lender"});
- const cnt={};rows.forEach(r=>{if(r.extra)for(const[k,x]of Object.entries(r.extra)){const m=cnt[k]||(cnt[k]=new Map());m.set(x,(m.get(x)||0)+1)}});
- for(const[k,m]of Object.entries(cnt)){const filled=[...m.values()].reduce((a,b)=>a+b,0);if(m.size>=2&&m.size<=40&&filled>=rows.length*.3)out.push({k:"x:"+k,l:k})}
- return out}
+/* ======================= breakdown dimensions =======================
+   First Call: escalation category · Onboarding: team (next level down) · Refunds: Refund Bucketing · Fintech: lender */
+const DIMGET={"x:refundbucketing":r=>X("Refund Bucketing","Refund Bucket")(r)};
+const dimVal=(r,d)=>DIMGET[d]?(DIMGET[d](r)||"(blank)"):(r[d]||"(blank)");
+function dimList(){
+ if(S.ds==="fce")return[{k:"escalation_category",l:"Escalation category"}];
+ if(S.ds==="onb")return[];
+ if(S.ds==="ref")return[{k:"x:refundbucketing",l:"Refund Bucketing"}];
+ return[{k:"lender",l:"Lender"}]}
+/* Onboarding "By team": the level just below the deepest selection (or below you) */
+function teamLevel(rows){let base=S.lock>=0?S.lock:5;LV.forEach(k=>{if(S.sel[k]&&k<base)base=k});for(let k=base-1;k>=0;k--)if(rows.some(r=>r["l"+k]))return k;return-1}
+function teamBars(rows){const lv=teamLevel(rows);if(lv<0)return'<div class="empty">This is the lowest level. See the records below.</div>';
+ const g=new Map();rows.forEach(r=>{const e=r["l"+lv]||DIR;let c=g.get(e);if(!c){c={e,name:e===DIR?"Direct (no L"+lv+")":r["l"+lv+"_name"]||e,n:0,a:0,o:0};g.set(e,c)}c.n++;if(r.res)c.a++;else if(r.open)c.o++});
+ const L=[...g.values()].sort((a,b)=>b.o-a.o||b.n-a.n).slice(0,20),mx=Math.max(...L.map(c=>c.n));
+ return`<p class="sub" style="margin:-4px 0 8px">One bar per L${lv}, most open first. Click a name to drill into their team.</p>`+L.map(c=>`<div class="hbar" data-pick="${lv}" data-pe="${esc(c.e)}" role="button" tabindex="0" title="${esc(c.name)}: ${c.a} resolved, ${c.o} open of ${c.n}"><span class="t">${esc(c.name)}</span><div class="bar"><i class="res" style="width:${c.a/mx*100}%"></i><i class="pen" style="width:${c.o/mx*100}%"></i></div><span class="num"><b>${N(c.o)}</b> open · ${pc(c.a,c.n,0)} resolved</span></div>`).join("")}
+function drill(lv,email){const rows=S.f.filter(r=>(r["l"+lv]||DIR)===email),s={...S.sel};
+ for(let j=lv+1;j<=S.top;j++){if(j===S.lock||s[j])continue;const c={};rows.forEach(r=>{const v=r["l"+j]||DIR;c[v]=(c[v]||0)+1});const best=Object.entries(c).sort((a,b)=>b[1]-a[1])[0];if(best)s[j]=best[0]}
+ s[lv]=email;LV.forEach(j=>{if(j<lv)delete s[j]});applySel(s,true)}
 
 /* ======================= render a section ======================= */
 function render(w){
  if(S.sec==="ov")return renderOv();
- w=w||walk(S.sel);drawPeriod();drawHier(w);drawCrumbs(w);drawSelNote();
- const v=VIEWS[S.ds],base=w.pool,dims=dimList(base);
- if(!dims.some(d=>d.k===S.dim))S.dim=dims[0]?.k||"";
+ const y0=window.scrollY;w=w||walk(S.sel);drawPeriod();drawHier(w);drawCrumbs(w);drawSelNote();
+ const v=VIEWS[S.ds],base=w.pool,dims=dimList();
+ S.dim=dims[0]?.k||"";
  const cat=S.cat?base.filter(r=>dimVal(r,S.catDim)===S.cat):base,f=S.bk?cat.filter(r=>r.k===S.bk):cat;S.f=f;
  const year=selFilter(rowsOf().filter(inYear)),yc=S.cat?year.filter(r=>dimVal(r,S.catDim)===S.cat):year;
  const catL=(dims.find(d=>d.k===S.catDim)||{l:S.catDim.replace(/^x:/,"")}).l;
@@ -574,7 +599,7 @@ function render(w){
  const note=S.note?`<div class="sel-note" style="margin:0 0 14px">${esc(S.note)}</div>`:"";
  const catRows=S.bk?base.filter(r=>r.k===S.bk):base;
  $("dash").innerHTML=note+(v.kind==="money"?moneyBody(v,f,cat,yc,catRows,dims):caseBody(v,f,cat,yc,catRows))+recordsPanel();
- drawTable();afterRender();
+ drawTable();afterRender(y0);
 }
 $("act").onclick=e=>{if(e.target.id==="clr"){S.cat="";S.catDim="";S.bk="";S.q="";S.month="";applySel({},true)}};
 const kpiHtml=K=>`<div class="kpis">${K.map(([a,b,c,t,ti])=>`<div class="kpi ${t}"${ti?` title="${esc(ti)}"`:""}><span>${a}</span><b class="num">${b}</b><small>${c}</small></div>`).join("")}</div>`;
@@ -583,14 +608,14 @@ const panel=(title,sub,body,extra)=>`<section class="panel"><div class="block-h"
 function caseBody(v,f,cat,yc,catRows){
  const s=summ(f),ds=S.ds;
  const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
-  :[["Escalated Total",N(s.n),"in current view","info"],["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Pending",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"pending ÷ total","warn"],["Avg age of pending",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Pending > 7 days",N(s.o7),pc(s.o7,s.pen)+" of pending","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
+  :[["Escalated Total",N(s.n),"in current view","info"],["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Open",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Open %",pc(s.pen,s.n,2),"open ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
  const ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null}});
- const lab=ds==="fce"?"Yet to resolve":"Pending";
+ const lab=ds==="fce"?"Yet to resolve":"Open";
  $("kbar").innerHTML=kpiHtml(K);return panel("Month-on-month: resolved vs "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
    `<div class="trend-legend"><span><i class="sw res"></i>${ds==="fce"?"Resolved":"Resolved (onboarded + ready + refund)"}</span><span><i class="sw pen"></i>${lab}</span><span><i class="sw pct"></i>Resolution %</span></div><div class="trend-chart fit">${trendChart(pts,{unit:"Cases",tip:p=>`${p.a} resolved · ${p.b} ${lab.toLowerCase()} · ${(p.p*100).toFixed(1)}% resolution`})}</div>`)+
   panel(ds==="fce"?"Status split":"Sales Bucketing split","Share of the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:ds==="fce"?"Status":"Sales Bucketing"}))+
-  `<div class="g2">`+panel("Aging of "+(ds==="fce"?"unresolved cases":"pending cases"),`${N(s.pen)} ${ds==="fce"?"unresolved":"pending"} case(s) in the current view, by days since raised.`,agingBlock(f,yc,ms))+
-  panel(v.catTitle,`Descending by volume. Click a row to filter. <span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> ${v.penL}`,`<div class="hbars">${catBars(catRows,v.catField)}</div>`)+`</div>`;
+  `<div class="g2">`+panel("Aging of "+(ds==="fce"?"unresolved cases":"open cases"),`${N(s.pen)} ${ds==="fce"?"unresolved":"open"} case(s) in the current view, by days since raised.`,agingBlock(f,yc,ms))+
+  (ds==="onb"?panel("By team",`<span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> open`,`<div class="hbars">${teamBars(catRows)}</div>`):panel(v.catTitle,`Descending by volume. Click a row to filter. <span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> ${v.penL}`,`<div class="hbars">${catBars(catRows,v.catField)}</div>`))+`</div>`;
 }
 
 function moneyBody(v,f,cat,yc,catRows,dims){
@@ -616,10 +641,9 @@ function moneyBody(v,f,cat,yc,catRows,dims){
    `<div class="trend-legend"><span><i class="sw res"></i>${v.goodL}</span><span><i class="sw pen"></i>${v.badL}</span><span><i class="sw pct"></i>${v.lineL}</span></div><div class="trend-chart fit">${trendChart(pts,{fmt,unit:mode==="value"?"Amount (₹)":v.unit,tip:p=>`${N(p.n)} ${v.unit.toLowerCase()} · ${v.goodL} ${p.gn} (${moneyShort(p.gv)}) · ${v.badL} ${p.bn} (${moneyShort(p.bv)}) · ${v.lineL} ${(p.p*100).toFixed(1)}%`})}</div>`,toggle);
  h+=panel(isFin?"Order Status split":"Refund Status split","Count and amount in the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:isFin?"Order Status":"Refund Status",money:1}));
  if(S.ds==="fin")h+=panel("Bajaj vs Fibe","Same filters, split by lender. Click a lender to open its own view.",lenderBlock(cat));
- const brk=`<label class="lbl" for="dim" style="margin:0 6px 0 0;display:inline">Breakdown by</label><select id="dim" style="width:auto;padding:7px 10px">${dims.map(d=>`<option value="${esc(d.k)}"${d.k===S.dim?" selected":""}>${esc(d.l)}</option>`).join("")}</select>`;
  const right=isFin?panel("EMI Confirmation",`${N(s.aw)} loan(s) awaiting the FST cycle (Upcoming). Click a row to filter.`,`<div class="hbars">${simpleBars(f,"emi_confirmation",x=>x.toLowerCase()==="upcoming")}</div>`)
   :panel("Revenue by status","Sale Claim Amount in the current view.",`<div class="hbars">${statusValueBars(v,cat)}</div>`);
- h+=`<div class="g2">`+panel("Breakdown",`Descending by count. Click a row to filter. <span style="color:var(--blue)">■</span> ${v.goodL.toLowerCase()} · <span style="color:#d98a0b">■</span> ${v.badL.toLowerCase()}`,dims.length?`<div class="hbars">${moneyBars(catRows,S.dim,v)}</div>`:'<div class="empty">No columns to break down by.</div>',dims.length?`<div>${brk}</div>`:"")+right+`</div>`;
+ h+=`<div class="g2">`+panel("Breakdown by "+dims[0].l,`Descending by count. Click a row to filter. <span style="color:var(--blue)">■</span> ${v.goodL.toLowerCase()} · <span style="color:#d98a0b">■</span> ${v.badL.toLowerCase()}`,`<div class="hbars">${moneyBars(catRows,S.dim,v)}</div>`)+right+`</div>`;
  return h;
 }
 
@@ -742,38 +766,42 @@ function simpleBars(rows,dim,hot){const g={};rows.forEach(r=>{const key=dimVal(r
 function statusValueBars(v,rows){const tot=rows.reduce((t,r)=>t+r.amt,0)||1;
  return v.keys.map(b=>{const x=rows.filter(r=>r.k===b.k),val=x.reduce((t,r)=>t+r.amt,0);if(!x.length)return"";return`<div class="hbar${S.bk===b.k?" on":""}" data-bk="${b.k}" role="button" tabindex="0"><span class="t"><span class="chip ${CHIP[b.k]}">${esc(b.l)}</span></span><div class="bar"><i style="width:${val/tot*100}%;background:linear-gradient(90deg,${b.col[2]},${b.col[1]})"></i></div><span class="num"><b>${moneyShort(val)}</b> · ${pc(val,tot,1)}</span></div>`}).join("")||'<div class="empty">No data for this selection.</div>'}
 
-/* ======================= record table + detail + CSV ======================= */
-function rcols(){const v=VIEWS[S.ds];
- if(S.ds==="fce")return[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["escalation_category","Escalation category"],["k","Status"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"]];
- if(S.ds==="onb")return[["esc_date","Date"],["user_id","User ID"],["product_category","Product"],["k","Sales Bucketing"],["age","Age",1],["l0_name","L0"],["l1_name","L1"],["l2_name","L2"],["l4_name","L4"]];
- return[["m","Month"],["user_id",v.fin?"User / Order ID":"User ID"],["product_category","Product"],["k",v.fin?"Order Status":"Refund Status"],["amt",v.fin?"Order Amount":"Sale Claim Amount",1]].concat(v.fin?[["emi_confirmation","EMI Confirmation"]]:[],S.ds==="fin"?[["lender","Lender"]]:[],[["l0_name","L0"],["l1_name","L1"],["l4_name","L4"]]);
-}
-const recordsPanel=()=>panel("Record-level drill-down","Every record in the current view. Click a row to see all its details.",
- `<div class="toolbar"><input id="q" type="search" placeholder="Search ID, product, status, name, any column" aria-label="Search records" value="${esc(S.q)}"><span class="grow"></span>
+/* ======================= record table + detail + CSV =======================
+   Each tab shows a fixed list of columns, in this order, in the table, the row pop-up and the CSV.
+   A column with no value in any record of the current view is left out. Sheet columns are
+   matched by header name, ignoring case, spaces and underscores. */
+const nz=s=>String(s??"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const X=(...names)=>r=>{for(const n of names){const v=r.xn&&r.xn[nz(n)];if(v!=null&&String(v).trim()!=="")return String(v)}return""};
+const DATECOL={l:"Date",k:"esc_date",get:r=>!r.esc_date?"":r.esc_date.slice(8,10)+"-"+MN[+r.esc_date.slice(5,7)-1]+"-"+r.esc_date.slice(0,4)};   // header "Date" (sheet column Month), value dd-mmm-yyyy e.g. 01-Oct-2026
+const LCOLS=[0,1,2,3,4].map(i=>({l:"L"+i,k:"l"+i+"_name",get:r=>r["l"+i+"_name"]||""}));
+const L0ID=X("L0 Employee Id","L0 Emp ID","L0 EMP ID","L0 Employee ID","L0 EmpID");
+const STATUS=l=>({l,k:"k",chip:1,get:r=>bLabel(S.ds,r.k,r)});
+const AMT=l=>({l,k:"amt",num:1,money:1,get:r=>r.amt?money(r.amt):""});
+const FINCOLS=[DATECOL,{l:"User ID",k:"user_id"},{l:"Loan ID",get:X("Loan ID","LoanID")},{l:"Phone Number",get:X("Phone Number","Phone No","Mobile Number")},AMT("Order Amount"),STATUS("Order Status"),{l:"L0 Emp ID",get:L0ID},...LCOLS];
+const RCOLS={
+ fce:[DATECOL,{l:"User ID",k:"user_id"},{l:"Product Category",k:"product_category",get:r=>r.product_category==="(blank)"?"":r.product_category},{l:"Escalation Category",k:"escalation_category"},{l:"CS Remarks",get:X("CS Remarks","CS Remark","CS Comments")},STATUS("Status"),{l:"Age",k:"age",num:1,get:r=>r.open&&r.age!=null?r.age+" d":""},...LCOLS],
+ onb:[DATECOL,{l:"User Id",k:"user_id"},{l:"L0 Employee Id",get:L0ID},...LCOLS,STATUS("Sales Bucketing"),{l:"Sales Remark",get:X("Sales Remark","Sales Remarks")}],
+ ref:[DATECOL,{l:"User Id",k:"user_id"},{l:"Enter Customer mobile number",get:X("Enter Customer mobile number","Customer mobile number","Customer Mobile Number","Mobile Number")},{l:"Customer Alternate mobile number",get:X("Customer Alternate mobile number","Alternate mobile number","Alternate Mobile Number")},AMT("Sale Claim Amount"),STATUS("Refund Status"),{l:"Refund Bucketing",get:X("Refund Bucketing","Refund Bucket")},{l:"L0 EMP ID",get:L0ID},...LCOLS],
+ fin:FINCOLS.concat([{l:"Lender",k:"lender"}]),baj:FINCOLS,fib:FINCOLS
+};
+const cv=(r,c)=>c.get?c.get(r):String(r[c.k]??"");
+function rcols(rows){return RCOLS[S.ds].filter(c=>c.chip||rows.some(r=>cv(r,c)!==""))}
+const recordsPanel=()=>panel("Record-level drill-down","Every record in the current view. Click a row to see its details.",
+ `<div class="toolbar"><input id="q" type="search" placeholder="Search any column" aria-label="Search records" value="${esc(S.q)}"><span class="grow"></span>
  <select id="size" aria-label="Rows per page">${[20,50,100].map(n=>`<option${n===S.size?" selected":""}>${n}</option>`).join("")}</select><button class="gh" id="exp" type="button">Export CSV</button></div><div id="tbl"></div>`);
-function records(){const q=S.q.trim().toLowerCase();
- let a=q?S.f.filter(r=>[r.user_id,r.product_category,r.escalation_category,r.sales_bucketing,r.status,r.emi_confirmation,r.lender].concat(LV.map(k=>(r["l"+k+"_name"]||"")+" "+(r["l"+k]||"")),r.extra?Object.values(r.extra):[]).join(" ").toLowerCase().includes(q)):S.f.slice();
- const{k,dir}=S.sort;a.sort((x,y)=>{let p=x[k],q2=y[k];if(p==null)p=k==="age"||k==="amt"?-1:"";if(q2==null)q2=k==="age"||k==="amt"?-1:"";return(typeof p==="number"?p-q2:String(p).localeCompare(String(q2)))*(dir==="desc"?-1:1)});return a}
-function drawTable(){const host=$("tbl");if(!host)return;const cols=rcols(),a=records(),pages=Math.max(1,Math.ceil(a.length/S.size));S.page=Math.min(S.page,pages);const v=a.slice((S.page-1)*S.size,S.page*S.size);S.pageRows=v;
- if(!cols.some(c=>c[0]===S.sort.k))S.sort={k:cols[0][0],dir:"desc"};
- const cell=(r,c)=>c==="esc_date"?(r.esc_date?fd(r.esc_date):"–"):c==="m"?(r.m?fml(r.m):"–"):c==="k"?`<span class="chip ${CHIP[r.k]}">${esc(bLabel(S.ds,r.k,r))}</span>`:c==="age"?(r.open&&r.age!=null?r.age+" d":"–"):c==="amt"?money(r.amt):esc(r[c]||"–");
- host.innerHTML=a.length?`<div class="tbox"><table class="tbl"><thead><tr>${cols.map(([c,l,r])=>`<th class="s${r?" r":""}${S.sort.k===c?" on":""}" data-k="${c}">${l}<span class="ar">${S.sort.k===c?(S.sort.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr></thead><tbody>${v.map((r,i)=>`<tr class="click" tabindex="0" data-i="${i}">${cols.map(([c,,rr])=>`<td${rr?' class="r num"':""}>${cell(r,c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="pg"><span>${N(a.length)} record(s)${VIEWS[S.ds].kind==="money"?" · "+money(a.reduce((t,r)=>t+r.amt,0)):""} · page ${S.page} of ${pages}</span><div><button class="gh" type="button" id="pv"${S.page<2?" disabled":""}>Previous</button><button class="gh" type="button" id="nx"${S.page>=pages?" disabled":""}>Next</button></div></div>`:'<div class="empty">No records match these filters.</div>'}
-function detail(r){const v=VIEWS[S.ds],rows=[];
- if(v.kind==="money"){rows.push(["Month",r.m?fml(r.m):"–"],["User / Order ID",r.user_id],["Product",r.product_category],[v.fin?"Order Status":"Refund Status",r.status||"(blank)"],[v.fin?"Order Amount":"Sale Claim Amount",money(r.amt)]);if(v.fin)rows.push(["EMI Confirmation",r.emi_confirmation],["Lender",r.lender])}
- else{rows.push(["Date",r.esc_date?fd(r.esc_date):"–"],["User ID",r.user_id],["Product",r.product_category]);
-  if(S.ds==="fce")rows.push(["Escalation category",r.escalation_category],["Status",r.status||"(blank) – yet to resolve"]);else rows.push(["Sales Bucketing",r.sales_bucketing||"(blank) – pending"]);
-  if(r.open)rows.push(["Age",(r.age??"–")+" days"])}
- LV.forEach(k=>{if(r["l"+k])rows.push(["L"+k,r["l"+k+"_name"]+" · "+r["l"+k]])});
- if(r.extra)Object.entries(r.extra).forEach(([k,x])=>rows.push([k,x]));
- modal(`<h3>${esc(v.title)} record</h3><div class="facts">${rows.map(([k,x])=>`<div class="fact"><span>${esc(k)}</span><b>${esc(x||"–")}</b></div>`).join("")}</div><div class="actions"><button class="pri" type="button" id="dOk">Close</button></div>`);$("dOk").onclick=closeModal}
+function records(){const q=S.q.trim().toLowerCase(),all=RCOLS[S.ds];
+ let a=q?S.f.filter(r=>all.map(c=>cv(r,c)).join(" ").toLowerCase().includes(q)):S.f.slice();
+ const c=all.find(x=>x.l===S.sort.k)||DATECOL,dir=S.sort.dir==="desc"?-1:1,key=r=>c.k==="esc_date"?(r.esc_date||""):c.k==="amt"?r.amt:c.k==="age"?(r.age??-1):cv(r,c).toLowerCase();
+ a.sort((x,y)=>{const p=key(x),q2=key(y);return(typeof p==="number"?p-q2:String(p).localeCompare(String(q2)))*dir});return a}
+function drawTable(){const host=$("tbl");if(!host)return;const a=records(),cols=rcols(a),pages=Math.max(1,Math.ceil(a.length/S.size));S.page=Math.min(S.page,pages);const v=a.slice((S.page-1)*S.size,S.page*S.size);S.pageRows=v;S.pageCols=cols;
+ const cell=(r,c)=>c.chip?`<span class="chip ${CHIP[r.k]}">${esc(cv(r,c))}</span>`:esc(cv(r,c)||"–");
+ host.innerHTML=a.length?`<div class="tbox"><table class="tbl"><thead><tr>${cols.map(c=>`<th class="s${c.num?" r":""}${S.sort.k===c.l?" on":""}" data-k="${esc(c.l)}">${esc(c.l)}<span class="ar">${S.sort.k===c.l?(S.sort.dir==="desc"?"▼":"▲"):"↕"}</span></th>`).join("")}</tr></thead><tbody>${v.map((r,i)=>`<tr class="click" tabindex="0" data-i="${i}">${cols.map(c=>`<td${c.num?' class="r num"':""}>${cell(r,c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="pg"><span>${N(a.length)} record(s)${VIEWS[S.ds].kind==="money"?" · "+money(a.reduce((t,r)=>t+r.amt,0)):""} · page ${S.page} of ${pages}</span><div><button class="gh" type="button" id="pv"${S.page<2?" disabled":""}>Previous</button><button class="gh" type="button" id="nx"${S.page>=pages?" disabled":""}>Next</button></div></div>`:'<div class="empty">No records match these filters.</div>'}
+function detail(r){const cols=S.pageCols||rcols([r]);
+ modal(`<h3>${esc(VIEWS[S.ds].title)} record</h3><div class="facts">${cols.map(c=>`<div class="fact"><span>${esc(c.l)}</span><b>${esc(cv(r,c)||"–")}</b></div>`).join("")}</div><div class="actions"><button class="pri" type="button" id="dOk">Close</button></div>`);$("dOk").onclick=closeModal}
 const csvCell=x=>{let s=String(x??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return/[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
 function exportCsv(){const v=VIEWS[S.ds],a=records();if(!a.length){toast("Nothing to export.",true);return}
- const xk=[...new Set(a.flatMap(r=>r.extra?Object.keys(r.extra):[]))],lv=r=>[r.l0_name,r.l1_name,r.l2_name,r.l3_name,r.l4_name];let head,line;
- if(v.kind==="money"){head=["Month","User / Order ID","Product category",v.fin?"Order Status":"Refund Status",v.fin?"Order Amount":"Sale Claim Amount"].concat(v.fin?["EMI Confirmation","Lender"]:[],["L0","L1","L2","L3","L4"],xk);
-  line=r=>[r.m?fml(r.m):"",r.user_id,r.product_category,r.status||"",r.amt].concat(v.fin?[r.emi_confirmation,r.lender]:[],lv(r),xk.map(k=>r.extra?.[k]??""))}
- else{head=["Date","User ID","Product category"].concat(S.ds==="fce"?["Escalation category","Status"]:["Sales Bucketing"],["Age (days)","L0","L1","L2","L3","L4"],xk);
-  line=r=>[r.esc_date?fd(r.esc_date):"",r.user_id,r.product_category].concat(S.ds==="fce"?[r.escalation_category,r.open?"Yet to Resolve":"Resolved"]:[r.sales_bucketing||"Pending"],[r.open&&r.age!=null?r.age:""],lv(r),xk.map(k=>r.extra?.[k]??""))}
- const blob=new Blob(["\ufeff"+[head].concat(a.map(line)).map(l=>l.map(csvCell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),el=document.createElement("a");
+ const cols=rcols(a),raw=(r,c)=>c.money?r.amt:cv(r,c);
+ const blob=new Blob(["﻿"+[cols.map(c=>c.l)].concat(a.map(r=>cols.map(c=>raw(r,c)))).map(l=>l.map(csvCell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),el=document.createElement("a");
  el.href=u;el.download=v.title.replace(/[^A-Za-z0-9]+/g,"_")+"_"+(S.month||String(fyLabel(S.fy)).replace(/\s/g,"_"))+".csv";document.body.appendChild(el);el.click();setTimeout(()=>{URL.revokeObjectURL(u);el.remove()},500);toast(a.length+" record(s) exported.")}
 
 /* section interactions (one delegated listener; the section body is redrawn on every filter change) */
@@ -783,14 +811,15 @@ $("dash").addEventListener("click",e=>{const t=e.target;
  const vw=t.closest("[data-view]");if(vw){setSec(vw.dataset.view);window.scrollTo({top:0,behavior:"smooth"});return}
  const m=t.closest("[data-m]");if(m){setMonth(S.month===m.dataset.m?"":m.dataset.m);return}
  const bk=t.closest("[data-bk]");if(bk){S.bk=S.bk===bk.dataset.bk?"":bk.dataset.bk;S.page=1;render();return}
+ const pk=t.closest("[data-pick]");if(pk){drill(+pk.dataset.pick,pk.dataset.pe);return}
  const c=t.closest("[data-c]");if(c){const d=c.dataset.dim;if(S.cat===c.dataset.c&&S.catDim===d){S.cat="";S.catDim=""}else{S.cat=c.dataset.c;S.catDim=d}S.page=1;render();return}
  if(t.id==="pv"){S.page--;drawTable();return}if(t.id==="nx"){S.page++;drawTable();return}if(t.id==="exp"){exportCsv();return}
- const th=t.closest("#tbl th[data-k]");if(th){const k=th.dataset.k;if(S.sort.k===k)S.sort.dir=S.sort.dir==="desc"?"asc":"desc";else S.sort={k,dir:["esc_date","m","age","amt"].includes(k)?"desc":"asc"};S.page=1;drawTable();return}
+ const th=t.closest("#tbl th[data-k]");if(th){const k=th.dataset.k;if(S.sort.k===k)S.sort.dir=S.sort.dir==="desc"?"asc":"desc";else S.sort={k,dir:["Date","Age"].includes(k)||/amount/i.test(k)?"desc":"asc"};S.page=1;drawTable();return}
  const tr=t.closest("#tbl tr[data-i]");if(tr)detail(S.pageRows[+tr.dataset.i]);
 });
-$("dash").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const el=e.target.closest("[data-bk],[data-c],[data-view],tr[data-i],tr[data-go],[data-ovgo]");if(el){e.preventDefault();el.click()}});
+$("dash").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const el=e.target.closest("[data-bk],[data-c],[data-pick],[data-view],[data-hv],tr[data-i],tr[data-go],[data-ovgo]");if(el){e.preventDefault();el.click()}});
 let qT;$("dash").addEventListener("input",e=>{if(e.target.id==="q"){clearTimeout(qT);const x=e.target.value;qT=setTimeout(()=>{S.q=x;S.page=1;drawTable()},200)}});
-$("dash").addEventListener("change",e=>{if(e.target.id==="size"){S.size=+e.target.value;S.page=1;drawTable()}if(e.target.id==="dim"){S.dim=e.target.value;render()}});
+$("dash").addEventListener("change",e=>{if(e.target.id==="size"){S.size=+e.target.value;S.page=1;drawTable()}});
 
 /* ======================= Dashboard Overview =======================
    Team Level Escalations Summary at the logged-in person's own level only:
@@ -803,7 +832,7 @@ function ovGroups(view){const lvl=ovLevel(),kind=VIEWS[view].kind,rows=viewRows(
 const pctBar=(a,b,good,warn,inv)=>{const v=b?a/b:0,col=inv?(v<=good?"var(--green)":v<=warn?"var(--amber)":"var(--red)"):(v>=good?"var(--green)":v>=warn?"var(--amber)":"var(--red)");return pc(a,b,2)+`<span class="pb"><i style="width:${v*100}%;background:${col}"></i></span>`};
 const OVCOL={
  fce:[{k:"n",l:"Escalated Total",g:s=>s.n},{k:"res",l:"Resolved",g:s=>s.res},{k:"pen",l:"Yet to Resolve",g:s=>s.pen,hl:1},{k:"rp",l:"Resolution %",g:s=>s.rp,f:s=>pctBar(s.res,s.n,.95,.85)},{k:"pp",l:"Pendency %",g:s=>s.pp,f:s=>pc(s.pen,s.n,0)},{k:"avg",l:"Avg open age",g:s=>s.avg??-1,f:s=>s.avg==null?"–":s.avg.toFixed(1)+" d"},{k:"o7",l:"Open > 7 d",g:s=>s.o7,hl:1}],
- onb:[{k:"n",l:"Escalated Total",g:s=>s.n},{k:"onb",l:"Onboarded Already",g:s=>s.b.onb||0},{k:"rtc",l:"Ready to connect",g:s=>s.b.rtc||0,hl:1},{k:"ref",l:"Refund Requested",g:s=>s.b.ref||0,hl:1},{k:"pen",l:"Pending",g:s=>s.pen,hl:1},{k:"rp",l:"Resolution %",g:s=>s.rp,f:s=>pctBar(s.res,s.n,.95,.85)},{k:"pp",l:"Pendency %",g:s=>s.pp,f:s=>pc(s.pen,s.n,0)}],
+ onb:[{k:"n",l:"Escalated Total",g:s=>s.n},{k:"onb",l:"Onboarded Already",g:s=>s.b.onb||0},{k:"rtc",l:"Ready to connect",g:s=>s.b.rtc||0,hl:1},{k:"ref",l:"Refund Requested",g:s=>s.b.ref||0,hl:1},{k:"pen",l:"Open",g:s=>s.pen,hl:1},{k:"rp",l:"Resolution %",g:s=>s.rp,f:s=>pctBar(s.res,s.n,.95,.85)},{k:"pp",l:"Open %",g:s=>s.pp,f:s=>pc(s.pen,s.n,0)}],
  ref:[{k:"n",l:"Punched",g:s=>s.n},{k:"v",l:"Punched Revenue",g:s=>s.v,m:1},{k:"rn",l:"Retained",g:s=>s.ret.n},{k:"rv",l:"Retained Revenue",g:s=>s.ret.v,m:1},{k:"fn",l:"Refunded",g:s=>s.rfd.n,hl:1},{k:"fv",l:"Refunded Revenue",g:s=>s.rfd.v,m:1,hl:1},{k:"rp",l:"Retained %",g:s=>s.n?s.ret.n/s.n:0,f:s=>pctBar(s.ret.n,s.n,.95,.9)},{k:"fp",l:"Refunded %",g:s=>s.n?s.rfd.n/s.n:0,f:s=>pc(s.rfd.n,s.n,2)}],
  fin:[{k:"n",l:"Loans Processed",g:s=>s.n},{k:"v",l:"Loans Value",g:s=>s.v,m:1},{k:"rn",l:"Retained",g:s=>s.ret.n},{k:"rv",l:"Retained Value",g:s=>s.ret.v,m:1},{k:"fn",l:"Cancelled (FST)",g:s=>s.fst.n,hl:1},{k:"fv",l:"FST Value",g:s=>s.fst.v,m:1,hl:1},{k:"cp",l:"Cancelled %",g:s=>s.n?s.fst.n/s.n:0,f:s=>pctBar(s.fst.n,s.n,.05,.07,1)},{k:"aw",l:"Awaiting FST Cycle",g:s=>s.aw,hl:1}]
 };
@@ -825,20 +854,21 @@ function ovTable(view){
 }
 const OVSUB={
  fce:"Resolution % = resolved ÷ escalated; Pendency % = yet to resolve ÷ escalated.",
- onb:"Based on Sales Bucketing. Pending = blank. Resolution % = (Onboarded Already + Ready to connect + Refund Requested) ÷ Escalated Total; Pendency % = Pending ÷ Escalated Total.",
+ onb:"Based on Sales Bucketing. Open = blank. Resolution % = (Onboarded Already + Ready to connect + Refund Requested) ÷ Escalated Total; Open % = Open ÷ Escalated Total.",
  ref:"Rows with a Month. Revenue = Sale Claim Amount. Retained % and Refunded % are on count.",
  fin:"Bajaj + Fibe, rows with a Month. Value = Order Amount. Cancelled % = FST ÷ Loans Processed (count). Awaiting = EMI Confirmation “Upcoming”."
 };
 /* ======================= frozen filters + scorecards =======================
-   While you scroll a section, the filter panel and KPI scorecards stay pinned under the header.
-   Once scrolled past them they shrink to a one-line filter summary + one row of KPIs, and every
-   chart is sized to fit the space left on screen. Phones keep normal scrolling. */
+   The filter panel and KPI scorecards stay pinned under the header. Once you scroll, they get
+   smaller (tighter spacing, smaller text, KPIs in one row) but remain fully usable, so filters can
+   be changed from anywhere. Changing a filter keeps you where you are on the page.
+   Phones keep normal scrolling. */
 let stuck=false;
 const narrow=()=>!!(window.matchMedia&&matchMedia("(max-width:820px)").matches);
 function layoutVars(){const top=document.querySelector(".top"),th=narrow()?0:(top?top.offsetHeight:0),root=document.documentElement.style;
  root.setProperty("--topH",th+"px");
- const fz=$("freeze"),fh=stuck&&fz?fz.offsetHeight:150;
- root.setProperty("--fitH",Math.max(260,innerHeight-th-fh-120)+"px")}
+ const fz=$("freeze"),fh=stuck&&fz?fz.offsetHeight:230;
+ root.setProperty("--fitH",Math.max(260,innerHeight-th-fh-110)+"px")}
 function unstick(){const fz=$("freeze");fz.classList.remove("stuck");fz.style.marginBottom="";stuck=false}
 function checkStick(){const fz=$("freeze");if(!fz)return;
  if($("app").hidden||narrow()||$("filt").hidden){if(stuck)unstick();return}
@@ -848,19 +878,16 @@ function checkStick(){const fz=$("freeze");if(!fz)return;
  layoutVars()}
 addEventListener("scroll",checkStick,{passive:true});
 addEventListener("resize",()=>{if(stuck)unstick();layoutVars();checkStick()});
-function drawFsum(){
- const parts=[periodTxt()].concat(S.sec==="ov"?[]:(S.crumbs||[]).slice(1).map(p=>p.label));
- if(S.sec!=="ov"){if(S.cat)parts.push(S.cat);if(S.bk)parts.push(bLabel(S.ds,S.bk))}
- $("fsum").innerHTML=`<b>${esc(S.sec==="ov"?"Dashboard Overview":VIEWS[S.ds].title)}</b>`+parts.map(t=>`<span class="chip">${esc(t)}</span>`).join("")+`<span class="grow"></span><button class="gh" type="button" id="fsEdit">Change filters ▲</button>`}
-$("filt").addEventListener("click",e=>{if(e.target.id==="fsEdit")window.scrollTo({top:0,behavior:"smooth"})});
-function afterRender(){drawFsum();if(stuck)unstick();layoutVars();checkStick()}
+/* redraw without jumping: the page keeps its scroll position after a filter change */
+function afterRender(y){if(stuck)unstick();layoutVars();if(y!=null)window.scrollTo(0,y);checkStick()}
 
 /* ======================= Dashboard Overview: management view =======================
-   Everything here covers the logged-in person's own scope (all teams for Admin / L5 / NS,
-   otherwise only the rows where they are at their own level). */
+   Visible to Admin / L5 / NS and L1 and above. Everything covers the logged-in person's own scope.
+   "Manager" in the insights = the level below you (L4 for Admin / L5 / NS). */
+const canOv=()=>S.lock<0||S.lock>=1;
 const MODS=[
  {v:"fce",t:"First Call Escalation",ic:"📞",kind:"case",rate:s=>s.n?s.res/s.n:null,rateL:"Resolution %",good:"high",tgt:[.95,.85],sub:s=>`${N(s.n)} escalations · ${N(s.pen)} open`},
- {v:"onb",t:"Onboarding Not Connected",ic:"🔌",kind:"case",rate:s=>s.n?s.res/s.n:null,rateL:"Resolution %",good:"high",tgt:[.95,.85],sub:s=>`${N(s.n)} escalated · ${N(s.pen)} pending`},
+ {v:"onb",t:"Onboarding Not Connected",ic:"🔌",kind:"case",rate:s=>s.n?s.res/s.n:null,rateL:"Resolution %",good:"high",tgt:[.95,.85],sub:s=>`${N(s.n)} escalated · ${N(s.pen)} open`},
  {v:"ref",t:"Refunds",ic:"↩️",kind:"money",rate:s=>s.n?s.ret.n/s.n:null,rateL:"Retained %",good:"high",tgt:[.95,.9],sub:s=>`${N(s.n)} punched · ${moneyShort(s.rfd.v)} refunded`},
  {v:"fin",t:"Fintech",ic:"💳",kind:"money",rate:s=>s.n?s.fst.n/s.n:null,rateL:"Cancelled %",good:"low",tgt:[.05,.07],sub:s=>`${N(s.n)} loans · ${N(s.aw)} awaiting FST`}
 ];
@@ -874,72 +901,133 @@ const prevMonth=m=>{let y=+m.slice(0,4),mo=+m.slice(5)-1;if(mo<1){mo=12;y--}retu
 const rateIn=(m,rows,mm)=>{const x=rows.filter(q=>q.m===mm);return x.length?m.rate(sumOf(m,x)):null};
 function refMonth(){if(S.month)return S.month;const ms=MODS.flatMap(m=>scopeRows(m.v).filter(inYear).map(r=>r.m)).filter(Boolean).sort();return ms[ms.length-1]||""}
 const pp=x=>(x*100).toFixed(1)+"%";
+const mgrLvl=()=>S.lock<0?4:Math.max(0,S.lock-1);
+/* the open "backlog" of each module */
+const BACK={fce:{l:"yet to resolve",f:r=>r.open},onb:{l:"open",f:r=>r.open},ref:{l:"status not updated",f:r=>r.k==="oth"},fin:{l:"awaiting FST cycle",f:r=>r.aw}};
+const ageOf=r=>r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;
+/* group rows by manager (the level below you) */
+function byMgr(rows,weight){const lv=mgrLvl(),g=new Map();rows.forEach(r=>{const e=r["l"+lv]||DIR;let x=g.get(e);if(!x){x={e,name:e===DIR?"(No L"+lv+" mapped)":r["l"+lv+"_name"]||e,n:0,w:0,rows:[]};g.set(e,x)}x.n++;x.w+=weight?weight(r):1;x.rows.push(r)});return[...g.values()]}
+function topMgr(rows,weight){const L=byMgr(rows,weight).sort((a,b)=>b.w-a.w);if(!L.length)return null;const tot=L.reduce((t,x)=>t+x.w,0);return{...L[0],share:tot?L[0].w/tot:0,many:L.length>1}}
+const B=s=>`<b>${esc(s)}</b>`;
 
-function spark(vals,tone){const W=120,H=36,p=4,n=vals.length,pts=vals.map((v,i)=>v==null?null:[p+i*(W-2*p)/Math.max(1,n-1),H-p-v*(H-2*p)]).filter(Boolean);
+/* ---------- speedometer gauge for a rate, with the target bands ---------- */
+function gauge(m,v){
+ const W=150,H=88,cx=75,cy=76,R=58,sw=11;let a,b;
+ if(m.good==="high"){b=1;a=Math.min(.5,v==null?.5:Math.floor(v*10)/10)}else{a=0;b=Math.max(m.tgt[1]*3,v==null?0:Math.ceil(v*1.25*20)/20)}
+ const T=x=>Math.min(1,Math.max(0,(x-a)/(b-a))),P=(t,r)=>[cx-(r||R)*Math.cos(Math.PI*t),cy-(r||R)*Math.sin(Math.PI*t)];
+ const arc=(x1,x2,col,op)=>{const t1=T(x1),t2=T(x2);if(t2-t1<.001)return"";const p1=P(t1),p2=P(t2);return`<path d="M${p1[0].toFixed(1)} ${p1[1].toFixed(1)} A${R} ${R} 0 0 1 ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}" fill="none" stroke="${col}" stroke-width="${sw}"${op?` opacity="${op}"`:""}/>`};
+ const G="#2fd49a",A="#ffbb3d",Rd="#ff6b80";
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="gauge" aria-hidden="true">`+arc(a,b,"var(--track)");
+ s+=m.good==="high"?arc(a,m.tgt[1],Rd,.85)+arc(m.tgt[1],m.tgt[0],A,.9)+arc(m.tgt[0],b,G,.9):arc(a,m.tgt[0],G,.9)+arc(m.tgt[0],m.tgt[1],A,.9)+arc(m.tgt[1],b,Rd,.85);
+ if(v!=null){const p=P(T(v),R-15);s+=`<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" style="stroke:var(--text)" stroke-width="3" stroke-linecap="round"/>`}
+ s+=`<circle cx="${cx}" cy="${cy}" r="6" style="fill:var(--text)"/><text x="${cx-R}" y="${H-1}" text-anchor="middle" style="fill:var(--faint)" font-size="9.5">${Math.round(a*100)}%</text><text x="${cx+R}" y="${H-1}" text-anchor="middle" style="fill:var(--faint)" font-size="9.5">${Math.round(b*100)}%</text>`;
+ return s+"</svg>"}
+function spark(vals,tone){const W=96,H=30,p=4,n=vals.length,pts=vals.map((v,i)=>v==null?null:[p+i*(W-2*p)/Math.max(1,n-1),H-p-v*(H-2*p)]).filter(Boolean);
  if(!pts.length)return"";const col=tone==="good"?"var(--green)":tone==="bad"?"var(--red)":tone==="warn"?"var(--amber)":"var(--cyan)",last=pts[pts.length-1];
- return`<svg viewBox="0 0 ${W} ${H}" class="spark" aria-hidden="true"><polyline points="${pts.map(q=>q[0].toFixed(1)+","+q[1].toFixed(1)).join(" ")}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".9"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.4" fill="${col}"/></svg>`}
+ return`<svg viewBox="0 0 ${W} ${H}" class="spark" aria-hidden="true"><polyline points="${pts.map(q=>q[0].toFixed(1)+","+q[1].toFixed(1)).join(" ")}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".9"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.2" fill="${col}"/></svg>`}
 function modCard(m,ref){
- if(!modReady(m.v))return`<div class="mcard off"><div class="mh"><span>${m.ic}</span>${m.t}</div><b class="num">–</b><small>Not set up yet</small></div>`;
+ if(!modReady(m.v))return`<div class="mcard off"><div class="mh"><span>${m.ic}</span>${m.t}</div><p class="sub">Not set up yet</p></div>`;
  const all=scopeRows(m.v),s=sumOf(m,all.filter(inPeriod)),r=m.rate(s),t=toneOf(m,r);
  const months=[];if(ref){let x=ref;for(let i=0;i<6;i++){months.unshift(x);x=prevMonth(x)}}
  const cur=ref?rateIn(m,all,ref):null,prv=ref?rateIn(m,all,prevMonth(ref)):null;
  let d='<span class="chip n">No previous month</span>';
  if(cur!=null&&prv!=null){const dd=(cur-prv)*100,flat=Math.abs(dd)<.05,better=m.good==="high"?dd>0:dd<0;
   d=`<span class="chip ${flat?"n":better?"g":"r"}">${flat?"■ 0.0":(dd>0?"▲ ":"▼ ")+Math.abs(dd).toFixed(1)} pp</span><small>${MN[+ref.slice(5)-1]} vs ${MN[+prevMonth(ref).slice(5)-1]}</small>`}
+ const tg=m.good==="high"?`target ≥ ${m.tgt[0]*100}%`:`target ≤ ${m.tgt[0]*100}%`;
  return`<div class="mcard ${t}" data-ovgo="${m.v}" role="button" tabindex="0" title="Open ${esc(m.t)}"><div class="mh"><span>${m.ic}</span>${m.t}</div>`+
-  `<div class="mrow"><div><b class="num">${r==null?"–":pp(r)}</b><span>${m.rateL}${m.good==="low"?" · lower is better":""}</span></div>${spark(months.map(mm=>rateIn(m,all,mm)),t)}</div>`+
-  `<div class="md">${d}</div><small>${m.sub(s)}</small></div>`}
+  `<div class="mg">${gauge(m,r)}<div class="mv"><b class="num">${r==null?"–":pp(r)}</b><span>${m.rateL}</span><small>${tg}</small></div></div>`+
+  `<div class="md">${d}<span class="grow"></span><span class="spk" title="Last 6 months">${spark(months.map(mm=>rateIn(m,all,mm)),t)}</span></div><small>${m.sub(s)}</small></div>`}
 
-function insights(ref){const out=[],add=(t,x)=>out.push({t,x}),lvl=ovLevel();
+/* ---------- needs attention: every point names the manager behind it ---------- */
+function insights(ref){const out=[],add=(t,x)=>out.push({t,x}),lv=mgrLvl(),who="L"+lv;
+ const tail=(tm,unit,fmtw)=>tm&&tm.many?` Highest: ${B(tm.name)} with ${fmtw?fmtw(tm.w):N(tm.w)} ${unit} (${pp(tm.share)}).`:tm&&!tm.many&&tm.e!==DIR?` All under ${B(tm.name)}.`:"";
  MODS.forEach(m=>{if(!modReady(m.v))return;const all=scopeRows(m.v);if(!all.length)return;
   if(ref){const c=rateIn(m,all,ref),p=rateIn(m,all,prevMonth(ref));if(c!=null&&p!=null){const dd=(c-p)*100,worse=m.good==="high"?dd<0:dd>0;
-   if(Math.abs(dd)>=3)add(worse?"bad":"good",`${m.t}: ${m.rateL} ${worse?"worsened":"improved"} by ${Math.abs(dd).toFixed(1)} pp in ${fml(ref)} (${pp(p)} → ${pp(c)}).`)}}
-  if(S.lock<0){const g=new Map();all.filter(inPeriod).forEach(r=>{const e=r["l"+lvl];if(!e)return;if(!g.has(e))g.set(e,{n:r["l"+lvl+"_name"]||e,rows:[]});g.get(e).rows.push(r)});
-   const rk=[...g.values()].filter(x=>x.rows.length>=3).map(x=>({...x,r:m.rate(sumOf(m,x.rows))})).sort((a,b)=>m.good==="high"?a.r-b.r:b.r-a.r);
-   if(rk.length>1){const w=rk[0],t=toneOf(m,w.r);if(t!=="good")add(t,`${m.t}: weakest L${lvl} is ${w.n} at ${pp(w.r)} ${m.rateL.toLowerCase()} (${N(w.rows.length)} cases).`)}}
+   if(Math.abs(dd)>=3){
+    const ms=byMgr(all.filter(r=>r.m===ref||r.m===prevMonth(ref))).map(x=>{const a=x.rows.filter(r=>r.m===ref),b=x.rows.filter(r=>r.m===prevMonth(ref));return a.length>=2&&b.length>=2?{...x,c:m.rate(sumOf(m,a)),p:m.rate(sumOf(m,b))}:null}).filter(Boolean)
+     .map(x=>({...x,d:(x.c-x.p)*(m.good==="high"?1:-1)})).sort((a,b)=>worse?a.d-b.d:b.d-a.d);
+    const mv=ms[0]&&(worse?ms[0].d<0:ms[0].d>0)?` Biggest ${worse?"drop":"gain"}: ${B(ms[0].name)} (${pp(ms[0].p)} → ${pp(ms[0].c)}).`:"";
+    add(worse?"bad":"good",`${esc(m.t)}: ${m.rateL} ${worse?"worsened":"improved"} by ${Math.abs(dd).toFixed(1)} pp in ${fml(ref)} (${pp(p)} → ${pp(c)}).${mv}`)}}}
+  const rk=byMgr(all.filter(inPeriod)).filter(x=>x.e!==DIR&&x.n>=3).map(x=>({...x,r:m.rate(sumOf(m,x.rows))})).sort((a,b)=>m.good==="high"?a.r-b.r:b.r-a.r);
+  if(rk.length>1){const w=rk[0],t=toneOf(m,w.r);if(t!=="good")add(t,`${esc(m.t)}: weakest ${who} is ${B(w.name)} at ${pp(w.r)} ${m.rateL.toLowerCase()} (${N(w.n)} cases).`)}
  });
- const f=summ(scopeRows("fce").filter(inPeriod));if(f.o30)add("bad",`${N(f.o30)} first-call escalation(s) have been open for more than 30 days.`);
- const o=summ(scopeRows("onb").filter(inPeriod));if(o.pen)add(o.pp>.1?"bad":"warn",`${N(o.pen)} onboarding case(s) are still pending (${pc(o.pen,o.n,1)} pendency).`);
- const rf=summM(scopeRows("ref").filter(inPeriod));if(rf.rfd.n)add("warn",`${moneyShort(rf.rfd.v)} refunded across ${N(rf.rfd.n)} case(s), ${pc(rf.rfd.v,rf.v,1)} of punched revenue.`);
- if(rf.oth.n)add("warn",`${N(rf.oth.n)} refund case(s) have no Refund Status yet.`);
- const fr=scopeRows("fin").filter(inPeriod),fn=summM(fr);if(fn.aw)add("warn",`${N(fn.aw)} loan(s) worth ${moneyShort(fn.awv)} are awaiting the FST cycle.`);
+ const fc=scopeRows("fce").filter(inPeriod),o30=fc.filter(r=>r.open&&r.age>30);
+ if(o30.length)add("bad",`${N(o30.length)} first-call escalation(s) have been open for more than 30 days.`+tail(topMgr(o30),"cases"));
+ const on=scopeRows("onb").filter(inPeriod),oo=on.filter(r=>r.open);
+ if(oo.length)add(oo.length/on.length>.1?"bad":"warn",`${N(oo.length)} onboarding case(s) are still open (${pc(oo.length,on.length,1)} open).`+tail(topMgr(oo),"open"));
+ const rf=scopeRows("ref").filter(inPeriod),rd=rf.filter(r=>r.k==="rfd"),rt=rf.reduce((t,r)=>t+r.amt,0),rdv=rd.reduce((t,r)=>t+r.amt,0);
+ if(rd.length)add("warn",`${moneyShort(rdv)} refunded across ${N(rd.length)} case(s), ${pc(rdv,rt,1)} of punched revenue.`+tail(topMgr(rd,r=>r.amt),"refunded",moneyShort));
+ const ru=rf.filter(r=>r.k==="oth");if(ru.length)add("warn",`${N(ru.length)} refund case(s) have no Refund Status yet.`+tail(topMgr(ru),"cases"));
+ const fr=scopeRows("fin").filter(inPeriod),fs=fr.filter(r=>r.k==="fst");
+ if(fs.length)add(fs.length/fr.length>.07?"bad":"warn",`${N(fs.length)} loan(s) worth ${moneyShort(fs.reduce((t,r)=>t+r.amt,0))} were cancelled (FST), ${pc(fs.length,fr.length,1)} of loans.`+tail(topMgr(fs),"cancellations"));
+ const aw=fr.filter(r=>r.aw);if(aw.length)add("warn",`${N(aw.length)} loan(s) worth ${moneyShort(aw.reduce((t,r)=>t+r.amt,0))} are awaiting the FST cycle.`+tail(topMgr(aw),"loans"));
  const lb=["baj","fib"].map(k=>{const x=fr.filter(r=>r.src===k);return{l:SRC[k].lender,n:x.length,c:x.length?x.filter(r=>r.k==="fst").length/x.length:0}}).filter(x=>x.n>=3);
- if(lb.length===2&&Math.abs(lb[0].c-lb[1].c)>=.05){const hi=lb[0].c>lb[1].c?lb[0]:lb[1],lo=hi===lb[0]?lb[1]:lb[0];add("warn",`Fintech: ${hi.l} cancels ${pp(hi.c)} of loans vs ${pp(lo.c)} for ${lo.l}.`)}
- const ord={bad:0,warn:1,good:2};return out.sort((a,b)=>ord[a.t]-ord[b.t]).slice(0,8)}
+ if(lb.length===2&&Math.abs(lb[0].c-lb[1].c)>=.02){const hi=lb[0].c>lb[1].c?lb[0]:lb[1],lo=hi===lb[0]?lb[1]:lb[0];add("warn",`Fintech: ${B(hi.l)} cancels ${pp(hi.c)} of loans vs ${pp(lo.c)} for ${esc(lo.l)}.`)}
+ const ord={bad:0,warn:1,good:2};return out.sort((a,b)=>ord[a.t]-ord[b.t]).slice(0,10)}
 
-/* multi-line chart: the four key rates by month */
+/* ---------- multi-line chart: the four key rates by month ---------- */
 function rateChart(ms){
  const series=MODS.filter(m=>modReady(m.v)).map(m=>{const all=scopeRows(m.v);return{m,v:ms.map(mm=>rateIn(m,all,mm))}}).filter(s=>s.v.some(x=>x!=null));
  if(!series.length)return'<div class="empty">No data for this period.</div>';
- const u="r"+(++UID),W=760,H=300,pl=46,pr=18,pt=22,pb=46,iw=W-pl-pr,ih=H-pt-pb,sl=iw/ms.length,X=i=>pl+sl*(i+.5),Y=v=>pt+ih-v*ih;
+ const u="r"+(++UID),W=760,H=300,pl=46,pr=18,pt=22,pb=46,iw=W-pl-pr,ih=H-pt-pb,sl=iw/ms.length,X2=i=>pl+sl*(i+.5),Y=v=>pt+ih-v*ih;
  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Key rates by month"><defs><filter id="${u}g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
  [0,.25,.5,.75,1].forEach((g,i)=>{s+=`<line x1="${pl}" x2="${W-pr}" y1="${Y(g)}" y2="${Y(g)}" style="stroke:var(${i?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${i?"3 5":"0"}"/><text x="${pl-8}" y="${Y(g)+4}" text-anchor="end" style="fill:var(--ch-ax)" font-size="11">${g*100}%</text>`});
  ms.forEach((mm,i)=>{if(mm===S.month)s+=`<rect x="${pl+sl*i+3}" y="${pt}" width="${sl-6}" height="${ih}" rx="8" style="fill:var(--ch-band);stroke:var(--ch-band-bd)"/>`;
-  s+=`<text x="${X(i)}" y="${H-pb+20}" text-anchor="middle" style="fill:var(${mm===S.month?"--ch-mon-sel":"--ch-mon"})" font-size="12" font-weight="${mm===S.month?800:600}">${MN[+mm.slice(5)-1].toUpperCase()}</text><text x="${X(i)}" y="${H-pb+34}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${mm.slice(0,4)}</text>`});
- series.forEach(({m,v})=>{const c=MCOL[m.v][1];let d="",pen=false;v.forEach((x,i)=>{if(x==null){pen=false;return}d+=(pen?"L":"M")+X(i).toFixed(1)+" "+Y(x).toFixed(1)+" ";pen=true});
+  s+=`<text x="${X2(i)}" y="${H-pb+20}" text-anchor="middle" style="fill:var(${mm===S.month?"--ch-mon-sel":"--ch-mon"})" font-size="12" font-weight="${mm===S.month?800:600}">${MN[+mm.slice(5)-1].toUpperCase()}</text><text x="${X2(i)}" y="${H-pb+34}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${mm.slice(0,4)}</text>`});
+ series.forEach(({m,v})=>{const c=MCOL[m.v][1];let d="",pen=false;v.forEach((x,i)=>{if(x==null){pen=false;return}d+=(pen?"L":"M")+X2(i).toFixed(1)+" "+Y(x).toFixed(1)+" ";pen=true});
   s+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" filter="url(#${u}g)"${m.good==="low"?' stroke-dasharray="7 4"':""}/>`;
-  v.forEach((x,i)=>{if(x!=null)s+=`<circle cx="${X(i)}" cy="${Y(x)}" r="3.6" style="fill:var(--ch-pt)" stroke="${c}" stroke-width="2.2"/>`});
-  const li=v.map((x,i)=>x==null?-1:i).filter(i=>i>=0).pop();if(li!=null){const lb=pp(v[li]),w=lb.length*6.6+12;s+=`<rect x="${X(li)+7}" y="${Y(v[li])-10}" width="${w}" height="18" rx="9" style="fill:var(--ch-pill)" stroke="${c}"/><text x="${X(li)+7+w/2}" y="${Y(v[li])+3}" text-anchor="middle" fill="${c}" font-size="10.5" font-weight="800">${lb}</text>`}});
+  v.forEach((x,i)=>{if(x!=null)s+=`<circle cx="${X2(i)}" cy="${Y(x)}" r="3.6" style="fill:var(--ch-pt)" stroke="${c}" stroke-width="2.2"/>`});
+  const li=v.map((x,i)=>x==null?-1:i).filter(i=>i>=0).pop();if(li!=null){const lb=pp(v[li]),w=lb.length*6.6+12;s+=`<rect x="${X2(li)+7}" y="${Y(v[li])-10}" width="${w}" height="18" rx="9" style="fill:var(--ch-pill)" stroke="${c}"/><text x="${X2(li)+7+w/2}" y="${Y(v[li])+3}" text-anchor="middle" fill="${c}" font-size="10.5" font-weight="800">${lb}</text>`}});
  ms.forEach((mm,i)=>{const tip=series.map(({m,v})=>`${m.t}: ${v[i]==null?"no data":pp(v[i])}`).join("\n");s+=`<rect class="hit" ${S.fy!=="all"?`data-m="${mm}"`:""} x="${pl+sl*i}" y="${pt}" width="${sl}" height="${ih+pb}" style="fill:transparent${S.fy!=="all"?";cursor:pointer":""}"><title>${fml(mm)}\n${esc(tip)}</title></rect>`});
  return s+"</svg>"}
 
-/* stacked columns: case volume per module per month */
-function volChart(ms){
- const mods=MODS.filter(m=>modReady(m.v)),by=ms.map(mm=>mods.map(m=>scopeRows(m.v).filter(r=>r.m===mm).length));
- if(!by.some(c=>c.some(Boolean)))return'<div class="empty">No data for this period.</div>';
- const u="v"+(++UID),W=560,H=280,L=44,T=20,B=40,iw=W-L-10,ih=H-T-B,sl=iw/ms.length,bw=Math.min(26,sl*.6),mx=niceInt(Math.max(...by.map(c=>c.reduce((a,b)=>a+b,0)))),y=v=>T+ih-v/mx*ih;
- let s=`<svg viewBox="0 0 ${W} ${H}" class="agsvg" role="img" aria-label="Workload by month"><defs>${mods.map(m=>`<linearGradient id="${u}${m.v}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${MCOL[m.v][0]}"/><stop offset="1" stop-color="${MCOL[m.v][2]}"/></linearGradient>`).join("")}</defs>`;
- for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line x1="${L}" x2="${W-10}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(${i?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${i?"3 5":"0"}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" style="fill:var(--ch-ax)" font-size="11">${N(Math.round(v))}</text>`}
- by.forEach((c,i)=>{const cx=L+sl*(i+.5),tot=c.reduce((a,b)=>a+b,0),mm=ms[i];let acc=0;
-  if(mm===S.month)s+=`<rect x="${L+sl*i+2}" y="${T}" width="${sl-4}" height="${ih}" rx="6" style="fill:var(--ch-band);stroke:var(--ch-band-bd)"/>`;
-  c.forEach((v,j)=>{if(v){s+=`<rect x="${cx-bw/2}" y="${y(acc+v)}" width="${bw}" height="${y(acc)-y(acc+v)}" rx="${acc+v===tot?4:0}" fill="url(#${u}${mods[j].v})"><title>${fml(mm)} · ${mods[j].t}: ${N(v)}</title></rect>`;acc+=v}});
-  if(tot)s+=`<text x="${cx}" y="${y(tot)-5}" text-anchor="middle" style="fill:var(--ch-mon)" font-size="10" font-weight="700">${N(tot)}</text>`;
-  s+=`<text x="${cx}" y="${H-22}" text-anchor="middle" style="fill:var(--ch-mon)" font-size="11" font-weight="600">${MN[+mm.slice(5)-1].toUpperCase()}</text><text x="${cx}" y="${H-8}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="9.5">${mm.slice(0,4)}</text>`;
-  if(tot&&S.fy!=="all")s+=`<rect class="hit" data-m="${mm}" x="${L+sl*i}" y="${T}" width="${sl}" height="${ih}" style="fill:transparent;cursor:pointer"/>`});
+/* ---------- open backlog by age, per module ---------- */
+const AB=["≤ 30 d","31–60 d","61–90 d","90+ d"],ACOL=[["#8fe3ff","#1c97d6"],["#ffe08a","#e3a417"],["#ffc08a","#e2700c"],["#ff9aa8","#d23a52"]];
+const abOf=a=>a==null?-1:a<=30?0:a<=60?1:a<=90?2:3;
+function backlogBlock(){
+ const rows=MODS.filter(m=>modReady(m.v)).map(m=>{const x=scopeRows(m.v).filter(inPeriod).filter(BACK[m.v].f),c=[0,0,0,0];x.forEach(r=>{const b=abOf(ageOf(r));if(b>=0)c[b]++});return{m,n:x.length,c,old:topMgr(x.filter(r=>abOf(ageOf(r))>=2))}});
+ if(!rows.some(r=>r.n))return'<div class="empty">No open backlog. 🎉</div>';
+ const mx=Math.max(...rows.map(r=>r.n))||1;
+ return`<div class="bk-leg">${AB.map((l,i)=>`<span><i style="background:linear-gradient(90deg,${ACOL[i][1]},${ACOL[i][0]})"></i>${l}</span>`).join("")}</div>`+rows.map(r=>`<div class="bk" data-ovgo="${r.m.v}" role="button" tabindex="0" title="Open ${esc(r.m.t)}"><div class="bk-h"><span>${r.m.ic} <b>${esc(r.m.t)}</b> · ${BACK[r.m.v].l}</span><b class="num">${N(r.n)}</b></div>`+
+  `<div class="bar big" style="width:${Math.max(4,r.n/mx*100)}%">${r.c.map((v,i)=>v?`<i style="width:${v/r.n*100}%;background:linear-gradient(90deg,${ACOL[i][1]},${ACOL[i][0]})" title="${AB[i]}: ${N(v)}"></i>`:"").join("")}</div>`+
+  `<small>${r.c.map((v,i)=>v?`${AB[i]}: ${N(v)}`:"").filter(Boolean).join(" · ")||"–"}${r.old&&r.old.e!==DIR?` · oldest backlog with <b>${esc(r.old.name)}</b> (${N(r.old.w)} over 60 d)`:""}</small></div>`).join("")}
+
+/* ---------- donut: who holds the open backlog (manager level) ---------- */
+const DCOL=["#34c5ff","#a184ff","#2fd49a","#ffbb3d","#ff6b80","#4a98f0","#8fa8c2"];
+function donutBlock(){
+ const all=MODS.filter(m=>modReady(m.v)).flatMap(m=>scopeRows(m.v).filter(inPeriod).filter(BACK[m.v].f).map(r=>({...r,_m:m.v})));
+ if(!all.length)return'<div class="empty">No open backlog. 🎉</div>';
+ const L=byMgr(all).sort((a,b)=>b.n-a.n),top=L.slice(0,6),rest=L.slice(6),parts=top.map((x,i)=>({l:x.name,e:x.e,n:x.n,rows:x.rows,c:DCOL[i]})).concat(rest.length?[{l:`Others (${rest.length})`,n:rest.reduce((t,x)=>t+x.n,0),rows:rest.flatMap(x=>x.rows),c:DCOL[6]}]:[]);
+ const tot=all.length,r=62,C=2*Math.PI*r;let off=0,seg="";
+ parts.forEach(p=>{const l=p.n/tot*C;seg+=`<circle cx="90" cy="90" r="${r}" fill="none" stroke="${p.c}" stroke-width="24" stroke-dasharray="${Math.max(0,l-1.5).toFixed(2)} ${(C-l+1.5).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 90 90)"><title>${esc(p.l)}: ${N(p.n)} (${pc(p.n,tot,1)})</title></circle>`;off+=l});
+ const mix=p=>MODS.map(m=>{const k=p.rows.filter(x=>x._m===m.v).length;return k?`${m.ic} ${N(k)}`:""}).filter(Boolean).join("  ");
+ return`<div class="donut"><svg viewBox="0 0 180 180" role="img" aria-label="Open backlog by manager"><circle cx="90" cy="90" r="${r}" fill="none" style="stroke:var(--track)" stroke-width="24"/>${seg}<text x="90" y="88" text-anchor="middle" style="fill:var(--text)" font-size="26" font-weight="800">${N(tot)}</text><text x="90" y="106" text-anchor="middle" style="fill:var(--muted)" font-size="11">open items</text></svg>`+
+  `<div class="dl">${parts.map(p=>`<div><i style="background:${p.c}"></i><span><b>${esc(p.l)}</b><small>${mix(p)}</small></span><b class="num">${N(p.n)}</b><span class="num">${pc(p.n,tot,0)}</span></div>`).join("")}</div></div>`}
+
+/* ---------- waterfall: where the value went ---------- */
+function waterfall(steps,ready){
+ if(!ready)return'<div class="empty">Not set up yet.</div>';
+ const tot=steps[0].v;if(!tot)return'<div class="empty">No value in this period.</div>';
+ const u="w"+(++UID),W=460,H=250,L=56,T=26,Bt=40,iw=W-L-10,ih=H-T-Bt,sl=iw/steps.length,bw=Math.min(60,sl*.6),mx=nice(tot),y=v=>T+ih-v/mx*ih;
+ const GR={total:["#6fdcff","#1747a8"],neg:["#ff9aa8","#d23a52"],grey:["#dce8f5","#5b7590"],end:["#9dffd5","#18a06f"]};
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="agsvg" role="img" aria-label="Value waterfall"><defs>${Object.entries(GR).map(([k,c])=>`<linearGradient id="${u}${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient>`).join("")}</defs>`;
+ for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line x1="${L}" x2="${W-10}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(${i?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${i?"3 5":"0"}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" style="fill:var(--ch-ax)" font-size="10.5">${shortAmt(v)}</text>`}
+ let lvl=tot;steps.forEach((st,i)=>{const cx=L+sl*(i+.5);let top,bot,lab;
+  if(st.t==="total"){top=tot;bot=0;lab=shortAmt(tot)}else if(st.t==="end"){top=st.v;bot=0;lab=shortAmt(st.v)}else{top=lvl;bot=lvl-st.v;lvl=bot;lab="−"+shortAmt(st.v)}
+  const h=Math.max(st.v?2:0,y(bot)-y(top));
+  s+=`<rect x="${cx-bw/2}" y="${y(top)}" width="${bw}" height="${h}" rx="4" fill="url(#${u}${st.c||st.t})"><title>${esc(st.l)}: ${esc(money(st.v))} (${pc(st.v,tot,1)})</title></rect>`;
+  if(i<steps.length-1){const nx=st.t==="total"?tot:st.t==="end"?st.v:bot;s+=`<line x1="${cx+bw/2}" x2="${cx+sl-bw/2}" y1="${y(nx)}" y2="${y(nx)}" style="stroke:var(--ch-grid0)" stroke-dasharray="3 3"/>`}
+  s+=`<text x="${cx}" y="${y(top)-6}" text-anchor="middle" style="fill:var(--text)" font-size="11" font-weight="800">${lab}</text><text x="${cx}" y="${H-22}" text-anchor="middle" style="fill:var(--ch-mon)" font-size="11" font-weight="600">${esc(st.l)}</text><text x="${cx}" y="${H-8}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${pc(st.v,tot,0)}</text>`});
  return s+"</svg>"}
+function waterfalls(){
+ const rf=summM(scopeRows("ref").filter(inPeriod)),fn=summM(scopeRows("fin").filter(inPeriod));
+ const a=[{l:"Punched",v:rf.v,t:"total"},{l:"Refunded",v:rf.rfd.v,t:"neg"}].concat(rf.oth.v?[{l:"Not updated",v:rf.oth.v,t:"neg",c:"grey"}]:[],[{l:"Retained",v:rf.ret.v,t:"end"}]);
+ const b=[{l:"Processed",v:fn.v,t:"total"},{l:"FST",v:fn.fst.v,t:"neg"}].concat(fn.oth.v?[{l:"Other",v:fn.oth.v,t:"neg",c:"grey"}]:[],[{l:"Retained",v:fn.ret.v,t:"end"}]);
+ return`<div class="g2">`+panel("Refunds value waterfall","Punched revenue (Sale Claim Amount) down to what was retained.",`<div class="fit">${waterfall(a,modReady("ref"))}</div>`)+
+  panel("Fintech value waterfall",`Loans value (Order Amount) down to what was retained. ⏳ ${N(fn.aw)} loan(s) worth ${moneyShort(fn.awv)} are still awaiting the FST cycle.`,`<div class="fit">${waterfall(b,modReady("fin"))}</div>`)+`</div>`}
 
 /* L4 scorecard heatmap: one row per person at your level, key metrics colour-coded */
-const HM=[{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Pending",get:s=>s.pen},
+const HM=[{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Open",get:s=>s.pen},
  {v:"ref",l:"Retained %",rate:1},{v:"ref",l:"Refunded ₹",get:s=>s.rfd.v,money:1},{v:"fin",l:"Cancelled %",rate:1},{v:"fin",l:"Awaiting FST",get:s=>s.aw}];
 function heatmap(){
  const lvl=ovLevel(),groups=new Map();
@@ -959,32 +1047,25 @@ function heatmap(){
  const foot=`<tr><td>Overall</td>${HM.map((c,i)=>{const v=val(tot,c);return v==null?'<td class="r">–</td>':`<td class="r num">${c.rate?pp(v):c.money?moneyShort(v):N(v)}</td>`}).join("")}</tr>`;
  return`<div class="tbox hm" style="max-height:none"><table class="tbl"><thead>${head1}${head2}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`}
 
-/* money at stake: where the Refunds and Fintech value ended up */
-function stakeBlock(){
- const rf=summM(scopeRows("ref").filter(inPeriod)),fn=summM(scopeRows("fin").filter(inPeriod));
- const bar=(title,ready,tot,parts,foot)=>{if(!ready)return`<div class="stake"><div class="sh"><b>${title}</b></div><p class="sub">Not set up yet.</p></div>`;parts=parts.filter(p=>p.v);
-  return`<div class="stake"><div class="sh"><b>${title}</b><span class="num" title="${esc(money(tot))}">${moneyShort(tot)}</span></div><div class="bar big">${parts.map(p=>`<i style="width:${tot?p.v/tot*100:0}%;background:linear-gradient(90deg,${p.c[2]},${p.c[1]})" title="${esc(p.l)}: ${esc(money(p.v))}"></i>`).join("")}</div>`+
-   `<div class="sl">${parts.map(p=>`<span><i style="background:${p.c[1]}"></i>${p.l} <b title="${esc(money(p.v))}">${moneyShort(p.v)}</b> · ${pc(p.v,tot,0)}</span>`).join("")}</div>${foot||""}</div>`};
- return bar("Refunds · Sale Claim Amount",modReady("ref"),rf.v,[{l:"Retained",v:rf.ret.v,c:C.green},{l:"Refunded",v:rf.rfd.v,c:C.red},{l:"Not updated",v:rf.oth.v,c:C.grey}])+
-  bar("Fintech · Order Amount",modReady("fin"),fn.v,[{l:"Retained",v:fn.ret.v,c:C.green},{l:"Cancelled (FST)",v:fn.fst.v,c:C.red},{l:"Other",v:fn.oth.v,c:C.grey}],`<p class="sub" style="margin-top:8px">⏳ Awaiting FST cycle: <b>${N(fn.aw)}</b> loan(s) worth <b>${moneyShort(fn.awv)}</b> can still cancel.</p>`)}
-
 function renderOv(){
+ const y0=window.scrollY;
  ensurePeriod();drawPeriod();$("hier").innerHTML="";$("crumbs").innerHTML="";$("selNote").hidden=true;$("act").innerHTML="";$("kbar").innerHTML="";
- const lvl=ovLevel(),ref=refMonth(),roleTxt=S.role==="ADMIN"?"Administrator":S.role;
+ const lvl=ovLevel(),ml=mgrLvl(),ref=refMonth(),roleTxt=S.role==="ADMIN"?"Administrator":S.role;
  const ms=chartMonths(MODS.flatMap(m=>scopeRows(m.v)));
  const ins=insights(ref);
  const legend=MODS.filter(m=>modReady(m.v)).map(m=>`<span><i class="sw" style="background:${MCOL[m.v][1]};height:4px;width:22px;vertical-align:3px"></i>${m.t} · ${m.rateL}${m.good==="low"?" (dashed, lower is better)":""}</span>`).join("");
- const vlegend=MODS.filter(m=>modReady(m.v)).map(m=>`<span><i class="sw" style="background:linear-gradient(180deg,${MCOL[m.v][0]},${MCOL[m.v][2]})"></i>${m.t}</span>`).join("");
  $("dash").innerHTML=
   `<section class="panel focus slim"><div><div class="sub">${esc(periodTxt())} · Management view</div><h2>${esc(S.meName)}</h2></div><div class="chips"><span class="chip">${esc(roleTxt)}</span><span class="chip p">Summary at L${lvl} level</span>${S.lock<0?'<span class="chip n">All teams</span>':'<span class="chip n">Your team only</span>'}${ref?`<span class="chip n">Month-on-month: ${fml(ref)} vs ${fml(prevMonth(ref))}</span>`:""}</div></section>`+
   `<div class="mcards">${MODS.map(m=>modCard(m,ref)).join("")}</div>`+
   `<div class="g2">`+panel("Key rates by month",(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Hover a month for all four values.",`<div class="trend-legend">${legend}</div><div class="fit">${rateChart(ms)}</div>`)+
-  panel("Needs attention",`Generated from the numbers for ${esc(periodTxt())}.`,ins.length?`<ul class="insights">${ins.map(i=>`<li><span class="dot ${i.t}"></span><span>${esc(i.x)}</span></li>`).join("")}</ul>`:'<div class="empty">Nothing needs attention right now. 🎉</div>')+`</div>`+
+  panel("Needs attention",`For ${esc(periodTxt())}, with the L${ml} manager behind each point.`,ins.length?`<ul class="insights">${ins.map(i=>`<li><span class="dot ${i.t}"></span><span>${i.x}</span></li>`).join("")}</ul>`:'<div class="empty">Nothing needs attention right now. 🎉</div>')+`</div>`+
   panel(`L${lvl} scorecard`,`Key metrics side by side for ${esc(periodTxt())}. Green / amber / red follow the targets; counts and amounts get redder as they grow. Click a cell to open that module for that person.`,heatmap())+
-  `<div class="g2">`+panel("Workload by month","Records per module. Click a month to filter.",`<div class="trend-legend">${vlegend}</div><div class="fit">${volChart(ms)}</div>`)+panel("Money at stake",`Where the value went in ${esc(periodTxt())}.`,stakeBlock())+`</div>`+
+  `<div class="g2">`+panel("Open backlog by age","Items still open in each module, by days since the case month. Click a module to open it.",backlogBlock())+
+  panel(`Who holds the open backlog`,`All open items across the four modules, by L${ml} manager.`,donutBlock())+`</div>`+
+  waterfalls()+
   `<h2 class="sec-h">Team Level Escalations Summary</h2>`+
   OV.map(([v,t])=>`<section class="panel"><div class="block-h"><div><h2>${t}</h2><p class="sub">One row per L${lvl}, ${esc(periodTxt())}. ${OVSUB[v]} Click a row to open its dashboard.</p></div></div>${ovTable(v)}</section>`).join("");
- afterRender();
+ afterRender(y0);
 }
 function ovOpen(view,email,name){const lvl=ovLevel();
  if(email&&lvl!==S.lock){S.want={[lvl]:email};S.wantLbl={[lvl]:name||email}}
