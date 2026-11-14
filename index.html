@@ -199,7 +199,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 @media(max-width:820px){#freeze{position:static}}
 .jsum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}.jsum div{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px}.jsum span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}.jsum b{font-size:20px;font-weight:800}.jsum small{display:block;font-size:11px;color:var(--faint)}.jsum .bad b{color:var(--red)}
 .sk svg{width:100%;height:auto}.sankey .lk:hover{opacity:.6}
-.hot{grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);align-items:start}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
+.hot{grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);align-items:start}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.ovcw{overflow-x:auto}.ovc{display:block;width:100%;height:auto}.ovtot{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ch-band);font-size:12px;color:var(--ch-mon)}.ovtot b{color:var(--text)}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
 @media(max-width:1100px){.jsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
@@ -863,6 +863,62 @@ function ovTable(view){
  const part=errs.length?`<div class="sel-note" style="margin:0 0 10px">${esc(errs.map(s=>setupMsg(S.data[s],"Fintech "+SRC[s].lender)).join(" "))}</div>`:"";
  return part+`<div class="tbox"><table class="tbl"><thead>${head}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`;
 }
+/* ===== Team Level Escalations Summary as a combo chart (clustered columns: total + each outcome, % line, data table underneath) ===== */
+const TOTC=["#b9c2ff","#4c5ad0","#27317e"];
+const OVCH={
+ fce:{stack:[["Resolved",s=>s.res,C.blue],["Yet to Resolve",s=>s.pen,C.amber]],line:["Resolution %",s=>s.n?s.res/s.n:0,[.95,.85]],
+  rows:[["Escalated Total",s=>N(s.n)],["Resolved",s=>N(s.res)],["Yet to Resolve",s=>N(s.pen)],["Resolution %",s=>pc(s.res,s.n,1)],["Pendency %",s=>pc(s.pen,s.n,1)],["Avg open age",s=>s.avg==null?"–":s.avg.toFixed(1)+" d"],["Open > 7 d",s=>N(s.o7)]]},
+ onb:{stack:[["Onboarded Already",s=>s.b.onb||0,C.green],["Ready to connect",s=>s.b.rtc||0,C.blue],["Refund Requested",s=>s.b.ref||0,C.purple],["Open",s=>s.pen,C.amber],["Other",s=>s.b.oth||0,C.grey]],line:["Resolution %",s=>s.rp,[.95,.85]],
+  rows:[["Escalated Total",s=>N(s.n)],["Onboarded Already",s=>N(s.b.onb||0)],["Ready to connect",s=>N(s.b.rtc||0)],["Refund Requested",s=>N(s.b.ref||0)],["Open",s=>N(s.pen)],["Resolution %",s=>pc(s.res,s.n,1)],["Open %",s=>pc(s.pen,s.n,1)]]},
+ ref:{stack:[["Retained",s=>s.ret.n,C.blue],["Refunded",s=>s.rfd.n,C.red]],line:["Retained %",s=>s.n?s.ret.n/s.n:0,[.95,.9]],
+  rows:[["Punched",s=>N(s.n)],["Punched Revenue",s=>shortAmt(s.v)],["Retained",s=>N(s.ret.n)],["Retained Revenue",s=>shortAmt(s.ret.v)],["Refunded",s=>N(s.rfd.n)],["Refunded Revenue",s=>shortAmt(s.rfd.v)],["Retained %",s=>pc(s.ret.n,s.n,1)],["Refunded %",s=>pc(s.rfd.n,s.n,1)]]},
+ fin:{stack:[["Retained",s=>s.ret.n,C.blue],["Cancelled (FST)",s=>s.fst.n,C.red]],line:["Cancelled %",s=>s.n?s.fst.n/s.n:0,[.05,.07],1],
+  rows:[["Loans Processed",s=>N(s.n)],["Loans Value",s=>shortAmt(s.v)],["Retained",s=>N(s.ret.n)],["Retained Value",s=>shortAmt(s.ret.v)],["Cancelled (FST)",s=>N(s.fst.n)],["FST Value",s=>shortAmt(s.fst.v)],["Cancelled %",s=>pc(s.fst.n,s.n,1)],["Awaiting FST Cycle",s=>N(s.aw)]]}
+};
+function ovChart(view){
+ const v=VIEWS[view],errs=v.src.filter(s=>S.data[s]?.err);
+ if(errs.length===v.src.length)return`<div class="empty">${esc(setupMsg(S.data[errs[0]],v.title))}</div>`;
+ const{T,list}=ovGroups(view);if(!list.length)return'<div class="empty">No records for '+esc(periodTxt())+'.</div>';
+ list.sort((a,b)=>b.s.n-a.s.n);S.ovRows[view]=list;
+ const cf=OVCH[view],stack=cf.stack.filter(([,g])=>list.some(x=>g(x.s)>0)||g===cf.stack[0][1]),[ll,lg,[good,warn],inv]=cf.line,ser=[[cf.rows[0][0],s=>s.n,TOTC]].concat(stack),k=ser.length,bwc=Math.max(13,Math.min(26,(Math.min(170,900/list.length)-26)/k)),mxN=Math.max(1,...list.map(x=>x.s.n)),rot=bwc<N(mxN).length*6.3+3;
+ const n=list.length,LW=150,cw=Math.max(96,k*bwc+26,Math.min(170,900/n)),W=LW+n*cw+56,T0=30,ih=290,rh=24,TB=T0+ih+58,H=TB+cf.rows.length*rh+4;
+ const band=ih*.34,bh=ih-band-(rot?44:30),max=(()=>{const raw=mxN*1.08/4,p=10**Math.floor(Math.log10(raw)),st=[1,1.5,2,2.5,3,4,5,6,8,10].map(m=>m*p).find(v=>v>=raw);return Math.max(4,Math.ceil(st)*4)})(),y=val=>T0+ih-val/max*bh;
+ const pv=list.map(x=>lg(x.s)),pst=[.01,.02,.025,.05,.1,.2,.25].find(st=>st*4>=Math.max(...pv,inv?warn:good)*1.08)||.25,pmax=pst*4,yp=p=>T0+band-p/pmax*band;
+ const rag=p=>inv?(p<=good?"var(--green)":p<=warn?"var(--amber)":"var(--red)"):(p>=good?"var(--green)":p>=warn?"var(--amber)":"var(--red)");
+ const u="oc"+view,bw=Math.min(64,cw*.56);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="ovc" style="min-width:${Math.round(W*.8)}px" role="img" aria-label="${esc(v.title)} by L${ovLevel()}"><defs>${ser.map(([,,c],i)=>`<linearGradient id="${u}${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset=".55" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient>`).join("")}<filter id="${u}gl"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+ // left axis (counts) and right axis (% band)
+ for(let i=0;i<=4;i++){const t=max/4*i,yy=y(t);s+=`<line x1="${LW}" x2="${W-56}" y1="${yy}" y2="${yy}" style="stroke:var(--ch-grid)"/><text x="${LW-8}" y="${yy+4}" text-anchor="end" font-size="11" style="fill:var(--ch-ax)">${N(t)}</text>`}
+ for(let i=0;i<=4;i++){const p=pmax/4*i;s+=`<text x="${W-50}" y="${yp(p)+4}" font-size="11" style="fill:var(--ch-pct)">${+(p*100).toFixed(1)}%</text>`}
+ const tg=inv?warn:good;s+=`<line x1="${LW}" x2="${W-56}" y1="${yp(tg)}" y2="${yp(tg)}" stroke-dasharray="4 4" style="stroke:var(--ch-pct)" opacity=".55"/><text x="${LW-8}" y="${yp(tg)+4}" text-anchor="end" font-size="10.5" font-weight="700" style="fill:var(--ch-pct)">${inv?"limit":"target"} ${(tg*100).toFixed(0)}%</text>`;
+ s+=`<text transform="translate(16 ${T0+ih*.68}) rotate(-90)" text-anchor="middle" font-size="11" style="fill:var(--ch-ax)">${esc(cf.rows[0][0])}</text><text transform="translate(${W-8} ${T0+band/2}) rotate(90)" text-anchor="middle" font-size="11" style="fill:var(--ch-ax)">${esc(ll)}</text>`;
+ // clustered columns: total first, then each outcome
+ list.forEach((x,i)=>{const cx=LW+cw*i+cw/2,click=!(x.e===DIR&&S.lock>=0),x0=cx-k*bwc/2;
+  s+=`<g${click?` data-hv="${view}" data-he="${esc(x.e)}" data-hn="${esc(x.name)}" style="cursor:pointer"`:""}><title>${esc(x.name)}\n${cf.rows.map(([l,f])=>l+": "+f(x.s)).join("\n")}</title><rect x="${LW+cw*i}" y="${T0}" width="${cw}" height="${ih}" fill="transparent"/>`;
+  ser.forEach(([,g],j)=>{const val=g(x.s),bx=x0+j*bwc+1,w=bwc-2,y1=y(val),hh=T0+ih-y1,lx=bx+w/2;
+   if(val)s+=`<rect x="${bx}" y="${y1}" width="${w}" height="${Math.max(hh,1)}" rx="3" fill="url(#${u}${j})"${j?"":' opacity=".95"'}/>`;
+   s+=rot?`<text transform="translate(${lx+3.5} ${y1-4}) rotate(-90)" font-size="10" font-weight="${j?600:800}" style="fill:var(--text)">${N(val)}</text>`
+         :`<text x="${lx}" y="${y1-5}" text-anchor="middle" font-size="10.5" font-weight="${j?600:800}" style="fill:var(--text)">${N(val)}</text>`});
+  const mc=Math.max(6,Math.floor((cw-6)/7.2)),cut=t=>t.length>mc?t.slice(0,mc-1)+"…":t,dp=x.name.indexOf(".");
+  const lines=x.name.length<=mc||dp<1?[cut(x.name)]:[cut(x.name.slice(0,dp)),cut(x.name.slice(dp))];
+  s+=`<text x="${cx}" y="${T0+ih+(lines.length>1?15:18)}" text-anchor="middle" font-size="11.5" font-weight="700" style="fill:var(--text)">${lines.map((t,j)=>`<tspan x="${cx}" dy="${j?13:0}">${esc(t)}</tspan>`).join("")}</text></g>`});
+ s+=`<line x1="${LW}" x2="${W-56}" y1="${T0+ih}" y2="${T0+ih}" style="stroke:var(--ch-ax)" opacity=".5"/>`;
+ // % line
+ const pts=list.map((x,i)=>[LW+cw*i+cw/2,yp(pv[i])]);
+ s+=`<polyline points="${pts.map(p=>p.join(",")).join(" ")}" fill="none" stroke="${C.green[2]}" stroke-width="3" stroke-linejoin="round" filter="url(#${u}gl)"/>`;
+ pts.forEach(([px,py],i)=>{s+=`<circle cx="${px}" cy="${py}" r="5" fill="${C.green[2]}" style="stroke:var(--p2)" stroke-width="2"/><text x="${px}" y="${py-11}" text-anchor="middle" font-size="11.5" font-weight="800" style="fill:${rag(pv[i])};paint-order:stroke;stroke:var(--p2);stroke-width:3px">${(pv[i]*100).toFixed(1)}%</text>`});
+ // data table under the chart
+ const tY=TB;s+=`<line x1="8" x2="${W-56}" y1="${tY-14}" y2="${tY-14}" style="stroke:var(--ch-grid)"/>`;
+ cf.rows.forEach(([l,f],r)=>{const yy=tY+r*rh,sw=ser.find(([sl])=>sl===l);
+  if(r%2===0)s+=`<rect x="8" y="${yy-15}" width="${W-64}" height="${rh}" rx="4" style="fill:var(--ch-band)"/>`;
+  s+=(sw?`<rect x="12" y="${yy-8}" width="10" height="10" rx="2" fill="${sw[2][1]}"/>`:l===ll?`<circle cx="17" cy="${yy-3}" r="4" fill="${C.green[2]}"/>`:"")+`<text x="28" y="${yy}" font-size="11.5" font-weight="600" style="fill:var(--ch-mon)">${esc(l)}</text>`;
+  list.forEach((x,i)=>{s+=`<text x="${LW+cw*i+cw/2}" y="${yy}" text-anchor="middle" font-size="11.5" class="num" style="fill:var(--text)">${esc(f(x.s))}</text>`});
+ });
+ s+=`</svg>`;
+ const part=errs.length?`<div class="sel-note" style="margin:0 0 10px">${esc(errs.map(z=>setupMsg(S.data[z],"Fintech "+SRC[z].lender)).join(" "))}</div>`:"";
+ return part+`<div class="ovcw">${s}</div><div class="ovtot"><b>Grand Total</b>${cf.rows.map(([l,f])=>`<span>${esc(l)} <b>${esc(f(T))}</b></span>`).join("")}</div>`;
+}
+
 const OVSUB={
  fce:"Resolution % = resolved ÷ escalated; Pendency % = yet to resolve ÷ escalated.",
  onb:"Based on Sales Bucketing. Open = blank. Resolution % = (Onboarded Already + Ready to connect + Refund Requested) ÷ Escalated Total; Open % = Open ÷ Escalated Total.",
@@ -1199,7 +1255,7 @@ function renderOv(){
   waterfalls()+
   themesBlocks()+
   `<h2 class="sec-h">Team Level Escalations Summary</h2>`+
-  OV.map(([v,t])=>`<section class="panel"><div class="block-h"><div><h2>${t}</h2><p class="sub">One row per L${lvl}, ${esc(periodTxt())}. ${OVSUB[v]} Click a row to open its dashboard.</p></div></div>${ovTable(v)}</section>`).join("");
+  OV.map(([v,t])=>`<section class="panel"><div class="block-h"><div><h2>${t}</h2><p class="sub">One row per L${lvl}, ${esc(periodTxt())}. ${OVSUB[v]} Click a manager's columns to open their dashboard; hover for all numbers.</p></div></div>${ovChart(v)}</section>`).join("");
  afterRender(y0);
 }
 function ovOpen(view,email,name){const lvl=ovLevel();
