@@ -100,7 +100,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 /* ---------- charts (Achievers style) ---------- */
 .trend-legend{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:4px 0 6px;font-size:12.5px;color:var(--tx2)}
 .trend-legend .sw{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:7px;vertical-align:-2px}
-.sw.res{background:linear-gradient(180deg,#5fd6ff,#1757bb)}.sw.pen{background:linear-gradient(180deg,#ffd27a,#ff7a18)}.sw.pct{height:4px!important;border-radius:4px;width:22px!important;vertical-align:3px!important;background:linear-gradient(90deg,#4bd39a,#b18cff)}
+.sw.res{background:linear-gradient(180deg,#5fd6ff,#1757bb)}.sw.pen{background:linear-gradient(180deg,#ffd27a,#ff7a18)}.sw.tot{background:linear-gradient(180deg,#b9c2ff,#27317e)}.sw.pct{height:4px!important;border-radius:4px;width:22px!important;vertical-align:3px!important;background:linear-gradient(90deg,#4bd39a,#b18cff)}
 .trend-chart{overflow-x:auto;margin:0 -4px}.trend-chart svg{display:block;min-width:720px;width:100%;height:auto}
 .trend-chart g.mo2:hover rect.tb{opacity:.82}.trend-chart .hit{fill:transparent;cursor:pointer}
 .hbars{display:grid;gap:4px;margin-top:6px}
@@ -190,17 +190,17 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 .spark{width:120px;height:36px;flex:none}.md{display:flex;gap:6px;align-items:center;margin-bottom:4px}.md small,.mcard>small{font-size:11.5px;color:var(--faint)}
 .insights{list-style:none;margin:0;padding:0;display:grid;gap:7px}.insights li{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border-radius:10px;background:var(--inset);border:1px solid var(--l2);font-size:13px}
 .dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:var(--cyan)}.dot.good{background:var(--green)}.dot.warn{background:var(--amber)}.dot.bad{background:var(--red)}
-.hm .tbl th.hmg{text-align:center}.hm .hmc{font-weight:700;color:var(--text);cursor:pointer}.hm .hmc:hover{outline:2px solid var(--cyan);outline-offset:-2px}.hm .hmx{color:var(--faint)}
+.hm .tbl th.hmg{text-align:center}.hm .hmc{font-weight:700;color:var(--text);cursor:pointer}.hm .hmc:hover{outline:2px solid var(--cyan);outline-offset:-2px}.hm .hmx{color:var(--faint)}.hm td.who,.hm tfoot td:first-child{position:sticky;left:0;z-index:1;background:linear-gradient(var(--p2),var(--p2)),var(--bg0);box-shadow:6px 0 8px -6px var(--sh)}.hm thead tr:first-child th:first-child{position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px var(--sh)}
 .stake{padding:10px 0 14px;border-bottom:1px dashed var(--line)}.stake:last-child{border-bottom:0}.sh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}.sh .num{font-size:20px;font-weight:800}
 .bar.big{height:16px}.sl{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12.5px;color:var(--tx2)}.sl i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 .sec-h{font-size:17px;margin:22px 2px 10px}
 @media(max-width:1300px){.mcards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.mcards{grid-template-columns:1fr}.focus.slim{grid-template-columns:1fr}.focus.slim .chips{justify-content:flex-start}}
 @media(max-width:820px){#freeze{position:static}}
-.jsum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}.jsum div{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px}.jsum span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}.jsum b{font-size:20px;font-weight:800}.jsum small{display:block;font-size:11px;color:var(--faint)}.jsum .bad b{color:var(--red)}
+.jsum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:10px}.jsum div{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px}.jsum span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}.jsum b{font-size:20px;font-weight:800}.jsum small{display:block;font-size:11px;color:var(--faint)}.jsum .bad b{color:var(--red)}
 .sk svg{width:100%;height:auto}.sankey .lk:hover{opacity:.6}
-.hot{grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);align-items:start}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.ovcw{overflow-x:auto}.ovc{display:block;width:100%;height:auto}.ovtot{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ch-band);font-size:12px;color:var(--ch-mon)}.ovtot b{color:var(--text)}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
-@media(max-width:1100px){.jsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hot{grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);align-items:start}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.ovcw{overflow-x:auto}.ovc{display:block;width:100%;height:auto}.ovtot{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ch-band);font-size:12px;color:var(--ch-mon)}.ovtot b{color:var(--text)}.jsteps{position:relative;height:18px;margin:4px 0 2px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.jsteps span{position:absolute;white-space:nowrap}.jsum .good b{color:var(--green)}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
+.jsum.j3{grid-template-columns:repeat(3,minmax(0,1fr))}.bfc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px}.bfcard{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px;cursor:pointer}.bfh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.bfh b{font-size:15px}.bfg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 10px}.bfg span{display:block;font-size:11px;color:var(--muted);font-weight:700}.bfg b{font-size:17px;font-weight:800}.bfg small{display:block;font-size:11px;color:var(--faint)}@media(max-width:1100px){.jsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <button type="button" class="theme-toggle theme-fixed" role="switch" aria-checked="false" aria-label="Switch to dark theme"><span class="o sun">☀️<em>Light</em></span><span class="tr"><span class="kn"></span></span><span class="o moon">🌙<em>Dark</em></span></button>
@@ -618,10 +618,10 @@ function caseBody(v,f,cat,yc,catRows){
  const s=summ(f),ds=S.ds;
  const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
   :[["Escalated Total",N(s.n),"in current view","info"],["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Open",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Open %",pc(s.pen,s.n,2),"open ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
- const ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null}});
+ const ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,t:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null}});
  const lab=ds==="fce"?"Yet to resolve":"Open";
- $("kbar").innerHTML=kpiHtml(K);return panel("Month-on-month: resolved vs "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
-   `<div class="trend-legend"><span><i class="sw res"></i>${ds==="fce"?"Resolved":"Resolved (onboarded + ready + refund)"}</span><span><i class="sw pen"></i>${lab}</span><span><i class="sw pct"></i>Resolution %</span></div><div class="trend-chart fit">${trendChart(pts,{unit:"Cases",tip:p=>`${p.a} resolved · ${p.b} ${lab.toLowerCase()} · ${(p.p*100).toFixed(1)}% resolution`})}</div>`)+
+ $("kbar").innerHTML=kpiHtml(K);return panel("Month-on-month: total, resolved and "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
+   `<div class="trend-legend"><span><i class="sw tot"></i>Escalated Total</span><span><i class="sw res"></i>${ds==="fce"?"Resolved":"Resolved (onboarded + ready + refund)"}</span><span><i class="sw pen"></i>${lab}</span><span><i class="sw pct"></i>Resolution %</span></div><div class="trend-chart fit">${trendChart(pts,{unit:"Cases",tip:p=>`${p.n} escalated · ${p.a} resolved · ${p.b} ${lab.toLowerCase()} · ${(p.p*100).toFixed(1)}% resolution`})}</div>`)+
   panel(ds==="fce"?"Status split":"Sales Bucketing split","Share of the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:ds==="fce"?"Status":"Sales Bucketing"}))+
   `<div class="g2">`+panel("Aging of "+(ds==="fce"?"unresolved cases":"open cases"),`${N(s.pen)} ${ds==="fce"?"unresolved":"open"} case(s) in the current view, by days since raised.`,agingBlock(f,yc,ms))+
   (ds==="onb"?panel("By team",`<span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> open`,`<div class="hbars">${teamBars(catRows)}</div>`):panel(v.catTitle,`Descending by volume. Click a row to filter. <span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> ${v.penL}`,`<div class="hbars">${catBars(catRows,v.catField)}</div>`))+`</div>`;
@@ -642,12 +642,12 @@ function moneyBody(v,f,cat,yc,catRows,dims){
   .concat(s.oth.n?[["Other order status",N(s.oth.n),"neither Retained nor FST","",money(s.oth.v)]]:[]);
  const ms=chartMonths(yc),val=a=>a.reduce((t,r)=>t+r.amt,0),mode=S.tmode;
  const pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),g=x.filter(r=>r.k===v.good),b=x.filter(r=>r.k===v.bad);
-  return{m,n:x.length,a:mode==="value"?val(g):g.length,b:mode==="value"?val(b):b.length,p:x.length?(v.line==="good"?g.length:b.length)/x.length:null,gn:g.length,bn:b.length,gv:val(g),bv:val(b)}});
+  return{m,n:x.length,t:mode==="value"?val(x):x.length,a:mode==="value"?val(g):g.length,b:mode==="value"?val(b):b.length,p:x.length?(v.line==="good"?g.length:b.length)/x.length:null,gn:g.length,bn:b.length,gv:val(g),bv:val(b)}});
  const fmt=mode==="value"?shortAmt:x=>N(Math.round(x));
  const toggle=`<div class="tabs" role="group" aria-label="Show count or value"><button type="button" class="tab${mode==="count"?" on":""}" data-tmode="count" aria-pressed="${mode==="count"}">Count</button><button type="button" class="tab${mode==="value"?" on":""}" data-tmode="value" aria-pressed="${mode==="value"}">${isFin?"Value":"Revenue"}</button></div>`;
  $("kbar").innerHTML=kpiHtml(K);let h=
-  panel(`Month-on-month: ${v.goodL} vs ${v.badL}`,(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+` The line is ${v.lineL} on count.`,
-   `<div class="trend-legend"><span><i class="sw res"></i>${v.goodL}</span><span><i class="sw pen"></i>${v.badL}</span><span><i class="sw pct"></i>${v.lineL}</span></div><div class="trend-chart fit">${trendChart(pts,{fmt,unit:mode==="value"?"Amount (₹)":v.unit,tip:p=>`${N(p.n)} ${v.unit.toLowerCase()} · ${v.goodL} ${p.gn} (${moneyShort(p.gv)}) · ${v.badL} ${p.bn} (${moneyShort(p.bv)}) · ${v.lineL} ${(p.p*100).toFixed(1)}%`})}</div>`,toggle);
+  panel(`Month-on-month: ${isFin?"Loans Processed":"Punched"}, ${v.goodL} and ${v.badL}`,(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+` The line is ${v.lineL} on count.`,
+   `<div class="trend-legend"><span><i class="sw tot"></i>${isFin?"Loans Processed":"Punched"}</span><span><i class="sw res"></i>${v.goodL}</span><span><i class="sw pen"></i>${v.badL}</span><span><i class="sw pct"></i>${v.lineL}</span></div><div class="trend-chart fit">${trendChart(pts,{fmt,unit:mode==="value"?"Amount (₹)":v.unit,tip:p=>`${N(p.n)} ${v.unit.toLowerCase()} · ${v.goodL} ${p.gn} (${moneyShort(p.gv)}) · ${v.badL} ${p.bn} (${moneyShort(p.bv)}) · ${v.lineL} ${(p.p*100).toFixed(1)}%`})}</div>`,toggle);
  h+=panel(isFin?"Order Status split":"Refund Status split","Count and amount in the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:isFin?"Order Status":"Refund Status",money:1}));
  if(S.ds==="fin")h+=panel("Bajaj vs Fibe","Same filters, split by lender. Click a lender to open its own view.",lenderBlock(cat));
  const right=isFin?panel("EMI Confirmation",`${N(s.aw)} loan(s) awaiting the FST cycle (Upcoming). Click a row to filter.`,`<div class="hbars">${simpleBars(f,"emi_confirmation",x=>x.toLowerCase()==="upcoming")}</div>`)
@@ -662,11 +662,12 @@ function moneyBody(v,f,cat,yc,catRows,dims){
 function trendChart(pts,o){
  if(!pts.some(p=>p.n))return'<div class="empty">No data for this selection.</div>';
  const fmt=o.fmt||(x=>N(Math.round(x)));
- const u="t"+(++UID),W=920,H=340,pl=62,pr=60,pt=30,pb=46,iw=W-pl-pr,ih=H-pt-pb,slot=iw/pts.length,bw=Math.min(26,slot*.3);
- const amtMax=nice(Math.max(1,...pts.map(p=>Math.max(p.a,p.b)))/0.58),bTop=pt+26,bBot=pt+ih*0.34;
+ const u="t"+(++UID),W=920,H=340,pl=62,pr=60,pt=30,pb=46,iw=W-pl-pr,ih=H-pt-pb,slot=iw/pts.length,bw=Math.min(22,(slot-14)/3);
+ const tv=p=>p.t??p.n,amtMax=nice(Math.max(1,...pts.map(p=>Math.max(tv(p),p.a,p.b)))/0.58),rot=bw<fmt(Math.max(...pts.map(tv))).length*6.2+2,bTop=pt+26,bBot=pt+ih*0.34;
  const yA=v=>pt+ih-(v/amtMax)*ih,yP=v=>bBot-v*(bBot-bTop);
  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Month-on-month chart"><defs>
   <linearGradient id="${u}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fdcff"/><stop offset=".55" stop-color="#2b8cff"/><stop offset="1" stop-color="#1747a8"/></linearGradient>
+  <linearGradient id="${u}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9c2ff"/><stop offset=".55" stop-color="#5a66d8"/><stop offset="1" stop-color="#27317e"/></linearGradient>
   <linearGradient id="${u}o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd98a"/><stop offset=".6" stop-color="#ff9a2e"/><stop offset="1" stop-color="#e2600c"/></linearGradient>
   <linearGradient id="${u}l" gradientUnits="userSpaceOnUse" x1="${pl}" y1="0" x2="${W-pr}" y2="0"><stop offset="0" stop-color="#4bd39a"/><stop offset=".5" stop-color="#34c5ff"/><stop offset="1" stop-color="#b18cff"/></linearGradient>
   <linearGradient id="${u}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34c5ff" stop-opacity=".22"/><stop offset="1" stop-color="#34c5ff" stop-opacity="0"/></linearGradient>
@@ -679,9 +680,11 @@ function trendChart(pts,o){
  pts.forEach((p,i)=>{const cx=pl+slot*(i+.5),sel=p.m===S.month;
   if(sel)s+=`<rect x="${pl+slot*i+3}" y="${pt}" width="${slot-6}" height="${ih}" rx="8" style="fill:var(--ch-band);stroke:var(--ch-band-bd)"/>`;
   s+=`<g class="mo2"><title>${fml(p.m)}${p.n?" — "+esc(o.tip(p)):" — no data"}</title>`;
-  if(p.n){const ha=Math.max(p.a?2:0,p.a/amtMax*ih),hb=Math.max(p.b?2:0,p.b/amtMax*ih),xa=cx-bw-2,xb=cx+2;
-   s+=`<rect class="tb" x="${xa}" y="${pt+ih-ha}" width="${bw}" height="${ha}" rx="4" fill="url(#${u}r)"/><rect class="tb" x="${xb}" y="${pt+ih-hb}" width="${bw}" height="${hb}" rx="4" fill="url(#${u}o)"/>`+
-    `<text x="${xa+bw/2}" y="${pt+ih-ha-6}" text-anchor="middle" style="fill:var(--ch-res)" font-size="10.5" font-weight="700">${fmt(p.a)}</text><text x="${xb+bw/2}" y="${pt+ih-hb-6}" text-anchor="middle" style="fill:var(--ch-pen)" font-size="10.5" font-weight="700">${fmt(p.b)}</text>`;
+  if(p.n){const bars=[[tv(p),"t","--text"],[p.a,"r","--ch-res"],[p.b,"o","--ch-pen"]],x0=cx-(3*bw+6)/2;
+   bars.forEach(([val,g,col],j)=>{const h=Math.max(val?2:0,val/amtMax*ih),x=x0+j*(bw+3),y=pt+ih-h,lx=x+bw/2;
+    s+=`<rect class="tb" x="${x}" y="${y}" width="${bw}" height="${h}" rx="4" fill="url(#${u}${g})"/>`+
+     (rot?`<text transform="translate(${lx+3.5} ${y-5}) rotate(-90)" style="fill:var(${col})" font-size="10" font-weight="${j?700:800}">${fmt(val)}</text>`
+         :`<text x="${lx}" y="${y-6}" text-anchor="middle" style="fill:var(${col})" font-size="10.5" font-weight="${j?700:800}">${fmt(val)}</text>`)});
    line.push({x:cx,y:yP(p.p),v:p.p})}
   else s+=`<text x="${cx}" y="${pt+ih-8}" text-anchor="middle" style="fill:var(--ch-nodata)" font-size="10">No data</text>`;
   s+=`<text x="${cx}" y="${H-pb+20}" text-anchor="middle" style="fill:var(${sel?"--ch-mon-sel":p.n?"--ch-mon":"--ch-mon-na"})" font-size="12" font-weight="${sel?800:600}">${MN[+p.m.slice(5)-1].toUpperCase()}</text><text x="${cx}" y="${H-pb+34}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${p.m.slice(0,4)}</text>`;
@@ -1052,7 +1055,7 @@ function rateChart(ms){
 const AB=["≤ 30 d","31–60 d","61–90 d","90+ d"],ACOL=[["#8fe3ff","#1c97d6"],["#ffe08a","#e3a417"],["#ffc08a","#e2700c"],["#ff9aa8","#d23a52"]];
 const abOf=a=>a==null?-1:a<=30?0:a<=60?1:a<=90?2:3;
 function backlogBlock(){
- const rows=MODS.filter(m=>modReady(m.v)).map(m=>{const x=scopeRows(m.v).filter(inPeriod).filter(BACK[m.v].f),c=[0,0,0,0];x.forEach(r=>{const b=abOf(ageOf(r));if(b>=0)c[b]++});return{m,n:x.length,c,old:topMgr(x.filter(r=>abOf(ageOf(r))>=2))}});
+ const rows=MODS.filter(m=>(m.v==="fce"||m.v==="onb")&&modReady(m.v)).map(m=>{const x=scopeRows(m.v).filter(inPeriod).filter(BACK[m.v].f),c=[0,0,0,0];x.forEach(r=>{const b=abOf(ageOf(r));if(b>=0)c[b]++});return{m,n:x.length,c,old:topMgr(x.filter(r=>abOf(ageOf(r))>=2))}});
  if(!rows.some(r=>r.n))return'<div class="empty">No open backlog. 🎉</div>';
  const mx=Math.max(...rows.map(r=>r.n))||1;
  return`<div class="bk-leg">${AB.map((l,i)=>`<span><i style="background:linear-gradient(90deg,${ACOL[i][1]},${ACOL[i][0]})"></i>${l}</span>`).join("")}</div>`+rows.map(r=>`<div class="bk" data-ovgo="${r.m.v}" role="button" tabindex="0" title="Open ${esc(r.m.t)}"><div class="bk-h"><span>${r.m.ic} <b>${esc(r.m.t)}</b> · ${BACK[r.m.v].l}</span><b class="num">${N(r.n)}</b></div>`+
@@ -1094,8 +1097,10 @@ function waterfalls(){
   panel("Fintech value waterfall",`Loans value (Order Amount) down to what was retained. ⏳ ${N(fn.aw)} loan(s) worth ${moneyShort(fn.awv)} are still awaiting the FST cycle.`,`<div class="fit">${waterfall(b,modReady("fin"))}</div>`)+`</div>`}
 
 /* L4 scorecard heatmap: one row per person at your level, key metrics colour-coded */
-const HM=[{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Open",get:s=>s.pen},
- {v:"ref",l:"Retained %",rate:1},{v:"ref",l:"Refunded ₹",get:s=>s.rfd.v,money:1},{v:"fin",l:"Cancelled %",rate:1},{v:"fin",l:"Awaiting FST",get:s=>s.aw}];
+const HM=[{v:"fce",l:"Escalated Total",get:s=>s.n,plain:1},{v:"fce",l:"Resolved",get:s=>s.res,plain:1},{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},
+ {v:"onb",l:"Escalated Total",get:s=>s.n,plain:1},{v:"onb",l:"Resolved",get:s=>s.res,plain:1,tip:"Onboarded Already + Ready to connect + Refund Requested"},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Open",get:s=>s.pen},
+ {v:"ref",l:"Punched",get:s=>s.n,plain:1},{v:"ref",l:"Retained",get:s=>s.ret.n,plain:1},{v:"ref",l:"Retained %",rate:1},{v:"ref",l:"Refunded ₹",get:s=>s.rfd.v,money:1},
+ {v:"fin",l:"Loans Processed",get:s=>s.n,plain:1},{v:"fin",l:"Cancelled (FST)",get:s=>s.fst.n},{v:"fin",l:"Cancelled %",rate:1},{v:"fin",l:"Awaiting FST",get:s=>s.aw}];
 function heatmap(){
  const lvl=ovLevel(),groups=new Map();
  MODS.forEach(m=>scopeRows(m.v).filter(inPeriod).forEach(r=>{const e=r["l"+lvl]||DIR;if(!groups.has(e))groups.set(e,{e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,by:{}});const g=groups.get(e);(g.by[m.v]||(g.by[m.v]=[])).push(r)}));
@@ -1106,48 +1111,16 @@ function heatmap(){
  const mx=HM.map(c=>c.rate?1:Math.max(0,...list.map(g=>val(g.by,c)||0)));
  const cell=(c,v,i,attrs)=>{if(v==null)return`<td class="r hmx">–</td>`;let bg,txt;
   if(c.rate){const t=toneOf(modOf(c.v),v);bg=t==="good"?"rgba(23,135,92,.20)":t==="warn"?"rgba(214,140,20,.24)":"rgba(201,48,72,.24)";txt=pp(v)}
+  else if(c.plain){bg="transparent";txt=N(v)}
   else{const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.06+a*.34).toFixed(2)})`:"transparent";txt=c.money?moneyShort(v):N(v)}
   return`<td class="r num hmc" style="background:${bg}"${attrs}>${txt}</td>`};
- const head1=`<tr><th rowspan="2">L${lvl}${lvl===4?" · Regional Head":""}</th>${MODS.map(m=>`<th colspan="2" class="hmg" style="border-bottom:2px solid ${MCOL[m.v][1]}">${m.ic} ${m.t}</th>`).join("")}</tr>`;
- const head2=`<tr>${HM.map(c=>`<th class="r">${c.l}</th>`).join("")}</tr>`;
+ const head1=`<tr><th rowspan="2">L${lvl}${lvl===4?" · Regional Head":""}</th>${MODS.map(m=>`<th colspan="${HM.filter(c=>c.v===m.v).length}" class="hmg" style="border-bottom:2px solid ${MCOL[m.v][1]}">${m.ic} ${m.t}</th>`).join("")}</tr>`;
+ const head2=`<tr>${HM.map(c=>`<th class="r"${c.tip?` title="${esc(c.tip)}"`:""}>${c.l}</th>`).join("")}</tr>`;
  const body=list.map(g=>`<tr><td class="who"><b>${esc(g.name)}</b>${g.e!==DIR?`<small>${esc(g.e)}</small>`:""}</td>${HM.map((c,i)=>cell(c,val(g.by,c),i,(g.e===DIR&&S.lock>=0)?"":` data-hv="${c.v}" data-he="${esc(g.e)}" data-hn="${esc(g.name)}" tabindex="0" role="button" title="Open ${esc(modOf(c.v).t)} for ${esc(g.name)}"`)).join("")}</tr>`).join("");
  const foot=`<tr><td>Overall</td>${HM.map((c,i)=>{const v=val(tot,c);return v==null?'<td class="r">–</td>':`<td class="r num">${c.rate?pp(v):c.money?moneyShort(v):N(v)}</td>`}).join("")}</tr>`;
  return`<div class="tbox hm" style="max-height:none"><table class="tbl"><thead>${head1}${head2}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`}
 
-/* ======================= Overview analyses: journey, Pareto, L0 hotspots, remarks themes ======================= */
-const uid=r=>String(r.user_id||"").trim();
-const JST=[["onb","Onboarding Not Connected"],["fce","First Call Escalation"],["ref","Refunds"],["fin","Fintech"]];
-const JCOL={onb:MCOL.onb,fce:MCOL.fce,ref:MCOL.ref,fin:MCOL.fin,end:C.grey,ret:C.green,lost:C.red};
-
-/* 1. Customer journey: each User ID followed through Onboarding → First Call → Refunds → Fintech */
-function journey(){
- const st=JST.filter(([v])=>modReady(v)),users=new Map();
- st.forEach(([v])=>scopeRows(v).filter(inPeriod).forEach(r=>{const u=uid(r);if(!u)return;let x=users.get(u);if(!x){x={s:new Set(),lost:0,lv:0,ret:0};users.set(u,x)}x.s.add(v);
-  if(v==="ref"||v==="fin"){if(r.k==="rfd"||r.k==="fst"){x.lost++;x.lv+=r.amt}else if(r.k==="ret")x.ret++}}));
- if(!users.size)return'<div class="empty">No User IDs in this period.</div>';
- const node=new Map(),link=new Map(),addL=(a,b)=>link.set(a+">"+b,(link.get(a+">"+b)||0)+1);
- const order=st.map(([v])=>v);
- users.forEach(x=>{const path=order.filter(v=>x.s.has(v));path.forEach(v=>node.set(v,(node.get(v)||0)+1));
-  for(let i=0;i<path.length-1;i++)addL(path[i],path[i+1]);
-  const o=x.lost?"lost":x.ret?"ret":"end";node.set(o,(node.get(o)||0)+1);addL(path[path.length-1],o)});
- const LBL={onb:"Onboarding Not Connected",fce:"First Call Escalation",ref:"Refunds",fin:"Fintech",end:"Escalation only",ret:"Retained",lost:"Lost (Refunded / FST)"};
- const cols=order.map(v=>[v]).concat([["end","ret","lost"]]);
- const W=980,H=380,nw=14,gap=18,x0=8,colX=i=>x0+i*((W-210-x0-nw)/(cols.length-1));
- const k=Math.min(...cols.map(c=>{const ids=c.filter(id=>node.get(id));const sum=ids.reduce((t,id)=>t+node.get(id),0);return sum?(H-20-(ids.length-1)*gap)/sum:Infinity}));
- const pos={};cols.forEach((c,i)=>{const ids=c.filter(id=>node.get(id)),tot=ids.reduce((t,id)=>t+node.get(id)*k,0)+(ids.length-1)*gap;let y=(H-tot)/2;ids.forEach(id=>{const h=Math.max(2,node.get(id)*k);pos[id]={x:colX(i),y,h,out:0,inn:0};y+=h+gap})});
- const L=[...link].map(([key,v])=>{const[a,b]=key.split(">");return{a,b,v}}).filter(l=>pos[l.a]&&pos[l.b]).sort((p,q)=>pos[p.a].y-pos[q.a].y||pos[p.b].y-pos[q.b].y);
- let s=`<svg viewBox="0 0 ${W} ${H}" class="sankey" role="img" aria-label="Customer journey">`;
- L.forEach(l=>{const A=pos[l.a],Bn=pos[l.b],h=Math.max(1,l.v*k),ya=A.y+A.out,yb=Bn.y+Bn.inn;A.out+=h;Bn.inn+=h;const xa=A.x+nw,xb=Bn.x,mx=(xa+xb)/2;
-  s+=`<path d="M${xa} ${ya} C${mx} ${ya} ${mx} ${yb} ${xb} ${yb} L${xb} ${yb+h} C${mx} ${yb+h} ${mx} ${ya+h} ${xa} ${ya+h} Z" fill="${JCOL[l.a][1]}" opacity=".32" class="lk"><title>${esc(LBL[l.a])} → ${esc(LBL[l.b])}: ${N(l.v)} user(s)</title></path>`});
- Object.entries(pos).forEach(([id,p])=>{const n=node.get(id),inc=L.filter(l=>l.b===id&&JST.some(j=>j[0]===l.a)).reduce((t,l)=>t+l.v,0),isEnd=["end","ret","lost"].includes(id);
-  s+=`<rect x="${p.x}" y="${p.y}" width="${nw}" height="${p.h}" rx="3" fill="${JCOL[id][1]}"${isEnd?"":` data-ovgo="${id}" style="cursor:pointer"`}><title>${esc(LBL[id])}: ${N(n)} user(s)${!isEnd&&inc?` · ${N(inc)} came from an earlier step`:""}</title></rect>`;
-  const ty=p.y+p.h/2;s+=`<text x="${p.x+nw+6}" y="${ty-2}" style="fill:var(--text)" font-size="12" font-weight="800">${esc(LBL[id])}</text><text x="${p.x+nw+6}" y="${ty+12}" style="fill:var(--muted)" font-size="11">${N(n)} users</text>`});
- s+="</svg>";
- const viaEsc=[...users.values()].filter(x=>(x.s.has("onb")||x.s.has("fce"))&&(x.s.has("ref")||x.s.has("fin"))),lostEsc=viaEsc.filter(x=>x.lost),lv=lostEsc.reduce((t,x)=>t+x.lv,0);
- const both=[...users.values()].filter(x=>x.s.has("onb")&&x.s.has("fce")).length,onbN=node.get("onb")||0;
- const chips=`<div class="jsum"><div><span>Users tracked</span><b class="num">${N(users.size)}</b></div>${onbN?`<div><span>Onboarding → First Call</span><b class="num">${N(both)}</b><small>${pc(both,onbN,1)} of onboarding users</small></div>`:""}<div><span>Escalated, then refund / loan</span><b class="num">${N(viaEsc.length)}</b><small>reached Refunds or Fintech</small></div><div class="bad"><span>Lost after escalating</span><b class="num">${N(lostEsc.length)}</b><small>${moneyShort(lv)} refunded or FST</small></div></div>`;
- return chips+`<div class="fit sk">${s}</div>`;
-}
+/* ======================= Overview analyses: Fintech vs Refund, refund Pareto, L0 hotspots ======================= */
 
 /* 2. Pareto: bars (descending) + cumulative % line + 80% line */
 function pareto(items,o){
@@ -1170,11 +1143,32 @@ function pareto(items,o){
  const k80=pts.findIndex(q=>q[2]>=.8)+1;
  return`<p class="sub" style="margin:-4px 0 6px">${k80?`<b>${k80}</b> of ${top.length-(rest.length?1:0)}${rest.length?"+":""} ${o.noun||"reasons"} make up 80% of the total. `:""}Click a bar to open those records.</p><div class="fit">${s}</div>`}
 function paretoBlocks(){
- const fc=scopeRows("fce").filter(inPeriod),g={};fc.forEach(r=>{const c=r.escalation_category;g[c]=(g[c]||0)+1});
- const a=pareto(Object.entries(g).map(([l,v])=>({l,v})),{key:"fce",title:"Escalation category Pareto",fmt:x=>N(Math.round(x)),col:MCOL.fce});
  const rf=scopeRows("ref").filter(inPeriod).filter(r=>r.k==="rfd"),h={};rf.forEach(r=>{const c=dimVal(r,"x:refundbucketing");const x=h[c]||(h[c]={v:0,n:0});x.v+=r.amt;x.n++});
  const b=modReady("ref")?pareto(Object.entries(h).map(([l,x])=>({l,lab:l==="Retained"?"Not bucketed":l,v:x.v,n:x.n})),{key:"ref",title:"Refund reason Pareto",fmt:shortAmt,cnt:"refunds",col:C.red}):'<div class="empty">Not set up yet.</div>';
- return`<div class="g2">`+panel("Top escalation categories (Pareto)",`First Call Escalation, by number of cases, ${esc(periodTxt())}.`,a)+panel("Top refund reasons (Pareto)",`Refund Bucketing of refunded cases, by ₹ refunded, ${esc(periodTxt())}.`,b)+`</div>`}
+ const lvl=ovLevel();
+ return`<div class="g2">`+panel("Fintech: Bajaj vs Fibe",`Both lenders side by side for ${esc(periodTxt())}, then by L${lvl} manager. Cancelled % = FST ÷ Loans Processed (count). Click a bar to open that lender for that manager.`,bajFibCompare())+panel("Top refund reasons (Pareto)",`Refund Bucketing of refunded cases, by ₹ refunded, ${esc(periodTxt())}.`,b)+`</div>`}
+
+/* Fintech: Bajaj vs Fibe — lender totals, then loans / FST / Cancelled % per manager */
+function bajFibCompare(){
+ const LN=[["baj","Bajaj",C.blue],["fib","Fibe",C.purple]].filter(([v])=>modReady(v));
+ if(!LN.length)return'<div class="empty">Fintech Bajaj and Fibe are not set up yet.</div>';
+ const fm=modOf("fin"),lvl=ovLevel(),rows={},g=new Map();
+ LN.forEach(([v])=>{rows[v]=scopeRows(v).filter(inPeriod);rows[v].forEach(r=>{const e=r["l"+lvl]||DIR;let x=g.get(e);if(!x){x={e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,by:{}};g.set(e,x)}(x.by[v]||(x.by[v]=[])).push(r)})});
+ const st=a=>{const s=summM(a||[]);return{n:s.n,v:s.v,f:s.fst.n,fv:s.fst.v,rn:s.ret.n,rv:s.ret.v,aw:s.aw,r:s.n?s.fst.n/s.n:null}};
+ const tc=r=>r==null?"":toneOf(fm,r),pcs=r=>r==null?"–":(r*100).toFixed(1)+"%";
+ const cards=`<div class="bfc">${LN.map(([v,l,c])=>{const t=st(rows[v]);return`<div class="bfcard" data-ovgo="${v}" role="button" tabindex="0" title="Open Fintech · ${l}" style="border-top:3px solid ${c[1]}"><div class="bfh"><b>${l}</b><span class="chip ${tc(t.r)==="good"?"g":tc(t.r)==="warn"?"b":t.r==null?"n":"r"}">Cancelled ${pcs(t.r)}</span></div>
+   <div class="bfg"><div><span>Loans Processed</span><b>${N(t.n)}</b><small>${shortAmt(t.v)}</small></div><div><span>Cancelled (FST)</span><b>${N(t.f)}</b><small>${shortAmt(t.fv)}</small></div><div><span>Retained</span><b>${N(t.rn)}</b><small>${shortAmt(t.rv)}</small></div><div><span>Awaiting FST</span><b>${N(t.aw)}</b><small>EMI upcoming</small></div></div></div>`}).join("")}</div>`;
+ const L=[...g.values()].sort((a,b)=>LN.reduce((t,[v])=>t+(b.by[v]||[]).length,0)-LN.reduce((t,[v])=>t+(a.by[v]||[]).length,0)).slice(0,10);
+ if(!L.length)return cards+'<div class="empty">No loans in '+esc(periodTxt())+'.</div>';
+ const mx=Math.max(1,...L.flatMap(x=>LN.map(([v])=>(x.by[v]||[]).length))),W=600,LW=150,BW=W-LW-190,bh=17,gap=3,rh=LN.length*(bh+gap)+14,H=L.length*rh+4,u="bf"+(++UID);
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="frc" role="img" aria-label="Bajaj versus Fibe by manager"><defs>${LN.map(([v,,c])=>`<linearGradient id="${u}${v}" x1="0" x2="1"><stop offset="0" stop-color="${c[2]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient>`).join("")}</defs>`;
+ L.forEach((x,i)=>{const y=i*rh+4,click=!(x.e===DIR&&S.lock>=0),nm=x.name.length>20?x.name.slice(0,19)+"…":x.name;
+  s+=`<text x="${LW-10}" y="${y+(LN.length*(bh+gap))/2+3}" text-anchor="end" font-size="12" font-weight="700" style="fill:var(--text)">${esc(nm)}</text>`;
+  LN.forEach(([v,l],j)=>{const t=st(x.by[v]),w=Math.max(t.n?3:0,t.n/mx*BW),yy=y+j*(bh+gap),tone=tc(t.r);
+   s+=`<g${click&&t.n?` data-hv="${v}" data-he="${esc(x.e)}" data-hn="${esc(x.name)}" style="cursor:pointer"`:""}><title>${esc(x.name)} · ${l}: ${N(t.n)} loans (${money(t.v)}) · ${N(t.f)} FST (${money(t.fv)}) · Cancelled ${pcs(t.r)}</title><rect x="${LW}" y="${yy}" width="${BW+190}" height="${bh+gap}" fill="transparent"/><rect x="${LW}" y="${yy}" width="${w}" height="${bh}" rx="4" fill="url(#${u}${v})"/>`+
+    `<text x="${LW+w+6}" y="${yy+12.5}" font-size="11" font-weight="700" style="fill:var(--text)">${N(t.n)} <tspan style="fill:var(--muted)" font-weight="500">loans · ${N(t.f)} FST ·</tspan> <tspan style="fill:var(--${tone==="good"?"green":tone==="warn"?"amber":tone?"red":"muted"})" font-weight="800">${pcs(t.r)}</tspan></text></g>`})});
+ s+="</svg>";
+ return cards+`<div class="trend-legend">${LN.map(([,l,c])=>`<span><i class="sw" style="background:linear-gradient(90deg,${c[2]},${c[1]})"></i>${l} loans</span>`).join("")}</div><p class="sub" style="margin:-4px 0 8px">Next to each bar: loans · FST · Cancelled % (green ≤ 5%, amber ≤ 7%, red above).</p><div class="fit">${s}</div>`+(g.size>10?`<p class="sub" style="margin:6px 0 0">Showing the top 10 of ${N(g.size)} managers by loans.</p>`:"")}
 
 /* 3. L0 hotspots: who generates the most escalations, refunds and cancellations */
 function hotspots(){
@@ -1190,38 +1184,6 @@ function hotspots(){
  const rows=L.slice(0,15).map((x,i)=>{return`<tr class="click" tabindex="0" data-hot="${i}" title="Open First Call Escalation for ${esc(x.name)}"><td class="num">${i+1}</td><td class="who"><b>${esc(x.name)}</b><small>${esc(x.id||x.e)}</small></td><td>${esc(x.mgr||"–")}</td><td class="r num">${N(x.onb)}</td><td class="r num">${N(x.fce)}</td><td class="r num">${N(x.rfd)}${x.rfv?`<small class="sub2">${moneyShort(x.rfv)}</small>`:""}</td><td class="r num">${N(x.fst)}${x.fsv?`<small class="sub2">${moneyShort(x.fsv)}</small>`:""}</td><td class="r num"><b>${N(x.t)}</b></td><td class="r num">${pc(x.t,tot,1)}</td></tr>`}).join("");
  return`<div class="g2 hot">`+`<div>${chart}</div>`+`<div class="tbox" style="max-height:none"><table class="tbl"><thead><tr><th>#</th><th>L0</th><th>Reports to</th><th class="r">Onboarding</th><th class="r">First Call</th><th class="r">Refunded</th><th class="r">FST</th><th class="r">Total</th><th class="r">Share</th></tr></thead><tbody>${rows}</tbody></table></div></div><p class="sub" style="margin-top:8px">${N(L.length)} L0 employee(s) in view; the table shows the top 15. Click a name to open their First Call Escalation records.</p>`}
 
-/* 4. Remarks themes: most frequent phrases in CS Remarks and Sales Remark */
-const STOP=new Set("a an the and or but if then than so to of in on at by for from with without into onto over under about after before as is are was were be been being am do does did done have has had having it its this that these those there here he she they them his her their we our you your i me my mine not no yes ok okay also very just only still even again already will would shall should can could may might must per via etc pls please kindly sir madam mam ji hai hain ka ki ke ko se ne bhi aur nahi tha thi the hoga hogi raha rahi rahe kar karo kiya diya liya wala wali wale".split(" "));
-const NEG=new Set(["not","no","non","nahi","nhi","never","didnt","dont","cant","wont"]);
-function themes(rows,getText){
- /* Phrases are 2–4 words that sit next to each other in the remark (so a click finds them with the record search);
-    a phrase already covered by a longer one with the same count, or overlapping one with the same count, is dropped. */
- const one={},gram={};let n=0;
- rows.forEach(r=>{const t=getText(r);if(!t)return;n++;const s1=new Set(),sg=new Set();
-  t.toLowerCase().split(/[^a-z\s]+/).forEach(seg=>{const raw=seg.trim().split(/\s+/).filter(Boolean);let run=[];
-   const flush=()=>{for(let k=2;k<=4;k++)for(let i=0;i+k<=run.length;i++){const sl=run.slice(i,i+k);if(NEG.has(sl[0])||NEG.has(sl[k-1]))continue;const g=sl.join(" ");if(!sg.has(g)){gram[g]=(gram[g]||0)+1;sg.add(g)}}run=[]};
-   raw.forEach(x=>{if(NEG.has(x)&&run.length){run.push(x);return}const ok=x.length>2&&!STOP.has(x);if(ok){run.push(x);if(!s1.has(x)){one[x]=(one[x]||0)+1;s1.add(x)}}else flush()});flush()})});
- const cand=Object.entries(gram).filter(([,c])=>c>=2).sort((a,b)=>b[1]-a[1]||b[0].split(" ").length-a[0].split(" ").length);
- const phrases=[];
- for(const [g,c] of cand){if(phrases.length>=8)break;const ws=g.split(" ");
-  if(phrases.some(([p,pc])=>p.includes(g)||(pc===c&&p.split(" ").some(w=>ws.includes(w)))))continue;phrases.push([g,c])}
- const used=new Set(phrases.flatMap(([p])=>p.split(" ")));
- const words=Object.entries(one).filter(([w,c])=>c>=2&&!used.has(w)).sort((a,b)=>b[1]-a[1]).slice(0,15-phrases.length);
- return{n,list:phrases.map(([l,c])=>({l,c,ph:1})).concat(words.map(([l,c])=>({l,c}))).sort((a,b)=>b.c-a.c)}}
-function themeBlock(view,label,getText){
- if(!modReady(view))return'<div class="empty">Not set up yet.</div>';
- const rows=scopeRows(view).filter(inPeriod),{n,list}=themes(rows,getText);
- if(!n)return`<div class="empty">No ${esc(label)} in this period.</div>`;
- if(!list.length)return`<div class="empty">${N(n)} remark(s), but no word repeats yet.</div>`;
- const mx=list[0].c;
- return`<p class="sub" style="margin:-4px 0 8px">From ${N(n)} remark(s). Share = % of remarks that mention it. Click to search those records.</p><div class="hbars">${list.map(x=>`<div class="hbar" data-thm="${view}" data-tq="${esc(x.l)}" role="button" tabindex="0" title="Search ${esc(DS_TITLE(view))} records for “${esc(x.l)}”"><span class="t">${x.ph?`<b>${esc(x.l)}</b>`:esc(x.l)}</span><div class="bar"><i style="width:${x.c/mx*100}%;background:linear-gradient(90deg,${MCOL[view][2]},${MCOL[view][1]})"></i></div><span class="num"><b>${N(x.c)}</b> · ${pc(x.c,n,0)}</span></div>`).join("")}</div>`}
-const DS_TITLE=v=>VIEWS[v].title;
-function themesBlocks(){
- return`<div class="g2">`+panel("CS Remarks themes",`Most common phrases (bold) and words in First Call Escalation CS Remarks, ${esc(periodTxt())}.`,themeBlock("fce","CS Remarks",X("CS Remarks","CS Remark","CS Comments")))+
-  panel("Sales Remark themes",`Most common phrases (bold) and words in Onboarding Not Connected Sales Remarks, ${esc(periodTxt())}.`,themeBlock("onb","Sales Remarks",X("Sales Remark","Sales Remarks")))+`</div>`}
-
-/* click-throughs from the analyses into a section (filter applied there) */
-function openWith(view,fn){ovOpen(view);if(S.ds===view&&S.sec===view){fn();S.page=1;render()}}
 function anaClick(e){
  const pa=e.target.closest("[data-pareto]");if(pa){const k=pa.dataset.pareto,v=pa.dataset.pv;
   if(k==="fce")openWith("fce",()=>{S.cat=v;S.catDim="escalation_category"});
@@ -1247,13 +1209,11 @@ function renderOv(){
   `<div class="g2">`+panel("Key rates by month",(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Hover a month for all four values.",`<div class="trend-legend">${legend}</div><div class="fit">${rateChart(ms)}</div>`)+
   panel("Needs attention",`For ${esc(periodTxt())}, with the L${ml} manager behind each point.`,ins.length?`<ul class="insights">${ins.map(i=>`<li><span class="dot ${i.t}"></span><span>${i.x}</span></li>`).join("")}</ul>`:'<div class="empty">Nothing needs attention right now. 🎉</div>')+`</div>`+
   panel(`L${lvl} scorecard`,`Key metrics side by side for ${esc(periodTxt())}. Green / amber / red follow the targets; counts and amounts get redder as they grow. Click a cell to open that module for that person.`,heatmap())+
-  panel("Customer journey",`Each User ID followed through Onboarding Not Connected → First Call Escalation → Refunds → Fintech for ${esc(periodTxt())}, ending in an outcome. Band width = number of users; hover a band for the count. Click a step to open it.`,journey())+
   paretoBlocks()+
   panel("L0 hotspots",`L0 employees ranked by issues raised against them in ${esc(periodTxt())}: onboarding and first-call escalations, refunds and FST cancellations.`,hotspots())+
-  `<div class="g2">`+panel("Open backlog by age","Items still open in each module, by days since the case month. Click a module to open it.",backlogBlock())+
+  `<div class="g2">`+panel("Open backlog by age","First Call Escalation and Onboarding Not Connected items still open, by days since the case month. Click a module to open it.",backlogBlock())+
   panel(`Who holds the open backlog`,`All open items across the four modules, by L${ml} manager.`,donutBlock())+`</div>`+
   waterfalls()+
-  themesBlocks()+
   `<h2 class="sec-h">Team Level Escalations Summary</h2>`+
   OV.map(([v,t])=>`<section class="panel"><div class="block-h"><div><h2>${t}</h2><p class="sub">One row per L${lvl}, ${esc(periodTxt())}. ${OVSUB[v]} Click a manager's columns to open their dashboard; hover for all numbers.</p></div></div>${ovChart(v)}</section>`).join("");
  afterRender(y0);
