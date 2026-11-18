@@ -100,7 +100,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 /* ---------- charts (Achievers style) ---------- */
 .trend-legend{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:4px 0 6px;font-size:12.5px;color:var(--tx2)}
 .trend-legend .sw{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:7px;vertical-align:-2px}
-.sw.res{background:linear-gradient(180deg,#5fd6ff,#1757bb)}.sw.pen{background:linear-gradient(180deg,#ffd27a,#ff7a18)}.sw.tot{background:linear-gradient(180deg,#b9c2ff,#27317e)}.sw.pct{height:4px!important;border-radius:4px;width:22px!important;vertical-align:3px!important;background:linear-gradient(90deg,#4bd39a,#b18cff)}
+.sw.res{background:linear-gradient(180deg,#5fd6ff,#1757bb)}.sw.pen{background:linear-gradient(180deg,#ffd27a,#ff7a18)}.sw.tot{background:linear-gradient(180deg,#b9c2ff,#27317e)}.sw.pun{background:#8a94a6;opacity:.4}.sw.pct{height:4px!important;border-radius:4px;width:22px!important;vertical-align:3px!important;background:linear-gradient(90deg,#4bd39a,#b18cff)}
 .trend-chart{overflow-x:auto;margin:0 -4px}.trend-chart svg{display:block;min-width:720px;width:100%;height:auto}
 .trend-chart g.mo2:hover rect.tb{opacity:.82}.trend-chart .hit{fill:transparent;cursor:pointer}
 .hbars{display:grid;gap:4px;margin-top:6px}
@@ -190,7 +190,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 .spark{width:120px;height:36px;flex:none}.md{display:flex;gap:6px;align-items:center;margin-bottom:4px}.md small,.mcard>small{font-size:11.5px;color:var(--faint)}
 .insights{list-style:none;margin:0;padding:0;display:grid;gap:7px}.insights li{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border-radius:10px;background:var(--inset);border:1px solid var(--l2);font-size:13px}
 .dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:var(--cyan)}.dot.good{background:var(--green)}.dot.warn{background:var(--amber)}.dot.bad{background:var(--red)}
-.hm .tbl th.hmg{text-align:center}.hm .hmc{font-weight:700;color:var(--text);cursor:pointer}.hm .hmc:hover{outline:2px solid var(--cyan);outline-offset:-2px}.hm .hmx{color:var(--faint)}.hm th small.hpr{display:block;font-size:10px;font-weight:600;color:var(--faint)}.hm td.who,.hm tfoot td:first-child{position:sticky;left:0;z-index:1;background:linear-gradient(var(--p2),var(--p2)),var(--bg0);box-shadow:6px 0 8px -6px var(--sh)}.hm thead tr:first-child th:first-child{position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px var(--sh)}
+.hm .tbl th.hmg{text-align:center}.hm .hmc{font-weight:700;color:var(--text);cursor:pointer}.hm .hmc:hover{outline:2px solid var(--cyan);outline-offset:-2px}.hm .hmx{color:var(--faint)}.hm th small.hpr{display:block;font-size:8.5px;font-weight:600;color:var(--faint)}.hmc2 .tbl{font-size:11.5px;width:100%}.hmc2 .tbl th,.hmc2 .tbl td{padding:6px 3px}.hmc2 .tbl td.who{padding-left:8px}.hmc2 .tbl thead th{font-size:10px;letter-spacing:-.1px;line-height:1.2;white-space:normal;vertical-align:bottom}.hmc2 .tbl th.hmg{font-size:11.5px;white-space:nowrap;text-align:center}.hmc2 .tbl th.hmg.wrap{white-space:normal}.hmc2 td.who{max-width:104px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hmc2 td.num{white-space:nowrap}.hm td.who,.hm tfoot td:first-child{position:sticky;left:0;z-index:1;background:linear-gradient(var(--p2),var(--p2)),var(--bg0);box-shadow:6px 0 8px -6px var(--sh)}.hm thead tr:first-child th:first-child{position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px var(--sh)}
 .stake{padding:10px 0 14px;border-bottom:1px dashed var(--line)}.stake:last-child{border-bottom:0}.sh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}.sh .num{font-size:20px;font-weight:800}
 .bar.big{height:16px}.sl{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12.5px;color:var(--tx2)}.sl i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 .sec-h{font-size:17px;margin:22px 2px 10px}
@@ -199,7 +199,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 @media(max-width:820px){#freeze{position:static}}
 .jsum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:10px}.jsum div{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px}.jsum span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}.jsum b{font-size:20px;font-weight:800}.jsum small{display:block;font-size:11px;color:var(--faint)}.jsum .bad b{color:var(--red)}
 .sk svg{width:100%;height:auto}.sankey .lk:hover{opacity:.6}
-.hot{grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);align-items:start}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.ovcw{overflow-x:auto}.ovc{display:block;width:100%;height:auto}.ovtot{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ch-band);font-size:12px;color:var(--ch-mon)}.ovtot b{color:var(--text)}.jsteps{position:relative;height:18px;margin:4px 0 2px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.jsteps span{position:absolute;white-space:nowrap}.jsum .good b{color:var(--green)}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
+.hot{display:block}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.ovcw{overflow-x:auto}.ovc{display:block;width:100%;height:auto}.ovtot{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ch-band);font-size:12px;color:var(--ch-mon)}.ovtot b{color:var(--text)}.jsteps{position:relative;height:18px;margin:4px 0 2px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.jsteps span{position:absolute;white-space:nowrap}.jsum .good b{color:var(--green)}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
 .jsum.j3{grid-template-columns:repeat(3,minmax(0,1fr))}.bfc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px}.bfcard{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px;cursor:pointer}.bfh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.bfh b{font-size:15px}.bfg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 10px}.bfg span{display:block;font-size:11px;color:var(--muted);font-weight:700}.bfg b{font-size:17px;font-weight:800}.bfg small{display:block;font-size:11px;color:var(--faint)}@media(max-width:1100px){.jsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
@@ -342,7 +342,7 @@ const shortAmt=v=>{const a=Math.abs(v);if(a>=1e7)return"₹"+(v/1e7).toFixed(1)+
 
 /* ======================= state ======================= */
 const LV=[4,3,2,1,0],DIR="__DIRECT__";
-const SEC=[["ov","Dashboard Overview","📊"],["fce","First Call Escalation","📞"],["onb","Onboarding Not Connected","🔌"],["ref","Refunds","↩️"],["fin","Fintech","💳",[["baj","Fintech Bajaj"],["fib","Fintech Fibe"]]]];
+const SEC=[["ov","Dashboard Overview","📊"],["onb","Onboarding Not Connected","🔌"],["fce","First Call Escalation","📞"],["fin","Fintech","💳",[["baj","Fintech Bajaj"],["fib","Fintech Fibe"]]],["ref","Refunds","↩️"]];
 function fresh(){return{user:null,email:"",me:"",meName:"",role:"",top:4,lock:-1,data:{},ds:"fce",fy:null,month:"",sel:{},want:{},wantLbl:{},sec:"ov",cat:"",catDim:"",dim:"",bk:"",q:"",page:1,size:20,tmode:"count",sort:{k:"Date",dir:"desc"},ovSort:{},f:[],crumbs:[],ovRows:{},note:"",loggingOut:false}}
 let S=fresh();
 let finOpen=false;   // Fintech starts collapsed
@@ -463,7 +463,7 @@ $("side").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;const id
  if(b.dataset.grp){if(S.sec===id){finOpen=!finOpen;side();return}finOpen=true}
  setSec(id);window.scrollTo({top:0})};
 function setSec(id){
- if(id==="ov"&&!canOv())id="fce";
+ if(id==="ov"&&!canOv())id="onb";
  S.sec=id;side();S.cat="";S.catDim="";S.dim="";S.bk="";S.q="";S.page=1;S.note="";S.sort={k:"Date",dir:"desc"};
  $("ph").hidden=true;$("filt").hidden=true;$("dash").innerHTML="";$("kbar").innerHTML="";
  if(id==="ov"){ensurePeriod();$("filt").hidden=false;renderOv();return}
@@ -620,10 +620,10 @@ function caseBody(v,f,cat,yc,catRows){
  const PK=[["Total Punched",S.P==null?"–":N(S.P),"orders in the Refunds tab","info"],["Escalation %",S.P?pc(s.n,S.P,2):"–","escalations ÷ punched orders","warn"]];
  const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],...PK,["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
   :[["Escalated Total",N(s.n),"in current view","info"],...PK,["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Open",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Open %",pc(s.pen,s.n,2),"open ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
- const ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,t:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null}});
+ const pm=punchByMonth(),ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,t:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null,P:pm?pm.get(m)||0:null}});
  const lab=ds==="fce"?"Yet to resolve":"Open";
- $("kbar").innerHTML=kpiHtml(K);return panel("Month-on-month: total, resolved and "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
-   `<div class="trend-legend"><span><i class="sw tot"></i>Escalated Total</span><span><i class="sw res"></i>${ds==="fce"?"Resolved":"Resolved (onboarded + ready + refund)"}</span><span><i class="sw pen"></i>${lab}</span><span><i class="sw pct"></i>Resolution %</span></div><div class="trend-chart fit">${trendChart(pts,{unit:"Cases",tip:p=>`${p.n} escalated · ${p.a} resolved · ${p.b} ${lab.toLowerCase()} · ${(p.p*100).toFixed(1)}% resolution`})}</div>`)+
+ $("kbar").innerHTML=kpiHtml(K);return panel("Month-on-month: total punched, escalated, resolved and "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
+   `<div class="trend-legend"><span><i class="sw tot"></i>Escalated Total</span><span><i class="sw res"></i>${ds==="fce"?"Resolved":"Resolved (onboarded + ready + refund)"}</span><span><i class="sw pen"></i>${lab}</span><span><i class="sw pct"></i>Resolution %</span>${pm?'<span><i class="sw pun"></i>Total Punched (shaded, own scale)</span>':""}</div><div class="trend-chart fit">${trendChart(pts,{unit:"Cases",punch:{rl:"Esc %",rate:p=>pc(p.n,p.P,2)},tip:p=>`${p.n} escalated · ${p.a} resolved · ${p.b} ${lab.toLowerCase()} · ${(p.p*100).toFixed(1)}% resolution`})}</div>`)+
   panel(ds==="fce"?"Status split":"Sales Bucketing split","Share of the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:ds==="fce"?"Status":"Sales Bucketing"}))+
   `<div class="g2">`+panel("Aging of "+(ds==="fce"?"unresolved cases":"open cases"),`${N(s.pen)} ${ds==="fce"?"unresolved":"open"} case(s) in the current view, by days since raised.`,agingBlock(f,yc,ms))+
   (ds==="onb"?panel("By team",`<span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> open`,`<div class="hbars">${teamBars(catRows)}</div>`):panel(v.catTitle,`Descending by volume. Click a row to filter. <span style="color:var(--blue)">■</span> resolved · <span style="color:#d98a0b">■</span> ${v.penL}`,`<div class="hbars">${catBars(catRows,v.catField)}</div>`))+`</div>`;
@@ -643,13 +643,13 @@ function moneyBody(v,f,cat,yc,catRows,dims){
    ["Cancelled %",pc(s.fst.n,s.n,2),"FST ÷ loans processed (count)",!s.n?"":s.fst.n/s.n<=.05?"good":s.fst.n/s.n<=.07?"warn":"bad"],["Awaiting FST Cycle",N(s.aw),"EMI Confirmation = Upcoming","pur",money(s.awv)]]
   .concat(s.oth.n?[["Other order status",N(s.oth.n),"neither Retained nor FST","",money(s.oth.v)]]:[]);
  const ms=chartMonths(yc),val=a=>a.reduce((t,r)=>t+r.amt,0),mode=S.tmode;
- const pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),g=x.filter(r=>r.k===v.good),b=x.filter(r=>r.k===v.bad);
-  return{m,n:x.length,t:mode==="value"?val(x):x.length,a:mode==="value"?val(g):g.length,b:mode==="value"?val(b):b.length,p:x.length?(v.line==="good"?g.length:b.length)/x.length:null,gn:g.length,bn:b.length,gv:val(g),bv:val(b)}});
+ const pm=isFin?punchByMonth():null,pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),g=x.filter(r=>r.k===v.good),b=x.filter(r=>r.k===v.bad);
+  return{m,n:x.length,t:mode==="value"?val(x):x.length,a:mode==="value"?val(g):g.length,b:mode==="value"?val(b):b.length,p:x.length?(v.line==="good"?g.length:b.length)/x.length:null,gn:g.length,bn:b.length,gv:val(g),bv:val(b),P:pm?pm.get(m)||0:null}});
  const fmt=mode==="value"?shortAmt:x=>N(Math.round(x));
  const toggle=`<div class="tabs" role="group" aria-label="Show count or value"><button type="button" class="tab${mode==="count"?" on":""}" data-tmode="count" aria-pressed="${mode==="count"}">Count</button><button type="button" class="tab${mode==="value"?" on":""}" data-tmode="value" aria-pressed="${mode==="value"}">${isFin?"Value":"Revenue"}</button></div>`;
  $("kbar").innerHTML=kpiHtml(K);let h=
-  panel(`Month-on-month: ${isFin?"Loans Processed":"Punched"}, ${v.goodL} and ${v.badL}`,(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+` The line is ${v.lineL} on count.`,
-   `<div class="trend-legend"><span><i class="sw tot"></i>${isFin?"Loans Processed":"Punched"}</span><span><i class="sw res"></i>${v.goodL}</span><span><i class="sw pen"></i>${v.badL}</span><span><i class="sw pct"></i>${v.lineL}</span></div><div class="trend-chart fit">${trendChart(pts,{fmt,unit:mode==="value"?"Amount (₹)":v.unit,tip:p=>`${N(p.n)} ${v.unit.toLowerCase()} · ${v.goodL} ${p.gn} (${moneyShort(p.gv)}) · ${v.badL} ${p.bn} (${moneyShort(p.bv)}) · ${v.lineL} ${(p.p*100).toFixed(1)}%`})}</div>`,toggle);
+  panel(`Month-on-month: ${isFin?"Total Punched, Loans Processed":"Total Punched"}, ${v.goodL} and ${v.badL}`,(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+` The line is ${v.lineL} on count.`,
+   `<div class="trend-legend"><span><i class="sw tot"></i>${isFin?"Loans Processed":"Total Punched"}</span><span><i class="sw res"></i>${v.goodL}</span><span><i class="sw pen"></i>${v.badL}</span><span><i class="sw pct"></i>${v.lineL}</span>${pm?'<span><i class="sw pun"></i>Total Punched (shaded, own scale)</span>':""}</div><div class="trend-chart fit">${trendChart(pts,{fmt,punch:pm?{rl:"FST %",rate:p=>pc(p.bn,p.P,2)}:null,unit:mode==="value"?"Amount (₹)":v.unit,tip:p=>`${N(p.n)} ${v.unit.toLowerCase()} · ${v.goodL} ${p.gn} (${moneyShort(p.gv)}) · ${v.badL} ${p.bn} (${moneyShort(p.bv)}) · ${v.lineL} ${(p.p*100).toFixed(1)}%`})}</div>`,toggle);
  h+=panel(isFin?"Order Status split":"Refund Status split","Count and amount in the current view. Click a row to filter.",pieBlock(v.keys,cat,{title:isFin?"Order Status":"Refund Status",money:1}));
  if(S.ds==="fin")h+=panel("Bajaj vs Fibe","Same filters, split by lender. Click a lender to open its own view.",lenderBlock(cat));
  const right=isFin?panel("EMI Confirmation",`${N(s.aw)} loan(s) awaiting the FST cycle (Upcoming). Click a row to filter.`,`<div class="hbars">${simpleBars(f,"emi_confirmation",x=>x.toLowerCase()==="upcoming")}</div>`)
@@ -661,10 +661,12 @@ function moneyBody(v,f,cat,yc,catRows,dims){
 }
 
 /* ---------- Achievers-style month trend: twin gradient columns + glowing % line ---------- */
+/* punched orders per month (Refunds tab rows), same hierarchy selection, whole chart range */
+function punchByMonth(){if(!modReady("ref"))return null;const m=new Map();selFilter(viewRows("ref")).forEach(r=>{if(r.m)m.set(r.m,(m.get(r.m)||0)+1)});return m}
 function trendChart(pts,o){
  if(!pts.some(p=>p.n))return'<div class="empty">No data for this selection.</div>';
  const fmt=o.fmt||(x=>N(Math.round(x)));
- const u="t"+(++UID),W=920,H=340,pl=62,pr=60,pt=30,pb=46,iw=W-pl-pr,ih=H-pt-pb,slot=iw/pts.length,bw=Math.min(22,(slot-14)/3);
+ const hasP=!!(o.punch&&pts.some(p=>p.P)),u="t"+(++UID),W=920,H=hasP?378:340,pl=62,pr=60,pt=30,pb=hasP?84:46,iw=W-pl-pr,ih=H-pt-pb,slot=iw/pts.length,bw=Math.min(22,(slot-14)/3);
  const tv=p=>p.t??p.n,amtMax=nice(Math.max(1,...pts.map(p=>Math.max(tv(p),p.a,p.b)))/0.58),rot=bw<fmt(Math.max(...pts.map(tv))).length*6.2+2,bTop=pt+26,bBot=pt+ih*0.34;
  const yA=v=>pt+ih-(v/amtMax)*ih,yP=v=>bBot-v*(bBot-bTop);
  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Month-on-month chart"><defs>
@@ -678,10 +680,13 @@ function trendChart(pts,o){
  s+=`<line x1="${W-pr+4}" x2="${W-pr+4}" y1="${bTop}" y2="${bBot}" style="stroke:var(--ch-pct-line)"/>`;
  [0,.5,1].forEach(f=>{const y=bBot-f*(bBot-bTop);s+=`<line x1="${W-pr+1}" x2="${W-pr+7}" y1="${y}" y2="${y}" style="stroke:var(--ch-pct-line)"/><text x="${W-pr+11}" y="${y+4}" style="fill:var(--ch-pct)" font-size="11">${f*100}%</text>`});
  s+=`<text x="14" y="${pt+ih/2}" transform="rotate(-90 14 ${pt+ih/2})" text-anchor="middle" style="fill:var(--ch-ax2)" font-size="11">${esc(o.unit||"")}</text>`;
- const line=[];
+ const line=[],pMax=hasP?Math.max(1,...pts.map(p=>p.P||0)):1;
+ if(hasP)s+=`<text x="${pl-10}" y="${H-pb+56}" text-anchor="end" font-size="10.5" font-weight="700" style="fill:var(--ch-ax)">Punched</text><text x="${pl-10}" y="${H-pb+72}" text-anchor="end" font-size="10.5" font-weight="700" style="fill:var(--ch-ax)">${esc(o.punch.rl)}</text>`;
  pts.forEach((p,i)=>{const cx=pl+slot*(i+.5),sel=p.m===S.month;
   if(sel)s+=`<rect x="${pl+slot*i+3}" y="${pt}" width="${slot-6}" height="${ih}" rx="8" style="fill:var(--ch-band);stroke:var(--ch-band-bd)"/>`;
-  s+=`<g class="mo2"><title>${fml(p.m)}${p.n?" — "+esc(o.tip(p)):" — no data"}</title>`;
+  s+=`<g class="mo2"><title>${fml(p.m)}${p.n?" — "+esc(o.tip(p)):" — no data"}${hasP&&p.P?` · ${N(p.P)} punched · ${o.punch.rl} ${o.punch.rate(p)}`:""}</title>`;
+  if(hasP&&p.P){const gh=p.P/pMax*(ih-6);s+=`<rect x="${pl+slot*i+5}" y="${pt+ih-gh}" width="${slot-10}" height="${gh}" rx="6" fill="#8a94a6" opacity=".13"/>`}
+  if(hasP)s+=`<text x="${cx}" y="${H-pb+56}" text-anchor="middle" font-size="10.5" font-weight="700" class="num" style="fill:var(--text)">${p.P?N(p.P):"–"}</text><text x="${cx}" y="${H-pb+72}" text-anchor="middle" font-size="10.5" font-weight="700" class="num" style="fill:var(--ch-pen)">${p.P&&p.n?o.punch.rate(p):"–"}</text>`;
   if(p.n){const bars=[[tv(p),"t","--text"],[p.a,"r","--ch-res"],[p.b,"o","--ch-pen"]],x0=cx-(3*bw+6)/2;
    bars.forEach(([val,g,col],j)=>{const h=Math.max(val?2:0,val/amtMax*ih),x=x0+j*(bw+3),y=pt+ih-h,lx=x+bw/2;
     s+=`<rect class="tb" x="${x}" y="${y}" width="${bw}" height="${h}" rx="4" fill="url(#${u}${g})"/>`+
@@ -835,7 +840,7 @@ $("dash").addEventListener("click",e=>{const t=e.target;
 });
 $("dash").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const el=e.target.closest("[data-bk],[data-c],[data-pick],[data-view],[data-hv],[data-hot],[data-thm],tr[data-i],tr[data-go],[data-ovgo]");if(el){e.preventDefault();el.click()}});
 let qT;$("dash").addEventListener("input",e=>{if(e.target.id==="q"){clearTimeout(qT);const x=e.target.value;qT=setTimeout(()=>{S.q=x;S.page=1;drawTable()},200)}});
-$("dash").addEventListener("change",e=>{if(e.target.id==="dim"){S.dim=e.target.value;render();return}if(e.target.id==="size"){S.size=+e.target.value;S.page=1;drawTable()}});
+$("dash").addEventListener("change",e=>{if(e.target.id==="hotMin"){S.hotMin=+e.target.value;const y=window.scrollY;renderOv();window.scrollTo(0,y);return}if(e.target.id==="dim"){S.dim=e.target.value;render();return}if(e.target.id==="size"){S.size=+e.target.value;S.page=1;drawTable()}});
 
 /* ======================= Dashboard Overview =======================
    Team Level Escalations Summary at the logged-in person's own level only:
@@ -843,7 +848,7 @@ $("dash").addEventListener("change",e=>{if(e.target.id==="dim"){S.dim=e.target.v
 const ovPicked=()=>S.sec==="ov"?Object.keys(S.sel).map(Number).filter(k=>k>=1):[];
 function ovLevel(){const ks=ovPicked();if(!ks.length)return S.lock>=0?S.lock:4;const base=Math.min(...ks),pool=selFilter(rowsOf().filter(inPeriod));
  for(let k=base-1;k>=0;k--)if(pool.some(r=>r["l"+k]))return k;return Math.max(0,base-1)}
-const OV=[["fce","First Call Escalation"],["onb","Onboarding Not Connected"],["ref","Refunds"],["fin","Fintech (Bajaj + Fibe)"]];
+const OV=[["onb","Onboarding Not Connected"],["fce","First Call Escalation"],["fin","Fintech (Bajaj + Fibe)"],["ref","Refunds"]];
 function ovGroups(view){const lvl=ovLevel(),kind=VIEWS[view].kind,rows=scopeRows(view).filter(inPeriod),g=new Map();
  rows.forEach(r=>{const e=r["l"+lvl]||DIR;let x=g.get(e);if(!x){x={e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,rows:[]};g.set(e,x)}x.rows.push(r)});
  const sf=kind==="case"?summ:summM,pm=new Map(),pr=modReady("ref")?scopeRows("ref").filter(inPeriod):null;
@@ -962,10 +967,10 @@ function afterRender(y){if(stuck)unstick();layoutVars();if(y!=null)window.scroll
    "Manager" in the insights = the level below you (L4 for Admin / L5 / NS). */
 const canOv=()=>S.lock<0||S.lock>=1;
 const MODS=[
- {v:"fce",t:"First Call Escalation",ic:"📞",kind:"case",rate:s=>s.n?s.res/s.n:null,rateL:"Resolution %",good:"high",tgt:[.95,.85],sub:s=>`${N(s.n)} escalations · ${N(s.pen)} open`},
  {v:"onb",t:"Onboarding Not Connected",ic:"🔌",kind:"case",rate:s=>s.n?s.res/s.n:null,rateL:"Resolution %",good:"high",tgt:[.95,.85],sub:s=>`${N(s.n)} escalated · ${N(s.pen)} open`},
- {v:"ref",t:"Refunds",ic:"↩️",kind:"money",rate:s=>s.n?s.ret.n/s.n:null,rateL:"Retained %",good:"high",tgt:[.95,.9],sub:s=>`${N(s.n)} punched · ${moneyShort(s.rfd.v)} refunded`},
- {v:"fin",t:"Fintech",ic:"💳",kind:"money",rate:s=>s.n?s.fst.n/s.n:null,rateL:"Cancelled %",good:"low",tgt:[.05,.07],sub:s=>`${N(s.n)} loans · ${N(s.aw)} awaiting FST`}
+ {v:"fce",t:"First Call Escalation",ic:"📞",kind:"case",rate:s=>s.n?s.res/s.n:null,rateL:"Resolution %",good:"high",tgt:[.95,.85],sub:s=>`${N(s.n)} escalations · ${N(s.pen)} open`},
+ {v:"fin",t:"Fintech",ic:"💳",kind:"money",rate:s=>s.n?s.fst.n/s.n:null,rateL:"Cancelled %",good:"low",tgt:[.05,.07],sub:s=>`${N(s.n)} loans · ${N(s.aw)} awaiting FST`},
+ {v:"ref",t:"Refunds",ic:"↩️",kind:"money",rate:s=>s.n?s.ret.n/s.n:null,rateL:"Retained %",good:"high",tgt:[.95,.9],sub:s=>`${N(s.n)} punched · ${moneyShort(s.rfd.v)} refunded`}
 ];
 const MCOL={fce:["#8fe3ff","#34c5ff","#1686b8"],onb:["#9dffd5","#2fd49a","#18a06f"],ref:["#e2d4ff","#a184ff","#6b4bd6"],fin:["#ffc6a8","#ff8a5c","#d9531e"]};
 const modOf=v=>MODS.find(m=>m.v===v);
@@ -1088,30 +1093,31 @@ function donutBlock(){
 function waterfall(steps,ready){
  if(!ready)return'<div class="empty">Not set up yet.</div>';
  const tot=steps[0].v;if(!tot)return'<div class="empty">No value in this period.</div>';
- const u="w"+(++UID),W=460,H=250,L=56,T=26,Bt=40,iw=W-L-10,ih=H-T-Bt,sl=iw/steps.length,bw=Math.min(60,sl*.6),mx=nice(tot),y=v=>T+ih-v/mx*ih;
+ const u="w"+(++UID),W=Math.max(460,steps.length*96+66),H=250,L=56,T=26,Bt=40,iw=W-L-10,ih=H-T-Bt,sl=iw/steps.length,bw=Math.min(60,sl*.6),mx=nice(tot),y=v=>T+ih-v/mx*ih;
  const GR={total:["#6fdcff","#1747a8"],neg:["#ff9aa8","#d23a52"],grey:["#dce8f5","#5b7590"],end:["#9dffd5","#18a06f"]};
  let s=`<svg viewBox="0 0 ${W} ${H}" class="agsvg" role="img" aria-label="Value waterfall"><defs>${Object.entries(GR).map(([k,c])=>`<linearGradient id="${u}${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient>`).join("")}</defs>`;
  for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line x1="${L}" x2="${W-10}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(${i?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${i?"3 5":"0"}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" style="fill:var(--ch-ax)" font-size="10.5">${shortAmt(v)}</text>`}
  let lvl=tot;steps.forEach((st,i)=>{const cx=L+sl*(i+.5);let top,bot,lab;
   if(st.t==="total"){top=tot;bot=0;lab=shortAmt(tot)}else if(st.t==="end"){top=st.v;bot=0;lab=shortAmt(st.v)}else{top=lvl;bot=lvl-st.v;lvl=bot;lab="−"+shortAmt(st.v)}
   const h=Math.max(st.v?2:0,y(bot)-y(top));
-  s+=`<rect x="${cx-bw/2}" y="${y(top)}" width="${bw}" height="${h}" rx="4" fill="url(#${u}${st.c||st.t})"><title>${esc(st.l)}: ${esc(money(st.v))} (${pc(st.v,tot,1)})</title></rect>`;
+  s+=`<rect x="${cx-bw/2}" y="${y(top)}" width="${bw}" height="${h}" rx="4" fill="url(#${u}${st.c||st.t})"><title>${esc(st.l)}: ${esc(money(st.v))} (${pc(st.v,tot,1)})${st.n!=null?` · ${N(st.n)} order(s)`:""}</title></rect>`;
   if(i<steps.length-1){const nx=st.t==="total"?tot:st.t==="end"?st.v:bot;s+=`<line x1="${cx+bw/2}" x2="${cx+sl-bw/2}" y1="${y(nx)}" y2="${y(nx)}" style="stroke:var(--ch-grid0)" stroke-dasharray="3 3"/>`}
-  s+=`<text x="${cx}" y="${y(top)-6}" text-anchor="middle" style="fill:var(--text)" font-size="11" font-weight="800">${lab}</text><text x="${cx}" y="${H-22}" text-anchor="middle" style="fill:var(--ch-mon)" font-size="11" font-weight="600">${esc(st.l)}</text><text x="${cx}" y="${H-8}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${pc(st.v,tot,0)}</text>`});
+  s+=`<text x="${cx}" y="${y(top)-6}" text-anchor="middle" style="fill:var(--text)" font-size="11" font-weight="800">${lab}</text><text x="${cx}" y="${H-22}" text-anchor="middle" style="fill:var(--ch-mon)" font-size="11" font-weight="600">${esc(st.l)}</text><text x="${cx}" y="${H-8}" text-anchor="middle" style="fill:var(--ch-mon-na)" font-size="10">${pc(st.v,tot,0)}${st.n!=null?" · "+N(st.n):""}</text>`});
  return s+"</svg>"}
 function waterfalls(){
  const rf=summM(scopeRows("ref").filter(inPeriod)),fn=summM(scopeRows("fin").filter(inPeriod));
- const a=[{l:"Punched",v:rf.v,t:"total"},{l:"Refunded",v:rf.rfd.v,t:"neg"}].concat(rf.oth.v?[{l:"Not updated",v:rf.oth.v,t:"neg",c:"grey"}]:[],[{l:"Retained",v:rf.ret.v,t:"end"}]);
- const b=[{l:"Processed",v:fn.v,t:"total"},{l:"FST",v:fn.fst.v,t:"neg"}].concat(fn.oth.v?[{l:"Other",v:fn.oth.v,t:"neg",c:"grey"}]:[],[{l:"Retained",v:fn.ret.v,t:"end"}]);
- return`<div class="g2">`+panel("Refunds value waterfall","Punched revenue (Sale Claim Amount) down to what was retained.",`<div class="fit">${waterfall(a,modReady("ref"))}</div>`)+
-  panel("Fintech value waterfall",`Loans value (Order Amount) down to what was retained. ⏳ ${N(fn.aw)} loan(s) worth ${moneyShort(fn.awv)} are still awaiting the FST cycle.`,`<div class="fit">${waterfall(b,modReady("fin"))}</div>`)+`</div>`}
+ const a=[{l:"Total Punched",v:rf.v,t:"total",n:rf.n},{l:"Refunded",v:rf.rfd.v,t:"neg",n:rf.rfd.n}].concat(rf.oth.v?[{l:"Not updated",v:rf.oth.v,t:"neg",c:"grey",n:rf.oth.n}]:[],[{l:"Retained",v:rf.ret.v,t:"end",n:rf.ret.n}]);
+ const viaP=modReady("ref")&&rf.v>=fn.v&&rf.v>0;
+ const b=(viaP?[{l:"Total Punched",v:rf.v,t:"total",n:rf.n},{l:"Not on loan",v:rf.v-fn.v,t:"neg",c:"grey",n:rf.n-fn.n},{l:"Loans Processed",v:fn.v,t:"end",c:"total",n:fn.n}]:[{l:"Loans Processed",v:fn.v,t:"total",n:fn.n}])
+  .concat([{l:"FST",v:fn.fst.v,t:"neg",n:fn.fst.n}],fn.oth.v?[{l:"Other",v:fn.oth.v,t:"neg",c:"grey",n:fn.oth.n}]:[],[{l:"Retained",v:fn.ret.v,t:"end",n:fn.ret.n}]);
+ return`<div class="g2">`+panel("Fintech value waterfall",`${viaP?`Total punched value (Sale Claim Amount, ${N(rf.n)} orders) → ${N(fn.n)} orders taken on a Fintech loan (Order Amount) → what was retained after FST.`:"Loans value (Order Amount) down to what was retained."} ⏳ ${N(fn.aw)} loan(s) worth ${moneyShort(fn.awv)} are still awaiting the FST cycle.`,`<div class="fit">${waterfall(b,modReady("fin"))}</div>`)+panel("Refunds value waterfall","Punched revenue (Sale Claim Amount) down to what was retained.",`<div class="fit">${waterfall(a,modReady("ref"))}</div>`)+`</div>`}
 
 /* L4 scorecard heatmap: one row per person at your level, key metrics colour-coded */
-const HM=[{v:"ord",l:"Total Punched",plain:1,tip:"Orders in the Refunds tab"},
- {v:"fce",l:"Escalated Total",get:s=>s.n,plain:1},{v:"fce",l:"Escalation %",pr:s=>s.n,tip:"Escalated Total ÷ Total Punched"},{v:"fce",l:"Resolved",get:s=>s.res,plain:1},{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},
- {v:"onb",l:"Escalated Total",get:s=>s.n,plain:1},{v:"onb",l:"Escalation %",pr:s=>s.n,tip:"Escalated Total ÷ Total Punched"},{v:"onb",l:"Resolved",get:s=>s.res,plain:1,tip:"Onboarded Already + Ready to connect + Refund Requested"},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Open",get:s=>s.pen},
- {v:"ref",l:"Retained",get:s=>s.ret.n,plain:1},{v:"ref",l:"Retained %",rate:1},{v:"ref",l:"Refunded",get:s=>s.rfd.n},{v:"ref",l:"Refund %",pr:s=>s.rfd.n,tip:"Refunded ÷ Total Punched"},{v:"ref",l:"Refunded ₹",get:s=>s.rfd.v,money:1},
- {v:"fin",l:"Loans Processed",get:s=>s.n,plain:1},{v:"fin",l:"Cancelled (FST)",get:s=>s.fst.n},{v:"fin",l:"FST %",pr:s=>s.fst.n,tip:"Order Status FST ÷ Total Punched"},{v:"fin",l:"Cancelled %",rate:1,tip:"FST ÷ Loans Processed"},{v:"fin",l:"Awaiting FST",get:s=>s.aw}];
+const HM=[{v:"ord",l:"Punched",tip:"Total Punched — orders in the Refunds tab",plain:1},
+ {v:"onb",l:"Total",tip:"Escalated Total",get:s=>s.n,plain:1},{v:"onb",l:"Esc %",pr:s=>s.n,tip:"Escalation % = Escalated Total ÷ Total Punched"},{v:"onb",l:"Resolved",get:s=>s.res,plain:1,tip:"Onboarded Already + Ready to connect + Refund Requested"},{v:"onb",l:"Res %",rate:1,tip:"Resolution % = Resolved ÷ Escalated Total"},{v:"onb",l:"Open",get:s=>s.pen},
+ {v:"fce",l:"Total",tip:"Escalated Total",get:s=>s.n,plain:1},{v:"fce",l:"Esc %",pr:s=>s.n,tip:"Escalation % = Escalated Total ÷ Total Punched"},{v:"fce",l:"Resolved",get:s=>s.res,plain:1},{v:"fce",l:"Res %",rate:1,tip:"Resolution % = Resolved ÷ Escalated Total"},{v:"fce",l:"Open",get:s=>s.pen},
+ {v:"fin",l:"Loans",tip:"Loans Processed",get:s=>s.n,plain:1},{v:"fin",l:"FST",tip:"Cancelled (FST)",get:s=>s.fst.n},{v:"fin",l:"FST %",pr:s=>s.fst.n,tip:"FST % = Order Status FST ÷ Total Punched"},{v:"fin",l:"Canc %",rate:1,tip:"Cancelled % = FST ÷ Loans Processed"},{v:"fin",l:"Await",tip:"Awaiting FST cycle",get:s=>s.aw},
+ {v:"ref",l:"Retained",get:s=>s.ret.n,plain:1},{v:"ref",l:"Ret %",rate:1,tip:"Retained % = Retained ÷ Total Punched"},{v:"ref",l:"Refunded",get:s=>s.rfd.n},{v:"ref",l:"Ref %",pr:s=>s.rfd.n,tip:"Refund % = Refunded ÷ Total Punched"},{v:"ref",l:"Ref ₹",tip:"Refunded value",get:s=>s.rfd.v,money:1}];
 const HMG=[{v:"ord",ic:"🧾",t:"Orders",col:"#8a94a6"}].concat(MODS.map(m=>({v:m.v,ic:m.ic,t:m.t,col:MCOL[m.v][1]})));
 function heatmap(){
  const lvl=ovLevel(),groups=new Map();
@@ -1124,16 +1130,16 @@ function heatmap(){
  const tot={};MODS.forEach(m=>tot[m.v]=scopeRows(m.v).filter(inPeriod));
  const mx=HM.map(c=>c.rate?1:Math.max(0,...list.map(g=>val(g.by,c)||0)));
  const cell=(c,v,i,attrs)=>{if(v==null)return`<td class="r hmx">–</td>`;let bg,txt;
-  if(c.pr){const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.05+a*.3).toFixed(2)})`:"transparent";txt=pc(v,1,2)}
+  if(c.pr){const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.05+a*.3).toFixed(2)})`:"transparent";txt=pc(v,1,1)}
   else if(c.rate){const t=toneOf(modOf(c.v),v);bg=t==="good"?"rgba(23,135,92,.20)":t==="warn"?"rgba(214,140,20,.24)":"rgba(201,48,72,.24)";txt=pp(v)}
   else if(c.plain){bg="transparent";txt=N(v)}
-  else{const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.06+a*.34).toFixed(2)})`:"transparent";txt=c.money?moneyShort(v):N(v)}
+  else{const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.06+a*.34).toFixed(2)})`:"transparent";txt=c.money?shortAmt(v):N(v)}
   return`<td class="r num hmc" style="background:${bg}"${attrs}>${txt}</td>`};
- const head1=`<tr><th rowspan="2">L${lvl}${lvl===4?" · Regional Head":""}</th>${HMG.map(m=>`<th colspan="${HM.filter(c=>c.v===m.v).length}" class="hmg" style="border-bottom:2px solid ${m.col}">${m.ic} ${m.t}</th>`).join("")}</tr>`;
- const head2=`<tr>${HM.map(c=>`<th class="r"${c.tip?` title="${esc(c.tip)}"`:""}>${c.l}${c.pr?'<small class="hpr">of punched</small>':""}</th>`).join("")}</tr>`;
- const body=list.map(g=>`<tr><td class="who"><b>${esc(g.name)}</b>${g.e!==DIR?`<small>${esc(g.e)}</small>`:""}</td>${HM.map((c,i)=>{const mv=c.v==="ord"?"ref":c.v;return cell(c,val(g.by,c),i,(g.e===DIR&&S.lock>=0)?"":` data-hv="${mv}" data-he="${esc(g.e)}" data-hn="${esc(g.name)}" tabindex="0" role="button" title="Open ${esc(modOf(mv).t)} for ${esc(g.name)}"`)}).join("")}</tr>`).join("");
- const foot=`<tr><td>Overall</td>${HM.map((c,i)=>{const v=val(tot,c);return v==null?'<td class="r">–</td>':`<td class="r num">${c.pr?pc(v,1,2):c.rate?pp(v):c.money?moneyShort(v):N(v)}</td>`}).join("")}</tr>`;
- return`<div class="tbox hm" style="max-height:none"><table class="tbl"><thead>${head1}${head2}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`}
+ const head1=`<tr><th rowspan="2">L${lvl}${lvl===4?"<small class=\"hpr\">Regional Head</small>":""}</th>${HMG.map(m=>`<th colspan="${HM.filter(c=>c.v===m.v).length}" class="hmg" style="border-bottom:2px solid ${m.col}">${m.ic} ${m.v==="onb"?"Onboarding Not Conn.":m.v==="fce"?"First Call Esc.":m.t}</th>`).join("")}</tr>`;
+ const head2=`<tr>${HM.map(c=>`<th class="r"${c.tip?` title="${esc(c.tip)}"`:""}>${c.l}${c.pr?'<small class="hpr">÷ punched</small>':""}</th>`).join("")}</tr>`;
+ const body=list.map(g=>`<tr><td class="who"${g.e!==DIR?` title="${esc(g.e)}"`:""}><b>${esc(g.name)}</b></td>${HM.map((c,i)=>{const mv=c.v==="ord"?"ref":c.v;return cell(c,val(g.by,c),i,(g.e===DIR&&S.lock>=0)?"":` data-hv="${mv}" data-he="${esc(g.e)}" data-hn="${esc(g.name)}" tabindex="0" role="button" title="Open ${esc(modOf(mv).t)} for ${esc(g.name)}"`)}).join("")}</tr>`).join("");
+ const foot=`<tr><td>Overall</td>${HM.map((c,i)=>{const v=val(tot,c);return v==null?'<td class="r">–</td>':`<td class="r num">${c.pr?pc(v,1,1):c.rate?pp(v):c.money?shortAmt(v):N(v)}</td>`}).join("")}</tr>`;
+ return`<div class="tbox hm hmc2" style="max-height:none"><table class="tbl"><thead>${head1}${head2}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`}
 
 /* ======================= Overview analyses: Fintech vs Refund, refund Pareto, L0 hotspots ======================= */
 
@@ -1187,17 +1193,29 @@ function bajFibCompare(){
 
 /* 3. L0 hotspots: who generates the most escalations, refunds and cancellations */
 function hotspots(){
- const g=new Map(),add=(r,f,amt)=>{if(!r.l0)return;let x=g.get(r.l0);if(!x){x={e:r.l0,name:r.l0_name||r.l0,id:"",mgr:"",fce:0,onb:0,rfd:0,rfv:0,fst:0,fsv:0,rows:[]};g.set(r.l0,x)}x[f]++;if(amt!=null)x[f==="rfd"?"rfv":"fsv"]+=amt;x.rows.push(r);if(!x.id)x.id=L0ID(r);if(!x.mgr)x.mgr=r.l1_name||r.l2_name||""};
- if(modReady("fce"))scopeRows("fce").filter(inPeriod).forEach(r=>add(r,"fce"));
+ /* Issue % = (Onboarding escalations + First Call escalations + Refunded + FST) ÷ Total Punched, per L0.
+    An FST loan whose customer (User ID) was also refunded under the same L0 is the same order, so it is counted once. */
+ const g=new Map(),get=r=>{let x=g.get(r.l0);if(!x){x={e:r.l0,name:r.l0_name||r.l0,id:"",mgr:"",p:0,fce:0,onb:0,rfd:0,rfv:0,fst:0,fsv:0,dup:0,ru:new Set(),fu:[],rows:[]};g.set(r.l0,x)}if(!x.id)x.id=L0ID(r);if(!x.mgr)x.mgr=r.l1_name||r.l2_name||"";return x},
+  add=(r,f,amt)=>{if(!r.l0)return;const x=get(r);x[f]++;if(amt!=null)x[f==="rfd"?"rfv":"fsv"]+=amt;x.rows.push(r)};
+ const uidOf=r=>String(r.user_id??"").trim();
+ if(modReady("ref"))scopeRows("ref").filter(inPeriod).forEach(r=>{if(!r.l0)return;const x=get(r);x.p++;if(r.k==="rfd"){add(r,"rfd",r.amt);if(uidOf(r))x.ru.add(uidOf(r))}});
  if(modReady("onb"))scopeRows("onb").filter(inPeriod).forEach(r=>add(r,"onb"));
- if(modReady("ref"))scopeRows("ref").filter(inPeriod).filter(r=>r.k==="rfd").forEach(r=>add(r,"rfd",r.amt));
- if(modReady("fin"))scopeRows("fin").filter(inPeriod).filter(r=>r.k==="fst").forEach(r=>add(r,"fst",r.amt));
- const L=[...g.values()].map(x=>({...x,t:x.fce+x.onb+x.rfd+x.fst})).sort((a,b)=>b.t-a.t||(b.rfv+b.fsv)-(a.rfv+a.fsv));
- if(!L.length)return'<div class="empty">No L0 records in this period.</div>';
- const tot=L.reduce((t,x)=>t+x.t,0);S.hot=L;
- const chart=pareto(L.map(x=>({l:x.name,v:x.t})),{key:"l0",title:"L0 Pareto",noun:"L0s",fmt:x=>N(Math.round(x)),col:C.cyan});
- const rows=L.slice(0,15).map((x,i)=>{return`<tr class="click" tabindex="0" data-hot="${i}" title="Open First Call Escalation for ${esc(x.name)}"><td class="num">${i+1}</td><td class="who"><b>${esc(x.name)}</b><small>${esc(x.id||x.e)}</small></td><td>${esc(x.mgr||"–")}</td><td class="r num">${N(x.onb)}</td><td class="r num">${N(x.fce)}</td><td class="r num">${N(x.rfd)}${x.rfv?`<small class="sub2">${moneyShort(x.rfv)}</small>`:""}</td><td class="r num">${N(x.fst)}${x.fsv?`<small class="sub2">${moneyShort(x.fsv)}</small>`:""}</td><td class="r num"><b>${N(x.t)}</b></td><td class="r num">${pc(x.t,tot,1)}</td></tr>`}).join("");
- return`<div class="g2 hot">`+`<div>${chart}</div>`+`<div class="tbox" style="max-height:none"><table class="tbl"><thead><tr><th>#</th><th>L0</th><th>Reports to</th><th class="r">Onboarding</th><th class="r">First Call</th><th class="r">Refunded</th><th class="r">FST</th><th class="r">Total</th><th class="r">Share</th></tr></thead><tbody>${rows}</tbody></table></div></div><p class="sub" style="margin-top:8px">${N(L.length)} L0 employee(s) in view; the table shows the top 15. Click a name to open their First Call Escalation records.</p>`}
+ if(modReady("fce"))scopeRows("fce").filter(inPeriod).forEach(r=>add(r,"fce"));
+ if(modReady("fin"))scopeRows("fin").filter(inPeriod).filter(r=>r.k==="fst").forEach(r=>{add(r,"fst",r.amt);if(r.l0)get(r).fu.push(uidOf(r))});
+ g.forEach(x=>{x.dup=x.fu.filter(u=>u&&x.ru.has(u)).length});
+ const all=[...g.values()].map(x=>{const t=x.onb+x.fce+x.rfd+x.fst-x.dup;return{...x,t,r:x.p?t/x.p:null}}).filter(x=>x.t);
+ if(!all.length)return'<div class="empty">No L0 issues in this period. 🎉</div>';
+ const mn=S.hotMin||0,hidden=mn?all.filter(x=>x.p<mn).length:0,L=all.filter(x=>!mn||x.p>=mn).sort((a,b)=>(a.r==null)-(b.r==null)||(b.r??0)-(a.r??0)||b.t-a.t);S.hot=L;
+ const pick=`<div class="toolbar" style="margin:0 0 10px"><label for="hotMin" class="sub" style="margin:0">Include L0s with at least</label><select id="hotMin" aria-label="Minimum punched orders">${[0,5,10,20,50,100].map(n=>`<option value="${n}"${n===mn?" selected":""}>${n?n+" punched orders":"any number of punched orders"}</option>`).join("")}</select>${hidden?`<span class="sub" style="margin:0">${N(hidden)} L0(s) below this are left out.</span>`:""}</div>`;
+ if(!L.length)return pick+'<div class="empty">No L0 meets this minimum.</div>';
+ const T=all.reduce((t,x)=>(t.t+=x.t,t),{t:0}),P=modReady("ref")?scopeRows("ref").filter(inPeriod).filter(r=>r.l0).length:0,noP=L.filter(x=>x.r==null).length;
+ const top=L.filter(x=>x.r!=null).slice(0,15),mx=Math.max(.0001,...top.map(x=>x.r)),W=980,LW=190,BW=W-LW-150,rh=24,H=top.length*rh+6;
+ let ch=`<svg viewBox="0 0 ${W} ${H}" class="frc" role="img" aria-label="L0 issue percentage ranking">`;
+ top.forEach((x,i)=>{const y=i*rh+3,w=Math.max(3,x.r/mx*BW),nm=x.name.length>20?x.name.slice(0,19)+"…":x.name;
+  ch+=`<g data-hot="${i}" style="cursor:pointer"><title>${esc(x.name)}: ${N(x.t)} issue(s)${x.dup?` (${N(x.dup)} FST also refunded, counted once)`:""} ÷ ${N(x.p)} punched = ${pc(x.r,1,2)}</title><rect x="0" y="${y}" width="${W}" height="${rh}" fill="transparent"/><text x="${LW-8}" y="${y+15}" text-anchor="end" font-size="11.5" font-weight="700" style="fill:var(--text)">${i+1}. ${esc(nm)}</text><rect x="${LW}" y="${y+4}" width="${w}" height="15" rx="4" fill="${C.red[1]}" opacity="${(.45+.55*x.r/mx).toFixed(2)}"/><text x="${LW+w+6}" y="${y+15}" font-size="11" font-weight="800" style="fill:var(--text)">${pc(x.r,1,2)} <tspan font-weight="500" style="fill:var(--muted)">· ${N(x.t)}/${N(x.p)}</tspan></text></g>`});
+ ch+="</svg>";
+ const rows=L.slice(0,15).map((x,i)=>`<tr class="click" tabindex="0" data-hot="${i}" title="Open Onboarding Not Connected for ${esc(x.name)}"><td class="num">${i+1}</td><td class="who"><b>${esc(x.name)}</b><small>${esc(x.id||x.e)}</small></td><td>${esc(x.mgr||"–")}</td><td class="r num">${x.p?N(x.p):"–"}</td><td class="r num">${N(x.onb)}</td><td class="r num">${N(x.fce)}</td><td class="r num">${N(x.fst)}${x.dup?`<small class="sub2" title="${N(x.dup)} of these customers were also refunded, so they are counted once">${N(x.dup)} also refunded</small>`:x.fsv?`<small class="sub2">${moneyShort(x.fsv)}</small>`:""}</td><td class="r num">${N(x.rfd)}${x.rfv?`<small class="sub2">${moneyShort(x.rfv)}</small>`:""}</td><td class="r num"><b>${N(x.t)}</b></td><td class="r num"><b>${x.r==null?"–":pc(x.r,1,2)}</b></td></tr>`).join("");
+ return pick+`<div class="hot"><div class="fit" style="margin-bottom:12px">${ch}</div><div class="tbox" style="max-height:none"><table class="tbl"><thead><tr><th>#</th><th>L0</th><th>Reports to</th><th class="r">Total Punched</th><th class="r">Onboarding</th><th class="r">First Call</th><th class="r">FST</th><th class="r">Refunded</th><th class="r" title="Onboarding + First Call + Refunded + FST, with an FST loan that was also refunded counted once">Total issues</th><th class="r" title="Total issues ÷ Total Punched">Issue %</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td></td><td>All L0 in view</td><td></td><td class="r num">${N(P)}</td><td class="r num">${N(all.reduce((t,x)=>t+x.onb,0))}</td><td class="r num">${N(all.reduce((t,x)=>t+x.fce,0))}</td><td class="r num">${N(all.reduce((t,x)=>t+x.fst,0))}<small class="sub2">${N(all.reduce((t,x)=>t+x.dup,0))} also refunded</small></td><td class="r num">${N(all.reduce((t,x)=>t+x.rfd,0))}</td><td class="r num">${N(T.t)}</td><td class="r num">${pc(T.t,P,2)}</td></tr></tfoot></table></div></div><p class="sub" style="margin-top:8px">Ranked by Issue % = (Onboarding + First Call + FST + Refunded) ÷ Total Punched (orders in the Refunds tab). An FST loan whose customer was also refunded is the same order, so it is counted once. ${N(L.length)} L0 employee(s) with issues; the chart and table show the top 15.${noP?` ${N(noP)} L0(s) have issues but no punched orders, so no % — listed last.`:""} Click a name to open their Onboarding Not Connected records.</p>`}
 
 function anaClick(e){
  const pa=e.target.closest("[data-pareto]");if(pa){const k=pa.dataset.pareto,v=pa.dataset.pv;
@@ -1209,7 +1227,7 @@ function anaClick(e){
  return false}
 function hotOpen(i){const x=S.hot[i];if(!x)return;const s={};
  for(let j=1;j<=S.top;j++){if(j===S.lock)continue;const c={};x.rows.forEach(r=>{const v=r["l"+j]||DIR;c[v]=(c[v]||0)+1});const best=Object.entries(c).sort((a,b)=>b[1]-a[1])[0];if(best)s[j]=best[0]}
- s[0]=x.e;S.want=s;S.wantLbl={0:x.name};setSec("fce");if(S.sec==="fce")applySel(s,true);window.scrollTo({top:0,behavior:"smooth"})}
+ s[0]=x.e;S.want=s;S.wantLbl={0:x.name};setSec("onb");if(S.sec==="onb")applySel(s,true);window.scrollTo({top:0,behavior:"smooth"})}
 
 function renderOv(){
  const y0=window.scrollY;
@@ -1230,7 +1248,7 @@ function renderOv(){
   panel("Needs attention",`For ${esc(periodTxt())}, with the L${ml} manager behind each point.`,ins.length?`<ul class="insights">${ins.map(i=>`<li><span class="dot ${i.t}"></span><span>${i.x}</span></li>`).join("")}</ul>`:'<div class="empty">Nothing needs attention right now. 🎉</div>')+`</div>`+
   panel(`L${lvl} scorecard`,`Key metrics side by side for ${esc(periodTxt())}. Green / amber / red follow the targets; counts and amounts get redder as they grow. Click a cell to open that module for that person.`,heatmap())+
   paretoBlocks()+
-  panel("L0 hotspots",`L0 employees ranked by issues raised against them in ${esc(periodTxt())}: onboarding and first-call escalations, refunds and FST cancellations.`,hotspots())+
+  panel("L0 hotspots",`L0 employees ranked by Issue % in ${esc(periodTxt())}: their onboarding escalations, first-call escalations, FST cancellations and refunds, divided by their total punched orders.`,hotspots())+
   `<div class="g2">`+panel("Open backlog by age","First Call Escalation and Onboarding Not Connected items still open, by days since the case month. Click a module to open it.",backlogBlock())+
   panel(`Who holds the open backlog`,`All open items across the four modules, by L${ml} manager.`,donutBlock())+`</div>`+
   waterfalls()+
