@@ -200,7 +200,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 .jsum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:10px}.jsum div{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px}.jsum span{display:block;font-size:11.5px;color:var(--muted);font-weight:700}.jsum b{font-size:20px;font-weight:800}.jsum small{display:block;font-size:11px;color:var(--faint)}.jsum .bad b{color:var(--red)}
 .sk svg{width:100%;height:auto}.sankey .lk:hover{opacity:.6}
 .hot{display:block}#dash>*,.g2>*,.panel{min-width:0}.tbox{max-width:100%}.ovcw{overflow-x:auto}.ovc{display:block;width:100%;height:auto}.ovtot{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ch-band);font-size:12px;color:var(--ch-mon)}.ovtot b{color:var(--text)}.jsteps{position:relative;height:18px;margin:4px 0 2px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.jsteps span{position:absolute;white-space:nowrap}.jsum .good b{color:var(--green)}.sankey text{paint-order:stroke;stroke:var(--p2);stroke-width:3px;stroke-linejoin:round}.sub2{display:block;font-size:10.5px;color:var(--faint);font-weight:600}
-.jsum.j3{grid-template-columns:repeat(3,minmax(0,1fr))}.bfc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px}.bfcard{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px;cursor:pointer}.bfh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.bfh b{font-size:15px}.bfg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 12px}@media(max-width:900px){.bfg{grid-template-columns:repeat(2,minmax(0,1fr))}}.bfsub{font-size:13px;font-weight:800;margin:2px 0 8px;color:var(--text)}.bf2{align-items:start}.bfg span{display:block;font-size:11px;color:var(--muted);font-weight:700}.bfg b{font-size:17px;font-weight:800}.bfg small{display:block;font-size:11px;color:var(--faint)}@media(max-width:1100px){.jsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.jsum.j3{grid-template-columns:repeat(3,minmax(0,1fr))}.bfl-baj{fill:#0b2a73}.bfl-fib{fill:#8a6300}[data-theme=dark] .bfl-baj{fill:#9fbcff}[data-theme=dark] .bfl-fib{fill:#ffd66b}[data-theme=dark] .bfs-baj{stroke:#6f9bff}[data-theme=dark] .bfd-baj{fill:#6f9bff}[data-theme=dark] .bfs-fib{stroke:#ffc533}[data-theme=dark] .bfd-fib{fill:#ffc533}.bfc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px}.bfcard{background:var(--p2);border:1px solid var(--l2);border-radius:12px;padding:10px 12px;cursor:pointer}.bfh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.bfh b{font-size:15px}.bfg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 12px}@media(max-width:900px){.bfg{grid-template-columns:repeat(2,minmax(0,1fr))}}.bfsub{font-size:13px;font-weight:800;margin:2px 0 8px;color:var(--text)}.bf2{align-items:start}.bfg span{display:block;font-size:11px;color:var(--muted);font-weight:700}.bfg b{font-size:17px;font-weight:800}.bfg small{display:block;font-size:11px;color:var(--faint)}@media(max-width:1100px){.jsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <button type="button" class="theme-toggle theme-fixed" role="switch" aria-checked="false" aria-label="Switch to dark theme"><span class="o sun">☀️<em>Light</em></span><span class="tr"><span class="kn"></span></span><span class="o moon">🌙<em>Dark</em></span></button>
@@ -1169,7 +1169,7 @@ function paretoBlocks(){
 
 /* Fintech: Bajaj vs Fibe — lender totals, then loans / FST / Cancelled % per manager */
 function bajFibCompare(){
- const LN=[["baj","Bajaj",C.blue],["fib","Fibe",C.purple]].filter(([v])=>modReady(v));
+ const LN=[["baj","Bajaj",BFC.baj],["fib","Fibe",BFC.fib]].filter(([v])=>modReady(v));
  if(!LN.length)return'<div class="empty">Fintech Bajaj and Fibe are not set up yet.</div>';
  const fm=modOf("fin"),lvl=ovLevel(),rows={},g=new Map();
  LN.forEach(([v])=>{rows[v]=scopeRows(v).filter(inPeriod);rows[v].forEach(r=>{const e=r["l"+lvl]||DIR;let x=g.get(e);if(!x){x={e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,by:{}};g.set(e,x)}(x.by[v]||(x.by[v]=[])).push(r)})});
@@ -1193,25 +1193,35 @@ function bajFibCompare(){
  return cards+`<div class="g2 bf2"><div><div class="bfsub">Month by month${S.fy==="all"?"":" · "+esc(fyLabel(S.fy))}</div>${bfMonths(LN)}</div><div><div class="bfsub">By L${lvl} manager</div>${mgr}</div></div>`}
 
 /* Bajaj vs Fibe per month: loans (columns, left axis) and Cancelled % (lines, right axis) */
+/* lender colours used across the Bajaj vs Fibe panel: [light, mid, dark] */
+const BFC={baj:["#7fa6f2","#1f4fbf","#0b2a73"],fib:["#f7d36b","#d39b00","#9a6f00"]};
 function bfMonths(LN){
  const yr={};LN.forEach(([v])=>yr[v]=scopeRows(v).filter(inYear));const ms=chartMonths(LN.flatMap(([v])=>yr[v]));
  const D=ms.map(m=>({m,by:Object.fromEntries(LN.map(([v])=>{const x=yr[v].filter(r=>r.m===m),f=x.filter(r=>r.k==="fst").length;return[v,{n:x.length,f,r:x.length?f/x.length:null}]}))}));
  if(!D.some(d=>LN.some(([v])=>d.by[v].n)))return'<div class="empty">No loans in this year.</div>';
- const W=600,H=300,pl=46,pr=46,pt=20,pb=40,iw=W-pl-pr,ih=H-pt-pb,sl=iw/ms.length,bw=Math.min(16,(sl-8)/LN.length);
- const mx=niceInt(Math.max(1,...D.flatMap(d=>LN.map(([v])=>d.by[v].n)))*1.1),rmx=Math.max(.1,Math.ceil(Math.max(...D.flatMap(d=>LN.map(([v])=>d.by[v].r||0)))*1.25*20)/20);
- const y=v=>pt+ih-v/mx*ih,yr2=r=>pt+ih-r/rmx*ih,u="bm"+(++UID);
- let s=`<svg viewBox="0 0 ${W} ${H}" class="frc" role="img" aria-label="Bajaj versus Fibe by month"><defs>${LN.map(([v,,c])=>`<linearGradient id="${u}${v}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient>`).join("")}</defs>`;
- for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);s+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" style="stroke:var(${i?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${i?"3 5":"0"}"/><text x="${pl-6}" y="${yy+4}" text-anchor="end" font-size="10" style="fill:var(--ch-ax)">${N(v)}</text><text x="${W-pr+6}" y="${yy+4}" font-size="10" style="fill:var(--ch-pct)">${(rmx*i/4*100).toFixed(0)}%</text>`}
- const tl=y(0)-ih*(1-.07/rmx);if(.07<rmx)s+=`<line x1="${pl}" x2="${W-pr}" y1="${yr2(.07)}" y2="${yr2(.07)}" stroke-dasharray="5 4" style="stroke:var(--red)" opacity=".5"/><text x="${W-pr-4}" y="${yr2(.07)-4}" text-anchor="end" font-size="9.5" style="fill:var(--red)">7% limit</text>`;
+ const W=640,H=340,pl=46,pr=46,pt=24,pb=40,iw=W-pl-pr,ih=H-pt-pb,sl=iw/ms.length,bw=Math.min(18,(sl-8)/LN.length);
+ /* columns use the lower 55% of the plot (left axis); Cancelled % lines use the top band (right axis), so labels do not collide */
+ const bH=ih*.55,band=ih*.36,mx=niceInt(Math.max(1,...D.flatMap(d=>LN.map(([v])=>d.by[v].n)))*1.05),rmx=Math.max(.1,Math.ceil(Math.max(...D.flatMap(d=>LN.map(([v])=>d.by[v].r||0)))*1.15*20)/20);
+ const y=v=>pt+ih-v/mx*bH,yr2=r=>pt+band-r/rmx*band,u="bm"+(++UID),rot=bw<N(mx).length*6+2;
+ let s=`<svg viewBox="0 0 ${W} ${H}" class="frc bfm" role="img" aria-label="Bajaj versus Fibe by month"><defs>${LN.map(([v,,c])=>`<linearGradient id="${u}${v}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset=".5" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient>`).join("")}</defs>`;
+ for(let i=0;i<=4;i++){const v=mx*i/4,yy=y(v);s+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" style="stroke:var(${i?"--ch-grid":"--ch-grid0"})" stroke-dasharray="${i?"3 5":"0"}"/><text x="${pl-6}" y="${yy+4}" text-anchor="end" font-size="10" style="fill:var(--ch-ax)">${N(v)}</text>`}
+ for(let i=0;i<=2;i++){const r=rmx*i/2;s+=`<text x="${W-pr+6}" y="${yr2(r)+4}" font-size="10" style="fill:var(--ch-pct)">${+(r*100).toFixed(1)}%</text>`}
+ s+=`<line x1="${W-pr+2}" x2="${W-pr+2}" y1="${yr2(rmx)}" y2="${yr2(0)}" style="stroke:var(--ch-pct-line)"/>`;
+ if(.07<rmx)s+=`<line x1="${pl}" x2="${W-pr}" y1="${yr2(.07)}" y2="${yr2(.07)}" stroke-dasharray="5 4" style="stroke:var(--red)" opacity=".5"/><text x="${W-pr-6}" y="${yr2(.07)-4}" text-anchor="end" font-size="9.5" style="fill:var(--red)">7% limit</text>`;
  D.forEach((d,i)=>{const cx=pl+sl*(i+.5),x0=cx-LN.length*bw/2,sel=d.m===S.month;
   if(sel)s+=`<rect x="${pl+sl*i+2}" y="${pt}" width="${sl-4}" height="${ih}" rx="6" style="fill:var(--ch-band)"/>`;
   s+=`<g><title>${fml(d.m)}\n${LN.map(([v,l])=>`${l}: ${N(d.by[v].n)} loans · ${N(d.by[v].f)} FST · ${d.by[v].r==null?"–":(d.by[v].r*100).toFixed(1)+"%"}`).join("\n")}</title><rect x="${pl+sl*i}" y="${pt}" width="${sl}" height="${ih}" fill="transparent"/>`;
-  LN.forEach(([v],j)=>{const n=d.by[v].n;if(n)s+=`<rect x="${x0+j*bw+1}" y="${y(n)}" width="${bw-2}" height="${pt+ih-y(n)}" rx="3" fill="url(#${u}${v})"/>`});
+  LN.forEach(([v],j)=>{const n=d.by[v].n;if(!n)return;const bx=x0+j*bw+1,w=bw-2,lx=bx+w/2,ty=y(n);
+   s+=`<rect x="${bx}" y="${ty}" width="${w}" height="${pt+ih-ty}" rx="3" fill="url(#${u}${v})"/>`+
+    (rot?`<text transform="translate(${lx+3.5} ${ty-4}) rotate(-90)" font-size="9.5" font-weight="800" class="bfl-${v}">${N(n)}</text>`:`<text x="${lx}" y="${ty-4}" text-anchor="middle" font-size="9.5" font-weight="800" class="bfl-${v}">${N(n)}</text>`)});
   s+=`<text x="${cx}" y="${H-pb+16}" text-anchor="middle" font-size="10.5" font-weight="${sel?800:600}" style="fill:var(${sel?"--ch-mon-sel":"--ch-mon"})">${MN[+d.m.slice(5)-1].toUpperCase()}</text></g>`});
- LN.forEach(([v,,c])=>{const pts=D.map((d,i)=>d.by[v].r==null?null:[pl+sl*(i+.5),yr2(d.by[v].r),d.by[v].r]).filter(Boolean);if(!pts.length)return;
-  s+=`<polyline points="${pts.map(p=>p[0]+","+p[1]).join(" ")}" fill="none" stroke="${c[2]}" stroke-width="2.5" stroke-linejoin="round"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="${c[2]}" style="stroke:var(--p2)" stroke-width="1.5"/>`).join("")});
+ LN.forEach(([v,,c],j)=>{const pts=D.map((d,i)=>d.by[v].r==null?null:[pl+sl*(i+.5),yr2(d.by[v].r),d.by[v].r,i]).filter(Boolean);if(!pts.length)return;
+  const P=pts.map(p=>p[0]+","+p[1]).join(" ");
+  s+=`<polyline points="${P}" fill="none" style="stroke:var(--p2)" stroke-width="6" stroke-linejoin="round" opacity=".9"/><polyline points="${P}" fill="none" stroke="${c[2]}" stroke-width="2.6" stroke-linejoin="round" class="bfs-${v}"/>`+
+   pts.map(p=>{const other=LN.find(([o])=>o!==v),or=other?D[p[3]].by[other[0]].r:null,above=or==null?j===0:p[2]>=or,ly=above?p[1]-8:p[1]+15;
+    return`<circle cx="${p[0]}" cy="${p[1]}" r="3.6" fill="${c[2]}" class="bfd-${v}" style="stroke:var(--p2)" stroke-width="1.6"/><text x="${p[0]}" y="${ly}" text-anchor="middle" font-size="9.5" font-weight="800" class="bfl-${v}" style="paint-order:stroke;stroke:var(--p2);stroke-width:3px">${(p[2]*100).toFixed(1)}%</text>`}).join("")});
  s+="</svg>";
- return`<div class="trend-legend">${LN.map(([,l,c])=>`<span><i class="sw" style="background:linear-gradient(180deg,${c[0]},${c[2]})"></i>${l} loans</span><span><i class="sw" style="background:${c[2]};height:3px;width:20px;vertical-align:middle"></i>${l} Cancelled %</span>`).join("")}</div><div class="fit">${s}</div>`}
+ return`<div class="trend-legend">${LN.map(([v,l,c])=>`<span><i class="sw" style="background:linear-gradient(180deg,${c[0]},${c[2]})"></i>${l} loans</span><span><i class="sw" style="background:${c[2]};height:3px;width:20px;vertical-align:middle"></i>${l} Cancelled %</span>`).join("")}</div><div class="fit">${s}</div>`}
 
 /* 3. L0 hotspots: who generates the most escalations, refunds and cancellations */
 function hotspots(){
