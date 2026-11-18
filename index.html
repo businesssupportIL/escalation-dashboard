@@ -181,7 +181,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 /* ---------- management overview ---------- */
 .focus.slim{grid-template-columns:1fr auto;padding:14px 18px}.focus.slim h2{font-size:20px;margin:2px 0 0}.focus.slim .chips{justify-content:flex-end}
 .mcards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
-.mcard{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px 12px;box-shadow:0 10px 28px var(--sh);cursor:pointer;overflow:hidden;transition:transform .15s,border-color .15s}
+.mcard .mp{display:flex;justify-content:space-between;gap:8px;margin:2px 0 8px;padding:6px 10px;border-radius:10px;background:var(--ch-band);font-size:11.5px;color:var(--ch-mon)}.mcard .mp span{display:flex;flex-direction:column}.mcard .mp b{color:var(--text);font-size:13.5px}.mcard{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px 12px;box-shadow:0 10px 28px var(--sh);cursor:pointer;overflow:hidden;transition:transform .15s,border-color .15s}
 .mcard:hover{transform:translateY(-2px);border-color:var(--cyan)}.mcard:before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--line)}
 .mcard.good:before{background:linear-gradient(90deg,#17a673,#4bd39a)}.mcard.warn:before{background:linear-gradient(90deg,#d98a0b,#ffbb3d)}.mcard.bad:before{background:linear-gradient(90deg,#c93048,#ff7081)}
 .mcard.off{opacity:.6;cursor:default}.mh{display:flex;gap:7px;align-items:center;font-weight:800;font-size:13px;color:var(--head)}
@@ -190,7 +190,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 .spark{width:120px;height:36px;flex:none}.md{display:flex;gap:6px;align-items:center;margin-bottom:4px}.md small,.mcard>small{font-size:11.5px;color:var(--faint)}
 .insights{list-style:none;margin:0;padding:0;display:grid;gap:7px}.insights li{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border-radius:10px;background:var(--inset);border:1px solid var(--l2);font-size:13px}
 .dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:var(--cyan)}.dot.good{background:var(--green)}.dot.warn{background:var(--amber)}.dot.bad{background:var(--red)}
-.hm .tbl th.hmg{text-align:center}.hm .hmc{font-weight:700;color:var(--text);cursor:pointer}.hm .hmc:hover{outline:2px solid var(--cyan);outline-offset:-2px}.hm .hmx{color:var(--faint)}.hm td.who,.hm tfoot td:first-child{position:sticky;left:0;z-index:1;background:linear-gradient(var(--p2),var(--p2)),var(--bg0);box-shadow:6px 0 8px -6px var(--sh)}.hm thead tr:first-child th:first-child{position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px var(--sh)}
+.hm .tbl th.hmg{text-align:center}.hm .hmc{font-weight:700;color:var(--text);cursor:pointer}.hm .hmc:hover{outline:2px solid var(--cyan);outline-offset:-2px}.hm .hmx{color:var(--faint)}.hm th small.hpr{display:block;font-size:10px;font-weight:600;color:var(--faint)}.hm td.who,.hm tfoot td:first-child{position:sticky;left:0;z-index:1;background:linear-gradient(var(--p2),var(--p2)),var(--bg0);box-shadow:6px 0 8px -6px var(--sh)}.hm thead tr:first-child th:first-child{position:sticky;left:0;z-index:3;box-shadow:6px 0 8px -6px var(--sh)}
 .stake{padding:10px 0 14px;border-bottom:1px dashed var(--line)}.stake:last-child{border-bottom:0}.sh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}.sh .num{font-size:20px;font-weight:800}
 .bar.big{height:16px}.sl{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12.5px;color:var(--tx2)}.sl i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 .sec-h{font-size:17px;margin:22px 2px 10px}
@@ -511,7 +511,7 @@ const selFilter=rows=>rows.filter(r=>LV.every(k=>!S.sel[k]||match(r,k,S.sel[k]))
 function walk(sel){
  let pool=rowsOf().filter(inPeriod),ok=true,last=null,need=null,invalid=null;const out=[];
  for(const k of LV){
-  if(k>S.top){out.push({k,st:"above"});continue}
+  if(k>S.top||(S.sec==="ov"&&k===0)){out.push({k,st:"above"});continue}
   if(k===S.lock){out.push({k,st:"lock",last});last=k;continue}
   if(!ok){out.push({k,st:"wait",last,need});continue}
   const nm=new Map();let blank=0;pool.forEach(r=>{const e=r["l"+k];if(e){if(!nm.has(e))nm.set(e,r["l"+k+"_name"]||e)}else blank++});
@@ -598,6 +598,7 @@ function drill(lv,email){const rows=S.f.filter(r=>(r["l"+lv]||DIR)===email),s={.
 function render(w){
  if(S.sec==="ov")return renderOv();
  const y0=window.scrollY;w=w||walk(S.sel);drawPeriod();drawHier(w);drawCrumbs(w);drawSelNote();
+ S.P=modReady("ref")?selFilter(viewRows("ref").filter(inPeriod)).length:null;
  const v=VIEWS[S.ds],base=w.pool,dims=dimList(base);
  if(!dims.some(d=>d.k===S.dim))S.dim=dims[0]?.k||"";
  const cat=S.cat?base.filter(r=>dimVal(r,S.catDim)===S.cat):base,f=S.bk?cat.filter(r=>r.k===S.bk):cat;S.f=f;
@@ -616,8 +617,9 @@ const panel=(title,sub,body,extra)=>`<section class="panel"><div class="block-h"
 
 function caseBody(v,f,cat,yc,catRows){
  const s=summ(f),ds=S.ds;
- const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
-  :[["Escalated Total",N(s.n),"in current view","info"],["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Open",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Open %",pc(s.pen,s.n,2),"open ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
+ const PK=[["Total Punched",S.P==null?"–":N(S.P),"orders in the Refunds tab","info"],["Escalation %",S.P?pc(s.n,S.P,2):"–","escalations ÷ punched orders","warn"]];
+ const K=ds==="fce"?[["Total escalations",N(s.n),"in current view","info"],...PK,["Resolved",N(s.res),pc(s.res,s.n)+" of total","good"],["Yet to resolve",N(s.pen),pc(s.pen,s.n)+" of total","bad"],["Resolution %",pc(s.res,s.n,2),"resolved ÷ total",s.n&&s.rp>=.8?"good":"warn"],["Pendency %",pc(s.pen,s.n,2),"yet to resolve ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"],["Open > 30 days",N(s.o30),pc(s.o30,s.pen)+" of open","bad"]]
+  :[["Escalated Total",N(s.n),"in current view","info"],...PK,["Onboarded Already",N(s.b.onb),pc(s.b.onb||0,s.n)+" of total","good"],["Ready to connect",N(s.b.rtc),pc(s.b.rtc||0,s.n)+" of total","info"],["Refund Requested",N(s.b.ref),pc(s.b.ref||0,s.n)+" of total","pur"],["Open",N(s.pen),"blank Sales Bucketing","bad"],["Resolution %",pc(s.res,s.n,2),"(onboarded + ready + refund) ÷ total",s.n&&s.rp>=.9?"good":"warn"],["Open %",pc(s.pen,s.n,2),"open ÷ total","warn"],["Avg age of open",s.avg==null?"–":s.avg.toFixed(1)+" d","days since raised",""],["Open > 7 days",N(s.o7),pc(s.o7,s.pen)+" of open","bad"]].concat(s.b.oth?[["Other values",N(s.b.oth),"not one of the 3 buckets",""]]:[]);
  const ms=chartMonths(yc),pts=ms.map(m=>{const x=yc.filter(r=>r.m===m),a=x.filter(r=>r.res).length;return{m,n:x.length,t:x.length,a,b:x.filter(r=>r.open).length,p:x.length?a/x.length:null}});
  const lab=ds==="fce"?"Yet to resolve":"Open";
  $("kbar").innerHTML=kpiHtml(K);return panel("Month-on-month: total, resolved and "+lab.toLowerCase(),(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Months with no records show “No data”.",
@@ -630,12 +632,12 @@ function caseBody(v,f,cat,yc,catRows){
 function moneyBody(v,f,cat,yc,catRows,dims){
  const s=summM(f),isFin=!!v.fin;
  const K=!isFin?[
-   ["Punched Count",N(s.n),"rows with a Month","info"],["Punched Revenue",moneyShort(s.v),"Sale Claim Amount","info",money(s.v)],
+   ["Total Punched",N(s.n),"orders (rows with a Month)","info"],["Punched Revenue",moneyShort(s.v),"Sale Claim Amount","info",money(s.v)],
    ["Retained Count",N(s.ret.n),pc(s.ret.n,s.n)+" of punched","good"],["Retained Revenue",moneyShort(s.ret.v),pc(s.ret.v,s.v)+" of revenue","good",money(s.ret.v)],
    ["Refunded Count",N(s.rfd.n),pc(s.rfd.n,s.n)+" of punched","bad"],["Refunded Revenue",moneyShort(s.rfd.v),pc(s.rfd.v,s.v)+" of revenue","bad",money(s.rfd.v)],
-   ["Retained %",pc(s.ret.n,s.n,2),"retained ÷ punched (count)",!s.n?"":s.ret.n/s.n>=.95?"good":s.ret.n/s.n>=.9?"warn":"bad"],["Refunded %",pc(s.rfd.n,s.n,2),"refunded ÷ punched (count)","warn"]]
+   ["Retained %",pc(s.ret.n,s.n,2),"retained ÷ punched (count)",!s.n?"":s.ret.n/s.n>=.95?"good":s.ret.n/s.n>=.9?"warn":"bad"],["Refund %",pc(s.rfd.n,s.n,2),"refunded ÷ total punched orders","warn"]]
   .concat(s.oth.n?[["Status not updated",N(s.oth.n),"neither Retained nor Refunded","",money(s.oth.v)]]:[])
-  :[["Loans Processed",N(s.n),"rows with a Month","info"],["Loans Processed Value",moneyShort(s.v),"Order Amount","info",money(s.v)],
+  :[["Loans Processed",N(s.n),"rows with a Month","info"],["Total Punched",S.P==null?"–":N(S.P),"orders in the Refunds tab","info"],["FST %",S.P?pc(s.fst.n,S.P,2):"–","Order Status FST ÷ punched orders","bad"],["Loans Processed Value",moneyShort(s.v),"Order Amount","info",money(s.v)],
    ["Retained",N(s.ret.n),pc(s.ret.n,s.n)+" of loans","good"],["Retained Value",moneyShort(s.ret.v),pc(s.ret.v,s.v)+" of value","good",money(s.ret.v)],
    ["Cancelled (FST)",N(s.fst.n),pc(s.fst.n,s.n)+" of loans","bad"],["Cancelled (FST) Value",moneyShort(s.fst.v),pc(s.fst.v,s.v)+" of value","bad",money(s.fst.v)],
    ["Cancelled %",pc(s.fst.n,s.n,2),"FST ÷ loans processed (count)",!s.n?"":s.fst.n/s.n<=.05?"good":s.fst.n/s.n<=.07?"warn":"bad"],["Awaiting FST Cycle",N(s.aw),"EMI Confirmation = Upcoming","pur",money(s.awv)]]
@@ -838,11 +840,15 @@ $("dash").addEventListener("change",e=>{if(e.target.id==="dim"){S.dim=e.target.v
 /* ======================= Dashboard Overview =======================
    Team Level Escalations Summary at the logged-in person's own level only:
    Admin / L5 / NS / L4 → one row per L4 · L3 → their own L3 row · … · L0 → their own row. */
-const ovLevel=()=>S.lock>=0?S.lock:4;
+const ovPicked=()=>S.sec==="ov"?Object.keys(S.sel).map(Number).filter(k=>k>=1):[];
+function ovLevel(){const ks=ovPicked();if(!ks.length)return S.lock>=0?S.lock:4;const base=Math.min(...ks),pool=selFilter(rowsOf().filter(inPeriod));
+ for(let k=base-1;k>=0;k--)if(pool.some(r=>r["l"+k]))return k;return Math.max(0,base-1)}
 const OV=[["fce","First Call Escalation"],["onb","Onboarding Not Connected"],["ref","Refunds"],["fin","Fintech (Bajaj + Fibe)"]];
-function ovGroups(view){const lvl=ovLevel(),kind=VIEWS[view].kind,rows=viewRows(view).filter(inPeriod).filter(r=>S.lock<0||r["l"+lvl]===S.me),g=new Map();
+function ovGroups(view){const lvl=ovLevel(),kind=VIEWS[view].kind,rows=scopeRows(view).filter(inPeriod),g=new Map();
  rows.forEach(r=>{const e=r["l"+lvl]||DIR;let x=g.get(e);if(!x){x={e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,rows:[]};g.set(e,x)}x.rows.push(r)});
- const sf=kind==="case"?summ:summM;return{T:sf(rows),list:[...g.values()].map(x=>({...x,s:sf(x.rows)}))}}
+ const sf=kind==="case"?summ:summM,pm=new Map(),pr=modReady("ref")?scopeRows("ref").filter(inPeriod):null;
+ if(pr)pr.forEach(r=>{const e=r["l"+lvl]||DIR;pm.set(e,(pm.get(e)||0)+1)});
+ const T=sf(rows);T.P=pr?pr.length:null;return{T,list:[...g.values()].map(x=>{const s=sf(x.rows);s.P=pr?pm.get(x.e)||0:null;return{...x,s}})}}
 const pctBar=(a,b,good,warn,inv)=>{const v=b?a/b:0,col=inv?(v<=good?"var(--green)":v<=warn?"var(--amber)":"var(--red)"):(v>=good?"var(--green)":v>=warn?"var(--amber)":"var(--red)");return pc(a,b,2)+`<span class="pb"><i style="width:${v*100}%;background:${col}"></i></span>`};
 const OVCOL={
  fce:[{k:"n",l:"Escalated Total",g:s=>s.n},{k:"res",l:"Resolved",g:s=>s.res},{k:"pen",l:"Yet to Resolve",g:s=>s.pen,hl:1},{k:"rp",l:"Resolution %",g:s=>s.rp,f:s=>pctBar(s.res,s.n,.95,.85)},{k:"pp",l:"Pendency %",g:s=>s.pp,f:s=>pc(s.pen,s.n,0)},{k:"avg",l:"Avg open age",g:s=>s.avg??-1,f:s=>s.avg==null?"–":s.avg.toFixed(1)+" d"},{k:"o7",l:"Open > 7 d",g:s=>s.o7,hl:1}],
@@ -870,13 +876,13 @@ function ovTable(view){
 const TOTC=["#b9c2ff","#4c5ad0","#27317e"];
 const OVCH={
  fce:{stack:[["Resolved",s=>s.res,C.blue],["Yet to Resolve",s=>s.pen,C.amber]],line:["Resolution %",s=>s.n?s.res/s.n:0,[.95,.85]],
-  rows:[["Escalated Total",s=>N(s.n)],["Resolved",s=>N(s.res)],["Yet to Resolve",s=>N(s.pen)],["Resolution %",s=>pc(s.res,s.n,1)],["Pendency %",s=>pc(s.pen,s.n,1)],["Avg open age",s=>s.avg==null?"–":s.avg.toFixed(1)+" d"],["Open > 7 d",s=>N(s.o7)]]},
+  rows:[["Escalated Total",s=>N(s.n)],["Total Punched",s=>s.P==null?"–":N(s.P)],["Escalation %",s=>s.P?pc(s.n,s.P,2):"–"],["Resolved",s=>N(s.res)],["Yet to Resolve",s=>N(s.pen)],["Resolution %",s=>pc(s.res,s.n,1)],["Pendency %",s=>pc(s.pen,s.n,1)],["Avg open age",s=>s.avg==null?"–":s.avg.toFixed(1)+" d"],["Open > 7 d",s=>N(s.o7)]]},
  onb:{stack:[["Onboarded Already",s=>s.b.onb||0,C.green],["Ready to connect",s=>s.b.rtc||0,C.blue],["Refund Requested",s=>s.b.ref||0,C.purple],["Open",s=>s.pen,C.amber],["Other",s=>s.b.oth||0,C.grey]],line:["Resolution %",s=>s.rp,[.95,.85]],
-  rows:[["Escalated Total",s=>N(s.n)],["Onboarded Already",s=>N(s.b.onb||0)],["Ready to connect",s=>N(s.b.rtc||0)],["Refund Requested",s=>N(s.b.ref||0)],["Open",s=>N(s.pen)],["Resolution %",s=>pc(s.res,s.n,1)],["Open %",s=>pc(s.pen,s.n,1)]]},
+  rows:[["Escalated Total",s=>N(s.n)],["Total Punched",s=>s.P==null?"–":N(s.P)],["Escalation %",s=>s.P?pc(s.n,s.P,2):"–"],["Onboarded Already",s=>N(s.b.onb||0)],["Ready to connect",s=>N(s.b.rtc||0)],["Refund Requested",s=>N(s.b.ref||0)],["Open",s=>N(s.pen)],["Resolution %",s=>pc(s.res,s.n,1)],["Open %",s=>pc(s.pen,s.n,1)]]},
  ref:{stack:[["Retained",s=>s.ret.n,C.blue],["Refunded",s=>s.rfd.n,C.red]],line:["Retained %",s=>s.n?s.ret.n/s.n:0,[.95,.9]],
-  rows:[["Punched",s=>N(s.n)],["Punched Revenue",s=>shortAmt(s.v)],["Retained",s=>N(s.ret.n)],["Retained Revenue",s=>shortAmt(s.ret.v)],["Refunded",s=>N(s.rfd.n)],["Refunded Revenue",s=>shortAmt(s.rfd.v)],["Retained %",s=>pc(s.ret.n,s.n,1)],["Refunded %",s=>pc(s.rfd.n,s.n,1)]]},
+  rows:[["Total Punched",s=>N(s.n)],["Punched Revenue",s=>shortAmt(s.v)],["Retained",s=>N(s.ret.n)],["Retained Revenue",s=>shortAmt(s.ret.v)],["Refunded",s=>N(s.rfd.n)],["Refunded Revenue",s=>shortAmt(s.rfd.v)],["Retained %",s=>pc(s.ret.n,s.n,1)],["Refund %",s=>pc(s.rfd.n,s.n,2)]]},
  fin:{stack:[["Retained",s=>s.ret.n,C.blue],["Cancelled (FST)",s=>s.fst.n,C.red]],line:["Cancelled %",s=>s.n?s.fst.n/s.n:0,[.05,.07],1],
-  rows:[["Loans Processed",s=>N(s.n)],["Loans Value",s=>shortAmt(s.v)],["Retained",s=>N(s.ret.n)],["Retained Value",s=>shortAmt(s.ret.v)],["Cancelled (FST)",s=>N(s.fst.n)],["FST Value",s=>shortAmt(s.fst.v)],["Cancelled %",s=>pc(s.fst.n,s.n,1)],["Awaiting FST Cycle",s=>N(s.aw)]]}
+  rows:[["Loans Processed",s=>N(s.n)],["Total Punched",s=>s.P==null?"–":N(s.P)],["FST % of punched",s=>s.P?pc(s.fst.n,s.P,2):"–"],["Loans Value",s=>shortAmt(s.v)],["Retained",s=>N(s.ret.n)],["Retained Value",s=>shortAmt(s.ret.v)],["Cancelled (FST)",s=>N(s.fst.n)],["FST Value",s=>shortAmt(s.fst.v)],["Cancelled %",s=>pc(s.fst.n,s.n,1)],["Awaiting FST Cycle",s=>N(s.aw)]]}
 };
 function ovChart(view){
  const v=VIEWS[view],errs=v.src.filter(s=>S.data[s]?.err);
@@ -965,13 +971,16 @@ const MCOL={fce:["#8fe3ff","#34c5ff","#1686b8"],onb:["#9dffd5","#2fd49a","#18a06
 const modOf=v=>MODS.find(m=>m.v===v);
 const sumOf=(m,rows)=>m.kind==="case"?summ(rows):summM(rows);
 const toneOf=(m,r)=>r==null?"":m.good==="high"?(r>=m.tgt[0]?"good":r>=m.tgt[1]?"warn":"bad"):(r<=m.tgt[0]?"good":r<=m.tgt[1]?"warn":"bad");
-const scopeRows=v=>viewRows(v).filter(r=>S.lock<0||r["l"+ovLevel()]===S.me);
+const scopeRows=v=>selFilter(viewRows(v).filter(r=>S.lock<0||r["l"+S.lock]===S.me));
 const modReady=v=>VIEWS[v].src.some(s=>S.data[s]&&!S.data[s].err);
+/* Total punched orders = rows in the Refunds tab, with the same hierarchy and period filters */
+const punchedOv=()=>modReady("ref")?scopeRows("ref").filter(inPeriod).length:null;
+const PR={fce:{l:"Escalation %",n:s=>s.n,d:"escalations ÷ punched orders"},onb:{l:"Escalation %",n:s=>s.n,d:"escalated ÷ punched orders"},ref:{l:"Refund %",n:s=>s.rfd.n,d:"refunded ÷ punched orders"},fin:{l:"FST %",n:s=>s.fst.n,d:"Order Status FST ÷ punched orders"}};
 const prevMonth=m=>{let y=+m.slice(0,4),mo=+m.slice(5)-1;if(mo<1){mo=12;y--}return y+"-"+pad(mo)};
 const rateIn=(m,rows,mm)=>{const x=rows.filter(q=>q.m===mm);return x.length?m.rate(sumOf(m,x)):null};
 function refMonth(){if(S.month)return S.month;const ms=MODS.flatMap(m=>scopeRows(m.v).filter(inYear).map(r=>r.m)).filter(Boolean).sort();return ms[ms.length-1]||""}
 const pp=x=>(x*100).toFixed(1)+"%";
-const mgrLvl=()=>S.lock<0?4:Math.max(0,S.lock-1);
+const mgrLvl=()=>ovPicked().length?ovLevel():S.lock<0?4:Math.max(0,S.lock-1);
 /* the open "backlog" of each module */
 const BACK={fce:{l:"yet to resolve",f:r=>r.open},onb:{l:"open",f:r=>r.open},ref:{l:"status not updated",f:r=>r.k==="oth"},fin:{l:"awaiting FST cycle",f:r=>r.aw}};
 const ageOf=r=>r.esc_date?Math.max(0,Math.floor((Date.now()-new Date(r.esc_date))/864e5)):null;
@@ -997,7 +1006,7 @@ function spark(vals,tone){const W=96,H=30,p=4,n=vals.length,pts=vals.map((v,i)=>
  return`<svg viewBox="0 0 ${W} ${H}" class="spark" aria-hidden="true"><polyline points="${pts.map(q=>q[0].toFixed(1)+","+q[1].toFixed(1)).join(" ")}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".9"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.2" fill="${col}"/></svg>`}
 function modCard(m,ref){
  if(!modReady(m.v))return`<div class="mcard off"><div class="mh"><span>${m.ic}</span>${m.t}</div><p class="sub">Not set up yet</p></div>`;
- const all=scopeRows(m.v),s=sumOf(m,all.filter(inPeriod)),r=m.rate(s),t=toneOf(m,r);
+ const all=scopeRows(m.v),s=sumOf(m,all.filter(inPeriod)),r=m.rate(s),t=toneOf(m,r),P=punchedOv();
  const months=[];if(ref){let x=ref;for(let i=0;i<6;i++){months.unshift(x);x=prevMonth(x)}}
  const cur=ref?rateIn(m,all,ref):null,prv=ref?rateIn(m,all,prevMonth(ref)):null;
  let d='<span class="chip n">No previous month</span>';
@@ -1006,6 +1015,7 @@ function modCard(m,ref){
  const tg=m.good==="high"?`target ≥ ${m.tgt[0]*100}%`:`target ≤ ${m.tgt[0]*100}%`;
  return`<div class="mcard ${t}" data-ovgo="${m.v}" role="button" tabindex="0" title="Open ${esc(m.t)}"><div class="mh"><span>${m.ic}</span>${m.t}</div>`+
   `<div class="mg">${gauge(m,r)}<div class="mv"><b class="num">${r==null?"–":pp(r)}</b><span>${m.rateL}</span><small>${tg}</small></div></div>`+
+  `<div class="mp" title="${esc(PR[m.v].d)}"><span>Total Punched <b class="num">${P==null?"–":N(P)}</b></span><span>${PR[m.v].l} <b class="num">${P?pc(PR[m.v].n(s),P,2):"–"}</b></span></div>`+
   `<div class="md">${d}<span class="grow"></span><span class="spk" title="Last 6 months">${spark(months.map(mm=>rateIn(m,all,mm)),t)}</span></div><small>${m.sub(s)}</small></div>`}
 
 /* ---------- needs attention: every point names the manager behind it ---------- */
@@ -1097,27 +1107,32 @@ function waterfalls(){
   panel("Fintech value waterfall",`Loans value (Order Amount) down to what was retained. ⏳ ${N(fn.aw)} loan(s) worth ${moneyShort(fn.awv)} are still awaiting the FST cycle.`,`<div class="fit">${waterfall(b,modReady("fin"))}</div>`)+`</div>`}
 
 /* L4 scorecard heatmap: one row per person at your level, key metrics colour-coded */
-const HM=[{v:"fce",l:"Escalated Total",get:s=>s.n,plain:1},{v:"fce",l:"Resolved",get:s=>s.res,plain:1},{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},
- {v:"onb",l:"Escalated Total",get:s=>s.n,plain:1},{v:"onb",l:"Resolved",get:s=>s.res,plain:1,tip:"Onboarded Already + Ready to connect + Refund Requested"},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Open",get:s=>s.pen},
- {v:"ref",l:"Punched",get:s=>s.n,plain:1},{v:"ref",l:"Retained",get:s=>s.ret.n,plain:1},{v:"ref",l:"Retained %",rate:1},{v:"ref",l:"Refunded ₹",get:s=>s.rfd.v,money:1},
- {v:"fin",l:"Loans Processed",get:s=>s.n,plain:1},{v:"fin",l:"Cancelled (FST)",get:s=>s.fst.n},{v:"fin",l:"Cancelled %",rate:1},{v:"fin",l:"Awaiting FST",get:s=>s.aw}];
+const HM=[{v:"ord",l:"Total Punched",plain:1,tip:"Orders in the Refunds tab"},
+ {v:"fce",l:"Escalated Total",get:s=>s.n,plain:1},{v:"fce",l:"Escalation %",pr:s=>s.n,tip:"Escalated Total ÷ Total Punched"},{v:"fce",l:"Resolved",get:s=>s.res,plain:1},{v:"fce",l:"Resolution %",rate:1},{v:"fce",l:"Open",get:s=>s.pen},
+ {v:"onb",l:"Escalated Total",get:s=>s.n,plain:1},{v:"onb",l:"Escalation %",pr:s=>s.n,tip:"Escalated Total ÷ Total Punched"},{v:"onb",l:"Resolved",get:s=>s.res,plain:1,tip:"Onboarded Already + Ready to connect + Refund Requested"},{v:"onb",l:"Resolution %",rate:1},{v:"onb",l:"Open",get:s=>s.pen},
+ {v:"ref",l:"Retained",get:s=>s.ret.n,plain:1},{v:"ref",l:"Retained %",rate:1},{v:"ref",l:"Refunded",get:s=>s.rfd.n},{v:"ref",l:"Refund %",pr:s=>s.rfd.n,tip:"Refunded ÷ Total Punched"},{v:"ref",l:"Refunded ₹",get:s=>s.rfd.v,money:1},
+ {v:"fin",l:"Loans Processed",get:s=>s.n,plain:1},{v:"fin",l:"Cancelled (FST)",get:s=>s.fst.n},{v:"fin",l:"FST %",pr:s=>s.fst.n,tip:"Order Status FST ÷ Total Punched"},{v:"fin",l:"Cancelled %",rate:1,tip:"FST ÷ Loans Processed"},{v:"fin",l:"Awaiting FST",get:s=>s.aw}];
+const HMG=[{v:"ord",ic:"🧾",t:"Orders",col:"#8a94a6"}].concat(MODS.map(m=>({v:m.v,ic:m.ic,t:m.t,col:MCOL[m.v][1]})));
 function heatmap(){
  const lvl=ovLevel(),groups=new Map();
  MODS.forEach(m=>scopeRows(m.v).filter(inPeriod).forEach(r=>{const e=r["l"+lvl]||DIR;if(!groups.has(e))groups.set(e,{e,name:e===DIR?"(No L"+lvl+" mapped)":r["l"+lvl+"_name"]||e,by:{}});const g=groups.get(e);(g.by[m.v]||(g.by[m.v]=[])).push(r)}));
  if(!groups.size)return'<div class="empty">No records for '+esc(periodTxt())+'.</div>';
- const val=(by,c)=>{const rows=by[c.v]||[];if(!rows.length)return null;const m=modOf(c.v),s=sumOf(m,rows);return c.rate?m.rate(s):c.get(s)};
+ const val=(by,c)=>{const P=(by.ref||[]).length;if(c.v==="ord")return P||null;const rows=by[c.v]||[];
+  if(c.pr){if(!P)return null;return rows.length?c.pr(sumOf(modOf(c.v),rows))/P:0}
+  if(!rows.length)return null;const m=modOf(c.v),s=sumOf(m,rows);return c.rate?m.rate(s):c.get(s)};
  const list=[...groups.values()].sort((a,b)=>a.name.localeCompare(b.name));
  const tot={};MODS.forEach(m=>tot[m.v]=scopeRows(m.v).filter(inPeriod));
  const mx=HM.map(c=>c.rate?1:Math.max(0,...list.map(g=>val(g.by,c)||0)));
  const cell=(c,v,i,attrs)=>{if(v==null)return`<td class="r hmx">–</td>`;let bg,txt;
-  if(c.rate){const t=toneOf(modOf(c.v),v);bg=t==="good"?"rgba(23,135,92,.20)":t==="warn"?"rgba(214,140,20,.24)":"rgba(201,48,72,.24)";txt=pp(v)}
+  if(c.pr){const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.05+a*.3).toFixed(2)})`:"transparent";txt=pc(v,1,2)}
+  else if(c.rate){const t=toneOf(modOf(c.v),v);bg=t==="good"?"rgba(23,135,92,.20)":t==="warn"?"rgba(214,140,20,.24)":"rgba(201,48,72,.24)";txt=pp(v)}
   else if(c.plain){bg="transparent";txt=N(v)}
   else{const a=mx[i]?v/mx[i]:0;bg=v?`rgba(201,48,72,${(.06+a*.34).toFixed(2)})`:"transparent";txt=c.money?moneyShort(v):N(v)}
   return`<td class="r num hmc" style="background:${bg}"${attrs}>${txt}</td>`};
- const head1=`<tr><th rowspan="2">L${lvl}${lvl===4?" · Regional Head":""}</th>${MODS.map(m=>`<th colspan="${HM.filter(c=>c.v===m.v).length}" class="hmg" style="border-bottom:2px solid ${MCOL[m.v][1]}">${m.ic} ${m.t}</th>`).join("")}</tr>`;
- const head2=`<tr>${HM.map(c=>`<th class="r"${c.tip?` title="${esc(c.tip)}"`:""}>${c.l}</th>`).join("")}</tr>`;
- const body=list.map(g=>`<tr><td class="who"><b>${esc(g.name)}</b>${g.e!==DIR?`<small>${esc(g.e)}</small>`:""}</td>${HM.map((c,i)=>cell(c,val(g.by,c),i,(g.e===DIR&&S.lock>=0)?"":` data-hv="${c.v}" data-he="${esc(g.e)}" data-hn="${esc(g.name)}" tabindex="0" role="button" title="Open ${esc(modOf(c.v).t)} for ${esc(g.name)}"`)).join("")}</tr>`).join("");
- const foot=`<tr><td>Overall</td>${HM.map((c,i)=>{const v=val(tot,c);return v==null?'<td class="r">–</td>':`<td class="r num">${c.rate?pp(v):c.money?moneyShort(v):N(v)}</td>`}).join("")}</tr>`;
+ const head1=`<tr><th rowspan="2">L${lvl}${lvl===4?" · Regional Head":""}</th>${HMG.map(m=>`<th colspan="${HM.filter(c=>c.v===m.v).length}" class="hmg" style="border-bottom:2px solid ${m.col}">${m.ic} ${m.t}</th>`).join("")}</tr>`;
+ const head2=`<tr>${HM.map(c=>`<th class="r"${c.tip?` title="${esc(c.tip)}"`:""}>${c.l}${c.pr?'<small class="hpr">of punched</small>':""}</th>`).join("")}</tr>`;
+ const body=list.map(g=>`<tr><td class="who"><b>${esc(g.name)}</b>${g.e!==DIR?`<small>${esc(g.e)}</small>`:""}</td>${HM.map((c,i)=>{const mv=c.v==="ord"?"ref":c.v;return cell(c,val(g.by,c),i,(g.e===DIR&&S.lock>=0)?"":` data-hv="${mv}" data-he="${esc(g.e)}" data-hn="${esc(g.name)}" tabindex="0" role="button" title="Open ${esc(modOf(mv).t)} for ${esc(g.name)}"`)}).join("")}</tr>`).join("");
+ const foot=`<tr><td>Overall</td>${HM.map((c,i)=>{const v=val(tot,c);return v==null?'<td class="r">–</td>':`<td class="r num">${c.pr?pc(v,1,2):c.rate?pp(v):c.money?moneyShort(v):N(v)}</td>`}).join("")}</tr>`;
  return`<div class="tbox hm" style="max-height:none"><table class="tbl"><thead>${head1}${head2}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table></div>`}
 
 /* ======================= Overview analyses: Fintech vs Refund, refund Pareto, L0 hotspots ======================= */
@@ -1198,13 +1213,18 @@ function hotOpen(i){const x=S.hot[i];if(!x)return;const s={};
 
 function renderOv(){
  const y0=window.scrollY;
- ensurePeriod();drawPeriod();$("hier").innerHTML="";$("crumbs").innerHTML="";$("selNote").hidden=true;$("act").innerHTML="";$("kbar").innerHTML="";
+ ensurePeriod();drawPeriod();
+ {const s0={};LV.forEach(k=>{if(k>=1&&S.want[k]&&k!==S.lock&&k<=S.top)s0[k]=S.want[k]});let w=walk(s0);
+  for(let i=0;i<6&&w.invalid!=null;i++){const k=[1,2,3,4].find(j=>s0[j]);if(k==null)break;delete s0[k];w=walk(s0)}
+  S.sel={};w.out.forEach(o=>{if(o.st==="open"&&o.v)S.sel[o.k]=o.v});drawHier(w);drawCrumbs(w)}
+ $("selNote").hidden=true;$("kbar").innerHTML="";
+ $("act").innerHTML=Object.keys(S.sel).length?'<button class="gh" type="button" id="clr">Clear all filters</button>':"";
  const lvl=ovLevel(),ml=mgrLvl(),ref=refMonth(),roleTxt=S.role==="ADMIN"?"Administrator":S.role;
  const ms=chartMonths(MODS.flatMap(m=>scopeRows(m.v)));
  const ins=insights(ref);
  const legend=MODS.filter(m=>modReady(m.v)).map(m=>`<span><i class="sw" style="background:${MCOL[m.v][1]};height:4px;width:22px;vertical-align:3px"></i>${m.t} · ${m.rateL}${m.good==="low"?" (dashed, lower is better)":""}</span>`).join("");
  $("dash").innerHTML=
-  `<section class="panel focus slim"><div><div class="sub">${esc(periodTxt())} · Management view</div><h2>${esc(S.meName)}</h2></div><div class="chips"><span class="chip">${esc(roleTxt)}</span><span class="chip p">Summary at L${lvl} level</span>${S.lock<0?'<span class="chip n">All teams</span>':'<span class="chip n">Your team only</span>'}${ref?`<span class="chip n">Month-on-month: ${fml(ref)} vs ${fml(prevMonth(ref))}</span>`:""}</div></section>`+
+  `<section class="panel focus slim"><div><div class="sub">${esc(periodTxt())} · Management view</div><h2>${esc(S.meName)}</h2></div><div class="chips"><span class="chip">${esc(roleTxt)}</span><span class="chip p">Summary at L${lvl} level</span>${ovPicked().length?`<span class="chip b">Filtered: ${esc(S.crumbs.slice(1).map(c=>c.label).join(" › "))}</span>`:""}${S.lock<0?'<span class="chip n">All teams</span>':'<span class="chip n">Your team only</span>'}${ref?`<span class="chip n">Month-on-month: ${fml(ref)} vs ${fml(prevMonth(ref))}</span>`:""}</div></section>`+
   `<div class="mcards">${MODS.map(m=>modCard(m,ref)).join("")}</div>`+
   `<div class="g2">`+panel("Key rates by month",(S.fy==="all"?"Latest 12 months with data.":"Every month of "+fyLabel(S.fy)+". Click a month to filter.")+" Hover a month for all four values.",`<div class="trend-legend">${legend}</div><div class="fit">${rateChart(ms)}</div>`)+
   panel("Needs attention",`For ${esc(periodTxt())}, with the L${ml} manager behind each point.`,ins.length?`<ul class="insights">${ins.map(i=>`<li><span class="dot ${i.t}"></span><span>${i.x}</span></li>`).join("")}</ul>`:'<div class="empty">Nothing needs attention right now. 🎉</div>')+`</div>`+
@@ -1219,7 +1239,7 @@ function renderOv(){
  afterRender(y0);
 }
 function ovOpen(view,email,name){const lvl=ovLevel();
- if(email&&lvl!==S.lock){S.want={[lvl]:email};S.wantLbl={[lvl]:name||email}}
+ if(email&&lvl!==S.lock){S.want={...S.sel,[lvl]:email};S.wantLbl={...(S.wantLbl||{}),[lvl]:name||email}}
  if(view==="fin")finOpen=true;
  setSec(view);if(email&&lvl!==S.lock&&S.ds===view)applySel(S.want,true);window.scrollTo({top:0,behavior:"smooth"})}
 function ovClick(e){
