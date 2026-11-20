@@ -55,7 +55,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 .top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px clamp(12px,2vw,32px);background:var(--panel);border-bottom:1px solid var(--line);box-shadow:0 10px 35px var(--sh);backdrop-filter:blur(16px)}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .brand img{width:52px;height:52px;object-fit:cover;flex:none;border-radius:12px;border:1px solid var(--line);box-shadow:0 6px 16px var(--sh);user-select:none}
-.brand h1{font-size:18px;font-weight:800;letter-spacing:.01em;white-space:nowrap}.brand h1 span{color:var(--cyan)}
+.brand h1{font-size:18px;font-weight:800;letter-spacing:.01em;white-space:nowrap}.dtill{display:inline-block;margin-left:10px;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:0;vertical-align:3px;color:var(--ctx);background:var(--chip);border:1px solid var(--line)}.dtill b{color:var(--text)}.brand h1 span{color:var(--cyan)}
 .ua{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .user-meta{text-align:right;font-size:12px;color:var(--muted);line-height:1.35;margin-right:6px}.user-meta b{display:block;color:var(--text);font-size:14px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:var(--chip);color:var(--ctx);white-space:nowrap}
@@ -226,7 +226,7 @@ h1,h2,h3{margin:0}h2{font-size:16px;font-weight:800}.sub{color:var(--muted);font
 
 <!-- ================= DASHBOARD ================= -->
 <section id="app" class="view" hidden>
-<header class="top"><div class="brand"><img id="mark" alt="FireDesk" draggable="false"><div><h1>Fire<span>Desk</span></h1><span class="sub" id="period">Sales Escalation &amp; Resolution Management</span></div></div>
+<header class="top"><div class="brand"><img id="mark" alt="FireDesk" draggable="false"><div><h1>Fire<span>Desk</span><span id="dataTill" class="dtill" hidden></span></h1><span class="sub" id="period">Sales Escalation &amp; Resolution Management</span></div></div>
 <div class="ua"><div class="user-meta"><b id="who"></b><span id="whoSub"></span></div>
 <button type="button" class="theme-toggle" role="switch" aria-checked="false" aria-label="Switch to dark theme"><span class="o sun">☀️<em>Light</em></span><span class="tr"><span class="kn"></span></span><span class="o moon">🌙<em>Dark</em></span></button>
 <button class="gh" id="refresh" type="button">Refresh data</button><button class="gh" id="chPw" type="button">Change password</button><button class="gh" id="out" type="button">Log out</button></div></header>
@@ -398,7 +398,7 @@ async function savePw(){const cp=$("cp").value,np=$("np").value,b=$("cpGo");
 
 function inactiveModal(){modal('<h3>Account inactive</h3><p>Your account is inactive, so you no longer have dashboard access. Contact your administrator if this is wrong.</p><div class="actions"><button class="pri" type="button" id="inOk">OK</button></div>',"danger");$("inOk").onclick=closeModal}
 
-function resetUI(){["who","whoSub","hier","crumbs","months","act","dash","side","ph","kbar"].forEach(id=>$(id).innerHTML="");if(typeof unstick==="function"&&stuck)unstick();
+function resetUI(){if($("dataTill")){$("dataTill").hidden=true;$("dataTill").innerHTML=""}["who","whoSub","hier","crumbs","months","act","dash","side","ph","kbar"].forEach(id=>$(id).innerHTML="");if(typeof unstick==="function"&&stuck)unstick();
  $("period").textContent="Sales Escalation & Resolution Management";$("fy").innerHTML="";$("selNote").hidden=true;$("filt").hidden=true;$("ph").hidden=true;$("toastRoot").innerHTML=""}
 async function logoutNow(msg,ok){S.loggingOut=true;clearTimeout(idleT);try{await sb.auth.signOut({scope:"local"})}catch(e){}
  S=fresh();resetUI();closeModal();$("lEmail").value="";showLogin(msg||"You have been logged out.",ok!==false)}
@@ -462,9 +462,15 @@ function side(){
 $("side").onclick=e=>{const b=e.target.closest("[data-s]");if(!b)return;const id=b.dataset.s;
  if(b.dataset.grp){if(S.sec===id){finOpen=!finOpen;side();return}finOpen=true}
  setSec(id);window.scrollTo({top:0})};
+/* "Data updated till": latest date in the Month column of the tab (First Call Escalation and Onboarding Not Connected only) */
+function drawDataTill(){const el=$("dataTill");if(!el)return;
+ if(S.sec!=="fce"&&S.sec!=="onb"){el.hidden=true;el.innerHTML="";return}
+ const mx=viewRows(S.sec).reduce((m,r)=>r.esc_date&&r.esc_date>m?r.esc_date:m,"");
+ if(!mx){el.hidden=true;el.innerHTML="";return}
+ el.innerHTML="Data updated till: <b>"+mx.slice(8,10)+"-"+MN[+mx.slice(5,7)-1]+"-"+mx.slice(0,4)+"</b>";el.title="Latest date in the Month column of "+secName(S.sec);el.hidden=false}
 function setSec(id){
  if(id==="ov"&&!canOv())id="onb";
- S.sec=id;side();S.cat="";S.catDim="";S.dim="";S.bk="";S.q="";S.page=1;S.note="";S.sort={k:"Date",dir:"desc"};
+ S.sec=id;side();drawDataTill();S.cat="";S.catDim="";S.dim="";S.bk="";S.q="";S.page=1;S.note="";S.sort={k:"Date",dir:"desc"};
  $("ph").hidden=true;$("filt").hidden=true;$("dash").innerHTML="";$("kbar").innerHTML="";
  if(id==="ov"){ensurePeriod();$("filt").hidden=false;renderOv();return}
  const v=VIEWS[id];if(!v)return;
